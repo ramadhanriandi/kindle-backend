@@ -1,0 +1,60 @@
+DATABASE MODEL
+
+#1 User
+id              : int
+username        : string
+email           : string
+password        : string
+fullname        : string
+gender          : string
+picture         : file
+address         : string
+description     : text
+phone           : string
+status          : string
+
+#2 Book
+sku             : string
+title           : string
+author          : string
+year            : int
+description     : text
+document        : file
+price           : float
+rating          : float
+merchant_id     : int
+
+#3 Category
+id              : int
+name            : string
+
+#4 BookCategory
+book_sku        : string
+category_id     : int
+
+#5 Wishlist
+book_sku        : string
+customer_id     : int
+
+#6 Library
+book_sku        : string
+customer_id     : int
+
+#7 Review
+id              : int
+comment         : string
+customer_id     : int
+book_sku        : string
+rating          : int
+
+#8 Transaction
+id              : int
+customer_id     : int
+date            : date
+status          : string
+total           : float
+
+#9 TransactionList
+id              : int
+book_sku        : string
+transaction_id  : int
