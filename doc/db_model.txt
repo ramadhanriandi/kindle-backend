@@ -1,60 +1,68 @@
 DATABASE MODEL
 
-#1 User
-id              : int
-username        : string
-email           : string
-password        : string
-fullname        : string
-gender          : string
-picture         : file
-address         : string
-description     : text
-phone           : string
-status          : string
+#1 users
+id              : int(11)           not null      primary key
+username        : varchar(255)      not null
+email           : varchar(255)      not null
+password        : varchar(255)      not null
+status          : varchar(255)      not null
 
-#2 Book
-sku             : string
-title           : string
-author          : string
-year            : int
-description     : text
-document        : file
-price           : float
-rating          : float
-merchant_id     : int
+#2 merchants
+id              : int(11)           not null      primary key
+username        : varchar(255)      not null
+email           : varchar(255)      not null
+name            : varchar(255)      not null
+password        : varchar(255)      not null
+description     : text              null
+phone           : varchar(255)      null
+status          : varchar(255)      not null
 
-#3 Category
-id              : int
-name            : string
+#3 admins
+id              : int(11)           not null      primary key
+username        : varchar(255)      not null
+email           : varchar(255)      not null
+password        : varchar(255)      not null
 
-#4 BookCategory
-book_sku        : string
-category_id     : int
+#4 books
+sku             : int(11)           not null      primary key
+title           : varchar(255)      not null
+author          : varchar(255)      not null
+year            : int(11)           not null
+description     : text              not null
+link            : varchar(255)      not null
+price           : int(11)           not null
+variant         : varchar(255)      not null
+merchant_id     : int(11)           not null      foreign key
 
-#5 Wishlist
-book_sku        : string
-customer_id     : int
+#5 bookCategories
+book_sku        : int(11)           not null      foreign key
+category_id     : int(11)           not null      foreign key
 
-#6 Library
-book_sku        : string
-customer_id     : int
+#6 categories
+id              : int(11)           not null      primary key
+name            : varchar(255)      not null
 
-#7 Review
-id              : int
-comment         : string
-customer_id     : int
-book_sku        : string
-rating          : int
+#7 wishlists
+book_sku        : int(11)           not null      foreign key
+user_id         : int(11)           not null      foreign key         
 
-#8 Transaction
-id              : int
-customer_id     : int
-date            : date
-status          : string
-total           : float
+#8 orders
+id              : int(11)           not null      primary key
+user_id         : int(11)           not null      foreign key
+date            : date              not null
+total           : int(11)           not null
 
-#9 TransactionList
-id              : int
-book_sku        : string
-transaction_id  : int
+#9 orderLists
+id              : int(11)           not null      primary key
+book_sku        : int(11)           not null      foreign key
+order_id        : int(11)           not null      foreign key
+merchant_id     : int(11)           not null      foreign key  
+
+#10 carts
+book_sku        : int(11)           not null      foreign key
+user_id         : int(11)           not null      foreign key
+
+#11 cartLists
+id              : int(11)           not null      primary key
+book_sku        : int(11)           not null      foreign key
+cart_id         : int(11)           not null      foreign key 
