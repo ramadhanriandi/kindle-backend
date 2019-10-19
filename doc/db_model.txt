@@ -49,7 +49,7 @@ user_id         : int(11)           not null      foreign key
 #8 orders
 id              : int(11)           not null      primary key
 user_id         : int(11)           not null      foreign key
-date            : date              not null
+datetime        : datetime          not null
 total           : int(11)           not null
 
 #9 orderLists
