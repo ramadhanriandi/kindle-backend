@@ -59,7 +59,7 @@ order_id        : int(11)           not null      foreign key
 merchant_id     : int(11)           not null      foreign key  
 
 #10 carts
-book_sku        : int(11)           not null      foreign key
+cart_id        : int(11)           not null      primary key
 user_id         : int(11)           not null      foreign key
 
 #11 cartLists
