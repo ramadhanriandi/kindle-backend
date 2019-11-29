@@ -9,7 +9,6 @@ status          : varchar(255)      not null
 
 #2 merchants
 id              : int(11)           not null      primary key
-username        : varchar(255)      not null
 email           : varchar(255)      not null
 name            : varchar(255)      not null
 password        : varchar(255)      not null
@@ -49,7 +48,7 @@ user_id         : int(11)           not null      foreign key
 #8 orders
 id              : int(11)           not null      primary key
 user_id         : int(11)           not null      foreign key
-date            : date              not null
+date            : datetime          not null
 total           : int(11)           not null
 
 #9 orderLists
@@ -59,7 +58,7 @@ order_id        : int(11)           not null      foreign key
 merchant_id     : int(11)           not null      foreign key  
 
 #10 carts
-book_sku        : int(11)           not null      foreign key
+cart_id         : int(11)           not null      primary key
 user_id         : int(11)           not null      foreign key
 
 #11 cartLists
