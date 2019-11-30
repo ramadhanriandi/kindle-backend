@@ -39,7 +39,14 @@ ALTER TABLE public.admin OWNER TO postgres;
 --
 
 CREATE TABLE public.book (
-    book_sku serial NOT NULL,
+    book_sku serial NOT NUL
+SET row_security = off;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--L,
     title character varying(255) NOT NULL,
     author character varying(255),
     year integer,
