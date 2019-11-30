@@ -23,4 +23,13 @@ public class AdminService {
   public Admin save(Admin admin) {
     return adminRepository.save(admin);
   }
+
+  public void updateAdmin(Integer id, Admin admin) {
+    admin.setAdminId(id);
+    adminRepository.save(admin);
+  }
+
+  public long deleteByAdminId(Integer adminId) {
+    return adminRepository.deleteByAdminId(adminId);
+  }
 }

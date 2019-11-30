@@ -3,34 +3,37 @@ package com.kindle.backend.controller;
 import com.kindle.backend.model.entity.Admin;
 import com.kindle.backend.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 import java.util.List;
 
 @RestController
 public class AdminController {
-  private AdminService service;
-
   @Autowired
-  public AdminController(AdminService service) {
-    this.service = service;
-  }
+  private AdminService adminService;
 
-  @GetMapping("/api/admins")
+  @RequestMapping(value = "/api/admins", method = RequestMethod.GET)
   public List<Admin> getAllAdmin() {
-    return this.service.findAllAdmin();
+    return this.adminService.findAllAdmin();
   }
 
-  @GetMapping("/api/admins/{id}")
+  @RequestMapping(value = "/api/admins/{id}", method = RequestMethod.GET)
   public Admin getAdminById(@PathVariable Integer id) {
-    return this.service.findByAdminId(id);
+    return this.adminService.findByAdminId(id);
   }
 
-  @PostMapping(value="/api/admins")
+  @RequestMapping(value = "/api/admins", method = RequestMethod.POST)
   public Admin save(@RequestBody Admin admin) {
-    return this.service.save(admin);
+    return this.adminService.save(admin);
+  }
+
+  @RequestMapping(value = "/api/admins/{id}", method = RequestMethod.PUT)
+  public void updateAdmin(@PathVariable Integer id, @RequestBody Admin admin) {
+    this.adminService.updateAdmin(id, admin);
+  }
+
+  @RequestMapping(value = "/api/admins/{id}", method = RequestMethod.DELETE)
+  public boolean deleteByAdminId(@PathVariable Integer id) {
+    return this.adminService.deleteByAdminId(id) > 0;
   }
 }
