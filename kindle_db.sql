@@ -39,14 +39,7 @@ ALTER TABLE public.admin OWNER TO postgres;
 --
 
 CREATE TABLE public.book (
-    book_sku serial NOT NUL
-SET row_security = off;
-
-SET default_tablespace = '';
-
-SET default_with_oids = false;
-
---L,
+    book_sku serial NOT NULL,
     title character varying(255) NOT NULL,
     author character varying(255),
     year integer,
@@ -199,7 +192,7 @@ ALTER TABLE public.wishlist OWNER TO postgres;
 --
 
 COPY public.admin (admin_id, username, email, password) FROM stdin;
-\.
+-- \.
 
 
 --
@@ -207,7 +200,7 @@ COPY public.admin (admin_id, username, email, password) FROM stdin;
 --
 
 COPY public.book (book_sku, title, author, year, description, document, price, rating, merchant_id) FROM stdin;
-\.
+-- \.
 
 
 --
@@ -215,7 +208,7 @@ COPY public.book (book_sku, title, author, year, description, document, price, r
 --
 
 COPY public.bookcategory (book_sku, category_id) FROM stdin;
-\.
+-- \.
 
 
 --
@@ -223,7 +216,7 @@ COPY public.bookcategory (book_sku, category_id) FROM stdin;
 --
 
 COPY public.cart (cart_id, customer_id) FROM stdin;
-\.
+-- \.
 
 
 --
@@ -231,7 +224,7 @@ COPY public.cart (cart_id, customer_id) FROM stdin;
 --
 
 COPY public.cartlist (cardlist_id, book_sku, cart_id) FROM stdin;
-\.
+-- \.
 
 
 --
@@ -239,7 +232,7 @@ COPY public.cartlist (cardlist_id, book_sku, cart_id) FROM stdin;
 --
 
 COPY public.category (category_id, name) FROM stdin;
-\.
+-- \.
 
 
 --
@@ -247,7 +240,7 @@ COPY public.category (category_id, name) FROM stdin;
 --
 
 COPY public.customer (customer_id, username, email, password, status) FROM stdin;
-\.
+-- \.
 
 
 --
@@ -255,7 +248,7 @@ COPY public.customer (customer_id, username, email, password, status) FROM stdin
 --
 
 COPY public.library (customer_id, book_sku) FROM stdin;
-\.
+-- \.
 
 
 --
@@ -263,7 +256,7 @@ COPY public.library (customer_id, book_sku) FROM stdin;
 --
 
 COPY public.merchant (merchant_id, username, email, password, fullname, description, phone, status) FROM stdin;
-\.
+-- \.
 
 
 --
@@ -271,7 +264,7 @@ COPY public.merchant (merchant_id, username, email, password, fullname, descript
 --
 
 COPY public.transaction (transaction_id, date, total, customer_id) FROM stdin;
-\.
+-- \.
 
 
 --
@@ -279,7 +272,7 @@ COPY public.transaction (transaction_id, date, total, customer_id) FROM stdin;
 --
 
 COPY public.transactionlist (transactionlist_id, book_sku, merchant_id, transaction_id) FROM stdin;
-\.
+-- \.
 
 
 --

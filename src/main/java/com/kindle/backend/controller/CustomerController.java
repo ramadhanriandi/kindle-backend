@@ -6,9 +6,11 @@ import com.kindle.backend.response.LoginResponse;
 import com.kindle.backend.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.List;
 
+@CrossOrigin
 @RestController
 public class CustomerController {
   @Autowired
