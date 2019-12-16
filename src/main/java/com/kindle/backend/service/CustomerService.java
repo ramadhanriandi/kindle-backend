@@ -2,7 +2,7 @@ package com.kindle.backend.service;
 
 import com.kindle.backend.model.entity.Customer;
 import com.kindle.backend.model.repository.CustomerRepository;
-import com.kindle.backend.response.LoginResponse;
+import com.kindle.backend.response.PostResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,10 +34,10 @@ public class CustomerService {
     return customerRepository.deleteByCustomerId(customerId);
   }
 
-  public LoginResponse login(Customer customer) {
+  public PostResponse login(Customer customer) {
     String email = customer.getEmail();
     String password = customer.getPassword();
-    LoginResponse loginResponse = new LoginResponse();
+    PostResponse loginResponse = new PostResponse();
 
     Customer customerResponse = customerRepository.findFirstByEmailAndPassword(email, password);
 
@@ -45,10 +45,31 @@ public class CustomerService {
       loginResponse.setCode(401);
       loginResponse.setMessage("Login failed: wrong email or password");
     } else {
-      loginResponse.setCode(200);
-      loginResponse.setMessage("Login success");
+      if (customerResponse.getStatus().equals("Active")) {
+        loginResponse.setCode(200);
+        loginResponse.setMessage("Login success");
+      } else {
+        loginResponse.setCode(402);
+        loginResponse.setMessage("Login failed: your account is " + customerResponse.getStatus());
+      }
     }
 
     return loginResponse;
+  }
+
+  public PostResponse register(Customer customer) {
+    PostResponse registerResponse = new PostResponse();
+
+    Customer customerResponse = customerRepository.save(customer);
+
+    if (customerResponse == null) {
+      registerResponse.setCode(401);
+      registerResponse.setMessage("Error: register fail");
+    } else {
+      registerResponse.setCode(200);
+      registerResponse.setMessage("Register success");
+    }
+
+    return registerResponse;
   }
 }

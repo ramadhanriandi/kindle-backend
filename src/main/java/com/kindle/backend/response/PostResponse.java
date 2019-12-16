@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-public class LoginResponse {
+public class PostResponse {
   private int code;
   private String message;
 
