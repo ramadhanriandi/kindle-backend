@@ -13,7 +13,7 @@ public class BookService {
   private BookRepository bookRepository;
 
   public Book findByBookSku(Integer sku){
-    return bookRepository.findFirstByBook_sku(sku);
+    return bookRepository.findFirstByBookSku(sku);
   }
 
   public List<Book> findAllBook(){
@@ -25,11 +25,11 @@ public class BookService {
   }
 
   public void updateBook(Integer sku, Book book) {
-    book.setBook_sku(sku);
+    book.setBookSku(sku);
     bookRepository.save(book);
   }
 
   public long deleteByBookSku(Integer sku) {
-    return bookRepository.deleteBookByBook_sku(sku);
+    return bookRepository.deleteBookByBookSku(sku);
   }
 }
