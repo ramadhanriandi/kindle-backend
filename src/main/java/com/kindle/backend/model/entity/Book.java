@@ -16,7 +16,7 @@ public class Book {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = BookConstant.BOOK_SKU)
-  private int book_sku;
+  private int bookSku;
 
   @Column(name = BookConstant.BOOK_TITLE)
   private String title;
@@ -39,12 +39,12 @@ public class Book {
   @Column(name = BookConstant.BOOK_DOCUMENT)
   private String document;
 
-  public int getBook_sku() {
-    return book_sku;
+  public int getBookSku() {
+    return bookSku;
   }
 
-  public void setBook_sku(int book_sku) {
-    this.book_sku = book_sku;
+  public void setBookSku(int bookSku) {
+    this.bookSku = bookSku;
   }
 
   public String getTitle() {
