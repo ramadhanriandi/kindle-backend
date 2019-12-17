@@ -5,6 +5,7 @@ public class ApiPath {
 
   public static final String ADMIN = API + "/admins";
   public static final String ADMIN_BY_ADMIN_ID = ADMIN + "/{id}";
+  public static final String ADMIN_LOGIN = ADMIN + "/login";
 
   public static final String CUSTOMER = API + "/customers";
   public static final String CUSTOMER_BY_CUSTOMER_ID = CUSTOMER + "/{customerId}";
