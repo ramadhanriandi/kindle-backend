@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -38,6 +39,9 @@ public class Book {
 
   @Column(name = BookConstant.BOOK_DOCUMENT)
   private String document;
+
+  @ManyToMany(mappedBy = "library", fetch = FetchType.LAZY)
+  List<Customer> ownerBook;
 
   public int getBookSku() {
     return bookSku;
@@ -101,5 +105,13 @@ public class Book {
 
   public void setDocument(String document) {
     this.document = document;
+  }
+
+  public List<Customer> getOwnerBook() {
+    return ownerBook;
+  }
+
+  public void setOwnerBook(List<Customer> ownerBook) {
+    this.ownerBook = ownerBook;
   }
 }

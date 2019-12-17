@@ -1,11 +1,13 @@
 package com.kindle.backend.model.entity;
 
 import com.kindle.backend.model.constant.CustomerConstant;
+import com.kindle.backend.model.constant.LibraryConstant;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -29,6 +31,14 @@ public class Customer {
 
   @Column(name = CustomerConstant.CUSTOMER_STATUS)
   private String status;
+
+  @ManyToMany(fetch = FetchType.LAZY)
+          @JoinTable(
+                  name = LibraryConstant.TABLE_NAME,
+                  joinColumns = @JoinColumn(name = LibraryConstant.CUSTOMER_ID),
+                  inverseJoinColumns = @JoinColumn(name = LibraryConstant.BOOK_SKU)
+          )
+  List<Book> library;
 
   public int getCustomerId() {
     return customerId;
@@ -68,5 +78,13 @@ public class Customer {
 
   public void setStatus(String status) {
     this.status = status;
+  }
+
+  public List<Book> getLibrary() {
+    return library;
+  }
+
+  public void setLibrary(List<Book> library) {
+    this.library = library;
   }
 }
