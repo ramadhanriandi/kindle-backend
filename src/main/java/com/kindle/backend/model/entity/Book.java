@@ -36,7 +36,7 @@ public class Book {
   private float price;
 
   @Column(name = BookConstant.BOOK_MERCHANT_ID)
-  private int merchant_id;
+  private int merchantId;
 
   @Column(name = BookConstant.BOOK_DOCUMENT)
   private String document;
@@ -93,12 +93,12 @@ public class Book {
     this.price = price;
   }
 
-  public int getMerchant_id() {
-    return merchant_id;
+  public int getMerchantId() {
+    return merchantId;
   }
 
-  public void setMerchant_id(int merchant_id) {
-    this.merchant_id = merchant_id;
+  public void setMerchantId(int merchantId) {
+    this.merchantId = merchantId;
   }
 
   public String getDocument() {
