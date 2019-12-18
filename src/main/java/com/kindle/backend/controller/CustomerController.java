@@ -4,6 +4,7 @@ import com.kindle.backend.model.constant.ApiPath;
 import com.kindle.backend.model.entity.Book;
 import com.kindle.backend.model.entity.Customer;
 import com.kindle.backend.response.PostResponse;
+import com.kindle.backend.response.PutResponse;
 import com.kindle.backend.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -33,8 +34,8 @@ public class CustomerController {
   }
 
   @RequestMapping(value = ApiPath.CUSTOMER_BY_CUSTOMER_ID, method = RequestMethod.PUT)
-  public void updateCustomer(@PathVariable Integer customerId, @RequestBody Customer customer) {
-    this.customerService.updateCustomer(customerId, customer);
+  public PutResponse updateCustomer(@PathVariable Integer customerId, @RequestBody Customer customer) {
+    return this.customerService.updateCustomer(customerId, customer);
   }
 
   @RequestMapping(value = ApiPath.CUSTOMER_BY_CUSTOMER_ID, method = RequestMethod.DELETE)
