@@ -46,6 +46,7 @@ public class CustomerService {
       loginResponse.setMessage("Login failed: wrong email or password");
     } else {
       if (customerResponse.getStatus().equals("Active")) {
+        loginResponse.setUserId(customerResponse.getCustomerId());
         loginResponse.setCode(200);
         loginResponse.setMessage("Login success");
       } else {
@@ -66,6 +67,7 @@ public class CustomerService {
       registerResponse.setCode(401);
       registerResponse.setMessage("Error: register fail");
     } else {
+      registerResponse.setUserId(customerResponse.getCustomerId());
       registerResponse.setCode(200);
       registerResponse.setMessage("Register success");
     }

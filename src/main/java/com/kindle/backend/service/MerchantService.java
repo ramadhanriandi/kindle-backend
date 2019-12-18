@@ -46,6 +46,7 @@ public class MerchantService {
       loginResponse.setMessage("Login failed: wrong email or password");
     } else {
       if (merchantResponse.getStatus().equals("Active")) {
+        loginResponse.setUserId(merchantResponse.getMerchantId());
         loginResponse.setCode(200);
         loginResponse.setMessage("Login success");
       } else {
