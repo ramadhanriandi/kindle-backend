@@ -27,6 +27,7 @@ public class AdminService {
       loginResponse.setCode(401);
       loginResponse.setMessage("Login failed: wrong email or password");
     } else {
+      loginResponse.setUserId(adminResponse.getAdminId());
       loginResponse.setCode(200);
       loginResponse.setMessage("Login success");
     }

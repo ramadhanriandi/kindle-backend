@@ -25,33 +25,77 @@ SET default_with_oids = false;
 --
 
 CREATE TABLE public.admin (
-    admin_id serial NOT NULL,
-    username character varying(255) NOT NULL,
-    email character varying(255) NOT NULL,
-    password character varying(255) NOT NULL
+    admin_id integer NOT NULL,
+    username character varying(255),
+    email character varying(255),
+    password character varying(255)
 );
 
 
 ALTER TABLE public.admin OWNER TO postgres;
 
 --
+-- Name: admin_admin_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.admin_admin_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.admin_admin_id_seq OWNER TO postgres;
+
+--
+-- Name: admin_admin_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.admin_admin_id_seq OWNED BY public.admin.admin_id;
+
+
+--
 -- Name: book; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.book (
-    book_sku serial NOT NULL,
+    book_sku integer NOT NULL,
     title character varying(255) NOT NULL,
     author character varying(255),
     year integer,
     description text,
-    document bytea,
     price double precision DEFAULT 0 NOT NULL,
-    rating double precision DEFAULT 0,
-    merchant_id integer NOT NULL
+    merchant_id integer NOT NULL,
+    document character varying(255),
+    merchant character varying(255)
 );
 
 
 ALTER TABLE public.book OWNER TO postgres;
+
+--
+-- Name: book_book_sku_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.book_book_sku_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.book_book_sku_seq OWNER TO postgres;
+
+--
+-- Name: book_book_sku_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.book_book_sku_seq OWNED BY public.book.book_sku;
+
 
 --
 -- Name: bookcategory; Type: TABLE; Schema: public; Owner: postgres
@@ -70,7 +114,7 @@ ALTER TABLE public.bookcategory OWNER TO postgres;
 --
 
 CREATE TABLE public.cart (
-    cart_id serial NOT NULL,
+    cart_id integer NOT NULL,
     customer_id integer NOT NULL
 );
 
@@ -78,11 +122,33 @@ CREATE TABLE public.cart (
 ALTER TABLE public.cart OWNER TO postgres;
 
 --
+-- Name: cart_cart_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.cart_cart_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.cart_cart_id_seq OWNER TO postgres;
+
+--
+-- Name: cart_cart_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.cart_cart_id_seq OWNED BY public.cart.cart_id;
+
+
+--
 -- Name: cartlist; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.cartlist (
-    cardlist_id serial NOT NULL,
+    cardlist_id integer NOT NULL,
     book_sku integer NOT NULL,
     cart_id integer NOT NULL
 );
@@ -91,11 +157,33 @@ CREATE TABLE public.cartlist (
 ALTER TABLE public.cartlist OWNER TO postgres;
 
 --
+-- Name: cartlist_cardlist_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.cartlist_cardlist_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.cartlist_cardlist_id_seq OWNER TO postgres;
+
+--
+-- Name: cartlist_cardlist_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.cartlist_cardlist_id_seq OWNED BY public.cartlist.cardlist_id;
+
+
+--
 -- Name: category; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.category (
-    category_id serial NOT NULL,
+    category_id integer NOT NULL,
     name character varying(255) NOT NULL
 );
 
@@ -103,11 +191,33 @@ CREATE TABLE public.category (
 ALTER TABLE public.category OWNER TO postgres;
 
 --
+-- Name: category_category_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.category_category_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.category_category_id_seq OWNER TO postgres;
+
+--
+-- Name: category_category_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.category_category_id_seq OWNED BY public.category.category_id;
+
+
+--
 -- Name: customer; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.customer (
-    customer_id serial NOT NULL,
+    customer_id integer NOT NULL,
     username character varying(255) NOT NULL,
     email character varying(255) NOT NULL,
     password character varying(255) NOT NULL,
@@ -116,6 +226,28 @@ CREATE TABLE public.customer (
 
 
 ALTER TABLE public.customer OWNER TO postgres;
+
+--
+-- Name: customer_customer_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.customer_customer_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.customer_customer_id_seq OWNER TO postgres;
+
+--
+-- Name: customer_customer_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.customer_customer_id_seq OWNED BY public.customer.customer_id;
+
 
 --
 -- Name: library; Type: TABLE; Schema: public; Owner: postgres
@@ -134,7 +266,7 @@ ALTER TABLE public.library OWNER TO postgres;
 --
 
 CREATE TABLE public.merchant (
-    merchant_id serial NOT NULL,
+    merchant_id integer NOT NULL,
     username character varying(255) NOT NULL,
     email character varying(255) NOT NULL,
     password character varying(255) NOT NULL,
@@ -148,11 +280,33 @@ CREATE TABLE public.merchant (
 ALTER TABLE public.merchant OWNER TO postgres;
 
 --
+-- Name: merchant_merchant_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.merchant_merchant_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.merchant_merchant_id_seq OWNER TO postgres;
+
+--
+-- Name: merchant_merchant_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.merchant_merchant_id_seq OWNED BY public.merchant.merchant_id;
+
+
+--
 -- Name: transaction; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.transaction (
-    transaction_id serial NOT NULL,
+    transaction_id integer NOT NULL,
     date timestamp without time zone DEFAULT now() NOT NULL,
     total double precision DEFAULT 0 NOT NULL,
     customer_id integer NOT NULL
@@ -162,11 +316,33 @@ CREATE TABLE public.transaction (
 ALTER TABLE public.transaction OWNER TO postgres;
 
 --
+-- Name: transaction_transaction_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.transaction_transaction_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.transaction_transaction_id_seq OWNER TO postgres;
+
+--
+-- Name: transaction_transaction_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.transaction_transaction_id_seq OWNED BY public.transaction.transaction_id;
+
+
+--
 -- Name: transactionlist; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.transactionlist (
-    transactionlist_id serial NOT NULL,
+    transactionlist_id integer NOT NULL,
     book_sku integer NOT NULL,
     merchant_id integer NOT NULL,
     transaction_id integer NOT NULL
@@ -174,6 +350,28 @@ CREATE TABLE public.transactionlist (
 
 
 ALTER TABLE public.transactionlist OWNER TO postgres;
+
+--
+-- Name: transactionlist_transactionlist_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.transactionlist_transactionlist_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.transactionlist_transactionlist_id_seq OWNER TO postgres;
+
+--
+-- Name: transactionlist_transactionlist_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.transactionlist_transactionlist_id_seq OWNED BY public.transactionlist.transactionlist_id;
+
 
 --
 -- Name: wishlist; Type: TABLE; Schema: public; Owner: postgres
@@ -188,19 +386,86 @@ CREATE TABLE public.wishlist (
 ALTER TABLE public.wishlist OWNER TO postgres;
 
 --
+-- Name: admin admin_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.admin ALTER COLUMN admin_id SET DEFAULT nextval('public.admin_admin_id_seq'::regclass);
+
+
+--
+-- Name: book book_sku; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.book ALTER COLUMN book_sku SET DEFAULT nextval('public.book_book_sku_seq'::regclass);
+
+
+--
+-- Name: cart cart_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.cart ALTER COLUMN cart_id SET DEFAULT nextval('public.cart_cart_id_seq'::regclass);
+
+
+--
+-- Name: cartlist cardlist_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.cartlist ALTER COLUMN cardlist_id SET DEFAULT nextval('public.cartlist_cardlist_id_seq'::regclass);
+
+
+--
+-- Name: category category_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.category ALTER COLUMN category_id SET DEFAULT nextval('public.category_category_id_seq'::regclass);
+
+
+--
+-- Name: customer customer_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.customer ALTER COLUMN customer_id SET DEFAULT nextval('public.customer_customer_id_seq'::regclass);
+
+
+--
+-- Name: merchant merchant_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.merchant ALTER COLUMN merchant_id SET DEFAULT nextval('public.merchant_merchant_id_seq'::regclass);
+
+
+--
+-- Name: transaction transaction_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.transaction ALTER COLUMN transaction_id SET DEFAULT nextval('public.transaction_transaction_id_seq'::regclass);
+
+
+--
+-- Name: transactionlist transactionlist_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.transactionlist ALTER COLUMN transactionlist_id SET DEFAULT nextval('public.transactionlist_transactionlist_id_seq'::regclass);
+
+
+--
 -- Data for Name: admin; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.admin (admin_id, username, email, password) FROM stdin;
--- \.
+1	admin	admin@admin.com	admin
+2	admin2	admin2@admin.com	admin3
+\.
 
 
 --
 -- Data for Name: book; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.book (book_sku, title, author, year, description, document, price, rating, merchant_id) FROM stdin;
--- \.
+COPY public.book (book_sku, title, author, year, description, price, merchant_id, document, merchant) FROM stdin;
+1	All The Light We Cannot See	Anthony Doerr	2009	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.	50000	1	/uploads/book-example.svg	\N
+2	All The Light We Cannot See 2	Anthony Doerr	2009	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.	50000	2	/uploads/book-example.svg	\N
+\.
 
 
 --
@@ -208,7 +473,12 @@ COPY public.book (book_sku, title, author, year, description, document, price, r
 --
 
 COPY public.bookcategory (book_sku, category_id) FROM stdin;
--- \.
+1	1
+1	3
+1	5
+2	2
+2	4
+\.
 
 
 --
@@ -216,7 +486,7 @@ COPY public.bookcategory (book_sku, category_id) FROM stdin;
 --
 
 COPY public.cart (cart_id, customer_id) FROM stdin;
--- \.
+\.
 
 
 --
@@ -224,7 +494,7 @@ COPY public.cart (cart_id, customer_id) FROM stdin;
 --
 
 COPY public.cartlist (cardlist_id, book_sku, cart_id) FROM stdin;
--- \.
+\.
 
 
 --
@@ -232,7 +502,12 @@ COPY public.cartlist (cardlist_id, book_sku, cart_id) FROM stdin;
 --
 
 COPY public.category (category_id, name) FROM stdin;
--- \.
+1	Fiction
+2	Non-fiction
+3	Drama
+4	Horror
+5	Romance
+\.
 
 
 --
@@ -240,7 +515,9 @@ COPY public.category (category_id, name) FROM stdin;
 --
 
 COPY public.customer (customer_id, username, email, password, status) FROM stdin;
--- \.
+1	riandi	riandi@example.com	helloworld	Active
+3	riandi2	riandi2@example.com	helloworld	Active
+\.
 
 
 --
@@ -248,7 +525,7 @@ COPY public.customer (customer_id, username, email, password, status) FROM stdin
 --
 
 COPY public.library (customer_id, book_sku) FROM stdin;
--- \.
+\.
 
 
 --
@@ -256,7 +533,9 @@ COPY public.library (customer_id, book_sku) FROM stdin;
 --
 
 COPY public.merchant (merchant_id, username, email, password, fullname, description, phone, status) FROM stdin;
--- \.
+1	gramedia	gramedia@example.com	helloworld	Gramedia	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.	1234567890	Active
+2	gramedia2	gramedia2@example.com	helloworld	Gramedia2	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.	1234567899	Active
+\.
 
 
 --
@@ -264,7 +543,7 @@ COPY public.merchant (merchant_id, username, email, password, fullname, descript
 --
 
 COPY public.transaction (transaction_id, date, total, customer_id) FROM stdin;
--- \.
+\.
 
 
 --
@@ -272,7 +551,7 @@ COPY public.transaction (transaction_id, date, total, customer_id) FROM stdin;
 --
 
 COPY public.transactionlist (transactionlist_id, book_sku, merchant_id, transaction_id) FROM stdin;
--- \.
+\.
 
 
 --
@@ -281,6 +560,69 @@ COPY public.transactionlist (transactionlist_id, book_sku, merchant_id, transact
 
 COPY public.wishlist (customer_id, book_sku) FROM stdin;
 \.
+
+
+--
+-- Name: admin_admin_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.admin_admin_id_seq', 4, true);
+
+
+--
+-- Name: book_book_sku_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.book_book_sku_seq', 2, true);
+
+
+--
+-- Name: cart_cart_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.cart_cart_id_seq', 1, false);
+
+
+--
+-- Name: cartlist_cardlist_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.cartlist_cardlist_id_seq', 1, false);
+
+
+--
+-- Name: category_category_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.category_category_id_seq', 5, true);
+
+
+--
+-- Name: customer_customer_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.customer_customer_id_seq', 3, true);
+
+
+--
+-- Name: merchant_merchant_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.merchant_merchant_id_seq', 2, true);
+
+
+--
+-- Name: transaction_transaction_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.transaction_transaction_id_seq', 1, false);
+
+
+--
+-- Name: transactionlist_transactionlist_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.transactionlist_transactionlist_id_seq', 1, false);
 
 
 --

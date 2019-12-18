@@ -1,8 +1,11 @@
 package com.kindle.backend.service;
 
+import com.kindle.backend.model.entity.Book;
 import com.kindle.backend.model.entity.Customer;
 import com.kindle.backend.model.repository.CustomerRepository;
 import com.kindle.backend.response.PostResponse;
+import com.kindle.backend.response.PutResponse;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,9 +28,20 @@ public class CustomerService {
     return customerRepository.save(customer);
   }
 
-  public void updateCustomer(Integer customerId, Customer customer) {
+  public PutResponse updateCustomer(Integer customerId, Customer customer) {
+    PutResponse updateResponse = new PutResponse();
     customer.setCustomerId(customerId);
-    customerRepository.save(customer);
+    Customer customerResponse = customerRepository.save(customer);
+
+    if (customerResponse == null) {
+      updateResponse.setCode(401);
+      updateResponse.setMessage("Error: update fail");
+    } else {
+      updateResponse.setCode(200);
+      updateResponse.setMessage("Update success");
+    }
+
+    return updateResponse;
   }
 
   public long deleteByCustomerId(Integer customerId) {
@@ -46,6 +60,7 @@ public class CustomerService {
       loginResponse.setMessage("Login failed: wrong email or password");
     } else {
       if (customerResponse.getStatus().equals("Active")) {
+        loginResponse.setUserId(customerResponse.getCustomerId());
         loginResponse.setCode(200);
         loginResponse.setMessage("Login success");
       } else {
@@ -66,10 +81,17 @@ public class CustomerService {
       registerResponse.setCode(401);
       registerResponse.setMessage("Error: register fail");
     } else {
+      registerResponse.setUserId(customerResponse.getCustomerId());
       registerResponse.setCode(200);
       registerResponse.setMessage("Register success");
     }
 
     return registerResponse;
+  }
+
+  public List<Book> findCustomerLibrary(Integer customerId){
+    Customer customerResponse = customerRepository.findFirstByCustomerId(customerId);
+
+    return customerResponse.getLibrary();
   }
 }
