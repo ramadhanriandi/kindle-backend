@@ -1,5 +1,6 @@
 package com.kindle.backend.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.kindle.backend.model.constant.CustomerConstant;
 import com.kindle.backend.model.constant.LibraryConstant;
 import lombok.AllArgsConstructor;
@@ -32,13 +33,14 @@ public class Customer {
   @Column(name = CustomerConstant.CUSTOMER_STATUS)
   private String status;
 
-  @ManyToMany(fetch = FetchType.LAZY)
+  @JsonIgnore
+  @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
           @JoinTable(
                   name = LibraryConstant.TABLE_NAME,
                   joinColumns = @JoinColumn(name = LibraryConstant.CUSTOMER_ID),
                   inverseJoinColumns = @JoinColumn(name = LibraryConstant.BOOK_SKU)
           )
-  List<Book> library;
+  private List<Book> library;
 
   public int getCustomerId() {
     return customerId;

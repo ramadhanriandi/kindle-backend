@@ -1,13 +1,16 @@
 package com.kindle.backend.response;
 
-import com.kindle.backend.model.constant.AdminConstant;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
-
 public class PostResponse {
+  private int userId;
+
+  public int getUserId() {
+    return userId;
+  }
+
+  public void setUserId(int userId) {
+    this.userId = userId;
+  }
+
   private int code;
   private String message;
 

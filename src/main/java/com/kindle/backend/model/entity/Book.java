@@ -1,5 +1,6 @@
 package com.kindle.backend.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.kindle.backend.model.constant.BookConstant;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -40,8 +41,9 @@ public class Book {
   @Column(name = BookConstant.BOOK_DOCUMENT)
   private String document;
 
-  @ManyToMany(mappedBy = "library", fetch = FetchType.LAZY)
-  List<Customer> ownerBook;
+  @JsonIgnore
+  @ManyToMany(mappedBy = "library", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+  private List<Customer> ownerBook;
 
   public int getBookSku() {
     return bookSku;
