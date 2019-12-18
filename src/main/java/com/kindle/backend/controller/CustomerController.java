@@ -1,6 +1,7 @@
 package com.kindle.backend.controller;
 
 import com.kindle.backend.model.constant.ApiPath;
+import com.kindle.backend.model.entity.Book;
 import com.kindle.backend.model.entity.Customer;
 import com.kindle.backend.response.PostResponse;
 import com.kindle.backend.service.CustomerService;
@@ -49,5 +50,10 @@ public class CustomerController {
   @RequestMapping(value = ApiPath.CUSTOMER_REGISTER, method = RequestMethod.POST)
   public PostResponse register(@RequestBody Customer customer) {
     return this.customerService.register(customer);
+  }
+
+  @RequestMapping(value = ApiPath.CUSTOMER_LIBRARY, method = RequestMethod.GET)
+  public List<Book> getCustomerLibrary(@PathVariable Integer customerId) {
+    return this.customerService.findCustomerLibrary(customerId);
   }
 }

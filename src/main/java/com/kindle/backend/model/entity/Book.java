@@ -42,7 +42,7 @@ public class Book {
   private String document;
 
   @JsonIgnore
-  @ManyToMany(mappedBy = "library", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+  @ManyToMany(mappedBy = "library", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   private List<Customer> ownerBook;
 
   public int getBookSku() {

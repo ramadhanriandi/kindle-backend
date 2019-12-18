@@ -1,8 +1,10 @@
 package com.kindle.backend.service;
 
+import com.kindle.backend.model.entity.Book;
 import com.kindle.backend.model.entity.Customer;
 import com.kindle.backend.model.repository.CustomerRepository;
 import com.kindle.backend.response.PostResponse;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -73,5 +75,12 @@ public class CustomerService {
     }
 
     return registerResponse;
+  }
+
+  public List<Book> findCustomerLibrary(Integer customerId){
+    Customer customerResponse = customerRepository.findFirstByCustomerId(customerId);
+//    Hibernate.initialize(customerResponse.getLibrary());
+
+    return customerResponse.getLibrary();
   }
 }
