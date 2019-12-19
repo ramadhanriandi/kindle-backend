@@ -19,6 +19,7 @@ public class ApiPath {
   public static final String MERCHANT = API + "/merchants";
   public static final String MERCHANT_BY_MERCHANT_ID = MERCHANT + "/{merchantId}";
   public static final String MERCHANT_LOGIN = MERCHANT + "/login";
+  public static final String MERCHANT_CATALOG = MERCHANT_BY_MERCHANT_ID + "/catalog";
 
   public static final String TRANSACTION = API + "/transactions";
 

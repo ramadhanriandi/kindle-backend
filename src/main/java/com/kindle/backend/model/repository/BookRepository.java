@@ -14,6 +14,8 @@ public interface BookRepository extends CrudRepository<Book, Integer> {
 
   List<Book> findAll();
 
+  List<Book> findBookByMerchantId(Integer merchant_id);
+
   @Transactional
   long deleteBookByBookSku(Integer sku);
 }

@@ -32,4 +32,6 @@ public class BookService {
   public long deleteByBookSku(Integer sku) {
     return bookRepository.deleteBookByBookSku(sku);
   }
+
+  public List<Book> findBookByMerchantId(Integer merchant_id){ return bookRepository.findBookByMerchantId(merchant_id); }
 }

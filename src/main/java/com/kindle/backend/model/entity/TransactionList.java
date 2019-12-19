@@ -1,5 +1,7 @@
 package com.kindle.backend.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.kindle.backend.model.constant.BookConstant;
 import com.kindle.backend.model.constant.TransactionListConstant;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,6 +29,11 @@ public class TransactionList {
 
   @Column(name = TransactionListConstant.TRANSACTIONLIST_TRANSACTION_ID)
   private int transactionId;
+
+  @JsonIgnore
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = TransactionListConstant.TRANSACTIONLIST_BOOK_SKU, insertable = false, updatable = false)
+  private Book bookDetail;
 
   public int getTransactionListId() {
     return transactionListId;
@@ -58,5 +65,13 @@ public class TransactionList {
 
   public void setTransactionId(int transactionId) {
     this.transactionId = transactionId;
+  }
+
+  public Book getBookDetail() {
+    return bookDetail;
+  }
+
+  public void setBookDetail(Book bookDetail) {
+    this.bookDetail = bookDetail;
   }
 }

@@ -9,6 +9,7 @@ import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -89,6 +90,7 @@ public class CustomerService {
     return registerResponse;
   }
 
+  @Transactional
   public List<Book> findCustomerLibrary(Integer customerId){
     Customer customerResponse = customerRepository.findFirstByCustomerId(customerId);
 

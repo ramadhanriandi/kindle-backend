@@ -860,4 +860,3 @@ ALTER TABLE ONLY public.wishlist
 --
 -- PostgreSQL database dump complete
 --
-

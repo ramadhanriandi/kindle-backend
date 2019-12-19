@@ -5,6 +5,8 @@ import com.kindle.backend.model.constant.BookConstant;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.util.List;
@@ -44,6 +46,11 @@ public class Book {
   @JsonIgnore
   @ManyToMany(mappedBy = "library", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   private List<Customer> ownerBook;
+
+  @JsonIgnore
+  @LazyCollection(LazyCollectionOption.FALSE)
+  @OneToMany(mappedBy = "bookDetail", fetch = FetchType.LAZY)
+  private List<TransactionList> orderList;
 
   public int getBookSku() {
     return bookSku;
@@ -115,5 +122,13 @@ public class Book {
 
   public void setOwnerBook(List<Customer> ownerBook) {
     this.ownerBook = ownerBook;
+  }
+
+  public List<TransactionList> getOrderList() {
+    return orderList;
+  }
+
+  public void setOrderList(List<TransactionList> orderList) {
+    this.orderList = orderList;
   }
 }
