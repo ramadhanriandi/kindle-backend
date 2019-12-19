@@ -1,0 +1,62 @@
+package com.kindle.backend.model.entity;
+
+import com.kindle.backend.model.constant.TransactionListConstant;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+import java.sql.Timestamp;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = TransactionListConstant.TABLE_NAME)
+public class TransactionList {
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = TransactionListConstant.TRANSACTIONLIST_ID)
+  private int transactionListId;
+
+  @Column(name = TransactionListConstant.TRANSACTIONLIST_BOOK_SKU)
+  private int bookSku;
+
+  @Column(name = TransactionListConstant.TRANSACTIONLIST_MERCHANT_ID)
+  private int merchantId;
+
+  @Column(name = TransactionListConstant.TRANSACTIONLIST_TRANSACTION_ID)
+  private int transactionId;
+
+  public int getTransactionListId() {
+    return transactionListId;
+  }
+
+  public void setTransactionListId(int transactionListId) {
+    this.transactionListId = transactionListId;
+  }
+
+  public int getBookSku() {
+    return bookSku;
+  }
+
+  public void setBookSku(int bookSku) {
+    this.bookSku = bookSku;
+  }
+
+  public int getMerchantId() {
+    return merchantId;
+  }
+
+  public void setMerchantId(int merchantId) {
+    this.merchantId = merchantId;
+  }
+
+  public int getTransactionId() {
+    return transactionId;
+  }
+
+  public void setTransactionId(int transactionId) {
+    this.transactionId = transactionId;
+  }
+}
