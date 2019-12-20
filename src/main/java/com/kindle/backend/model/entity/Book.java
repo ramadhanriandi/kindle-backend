@@ -1,10 +1,13 @@
 package com.kindle.backend.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.kindle.backend.model.constant.BookCategoryConstant;
 import com.kindle.backend.model.constant.BookConstant;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.List;
@@ -52,6 +55,16 @@ public class Book {
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "merchant_id", nullable = false, insertable = false, updatable = false)
   private Merchant merchant;
+
+  @JsonIgnore
+  @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+  @Fetch(value = FetchMode.SUBSELECT)
+  @JoinTable(
+          name = BookCategoryConstant.TABLE_NAME,
+          joinColumns = @JoinColumn(name = BookCategoryConstant.BOOK_SKU),
+          inverseJoinColumns = @JoinColumn(name = BookCategoryConstant.CATEGORY_ID)
+  )
+  private List<Category> categories;
 
   public int getBookSku() {
     return bookSku;
@@ -139,5 +152,13 @@ public class Book {
 
   public void setMerchant(Merchant merchant) {
     this.merchant = merchant;
+  }
+
+  public List<Category> getCategories() {
+    return categories;
+  }
+
+  public void setCategories(List<Category> categories) {
+    this.categories = categories;
   }
 }

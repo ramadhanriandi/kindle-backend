@@ -1,12 +1,16 @@
 package com.kindle.backend.response;
 
 import com.kindle.backend.model.entity.Book;
+import com.kindle.backend.model.entity.Category;
+
+import java.util.List;
 
 public class BookDetailResponse {
   private int code;
   private String message;
   private Book bookData;
   private String merchant;
+  private List<Category> categories;
 
   public int getCode() {
     return code;
@@ -38,5 +42,13 @@ public class BookDetailResponse {
 
   public void setMerchant(String merchant) {
     this.merchant = merchant;
+  }
+
+  public List<Category> getCategories() {
+    return categories;
+  }
+
+  public void setCategories(List<Category> categories) {
+    this.categories = categories;
   }
 }

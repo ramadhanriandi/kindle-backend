@@ -35,11 +35,11 @@ public class Customer {
 
   @JsonIgnore
   @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-          @JoinTable(
-                  name = LibraryConstant.TABLE_NAME,
-                  joinColumns = @JoinColumn(name = LibraryConstant.CUSTOMER_ID),
-                  inverseJoinColumns = @JoinColumn(name = LibraryConstant.BOOK_SKU)
-          )
+  @JoinTable(
+          name = LibraryConstant.TABLE_NAME,
+          joinColumns = @JoinColumn(name = LibraryConstant.CUSTOMER_ID),
+          inverseJoinColumns = @JoinColumn(name = LibraryConstant.BOOK_SKU)
+  )
   private List<Book> library;
 
   public int getCustomerId() {
