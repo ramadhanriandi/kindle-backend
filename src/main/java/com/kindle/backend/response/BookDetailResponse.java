@@ -1,13 +1,12 @@
 package com.kindle.backend.response;
 
 import com.kindle.backend.model.entity.Book;
-import com.kindle.backend.model.entity.Merchant;
 
 public class BookDetailResponse {
   private int code;
   private String message;
   private Book bookData;
-  private Merchant merchantData;
+  private String merchant;
 
   public int getCode() {
     return code;
@@ -33,11 +32,11 @@ public class BookDetailResponse {
     this.bookData = bookData;
   }
 
-  public Merchant getMerchantData() {
-    return merchantData;
+  public String getMerchant() {
+    return merchant;
   }
 
-  public void setMerchantData(Merchant merchantData) {
-    this.merchantData = merchantData;
+  public void setMerchant(String merchant) {
+    this.merchant = merchant;
   }
 }

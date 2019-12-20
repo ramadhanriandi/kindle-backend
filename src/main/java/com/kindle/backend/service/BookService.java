@@ -47,7 +47,7 @@ public class BookService {
       bookDetailResponse.setCode(200);
       bookDetailResponse.setMessage("Fetch success");
       bookDetailResponse.setBookData(bookResponse);
-      bookDetailResponse.setMerchantData(bookResponse.getMerchant());
+      bookDetailResponse.setMerchant(bookResponse.getMerchant().getFullname());
     }
 
     return bookDetailResponse;
