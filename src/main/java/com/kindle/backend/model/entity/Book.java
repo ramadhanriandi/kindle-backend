@@ -41,9 +41,16 @@ public class Book {
   @Column(name = BookConstant.BOOK_DOCUMENT)
   private String document;
 
+  @Column(name = BookConstant.BOOK_VARIANT)
+  private String variant;
+
   @JsonIgnore
   @ManyToMany(mappedBy = "library", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   private List<Customer> ownerBook;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "merchant_id", nullable = false, insertable = false, updatable = false)
+  private Merchant merchant;
 
   public int getBookSku() {
     return bookSku;
@@ -93,14 +100,6 @@ public class Book {
     this.price = price;
   }
 
-  public int getMerchant_id() {
-    return merchantId;
-  }
-
-  public void setMerchant_id(int merchantId) {
-    this.merchantId = merchantId;
-  }
-
   public String getDocument() {
     return document;
   }
@@ -109,11 +108,35 @@ public class Book {
     this.document = document;
   }
 
+  public int getMerchantId() {
+    return merchantId;
+  }
+
+  public void setMerchantId(int merchantId) {
+    this.merchantId = merchantId;
+  }
+
+  public String getVariant() {
+    return variant;
+  }
+
+  public void setVariant(String variant) {
+    this.variant = variant;
+  }
+
   public List<Customer> getOwnerBook() {
     return ownerBook;
   }
 
   public void setOwnerBook(List<Customer> ownerBook) {
     this.ownerBook = ownerBook;
+  }
+
+  public Merchant getMerchant() {
+    return merchant;
+  }
+
+  public void setMerchant(Merchant merchant) {
+    this.merchant = merchant;
   }
 }
