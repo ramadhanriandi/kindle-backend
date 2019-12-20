@@ -3,6 +3,7 @@ package com.kindle.backend.model.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.kindle.backend.model.constant.CustomerConstant;
 import com.kindle.backend.model.constant.LibraryConstant;
+import com.kindle.backend.model.constant.WishlistConstant;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -41,6 +42,15 @@ public class Customer {
           inverseJoinColumns = @JoinColumn(name = LibraryConstant.BOOK_SKU)
   )
   private List<Book> library;
+
+  @JsonIgnore
+  @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+  @JoinTable(
+          name = WishlistConstant.TABLE_NAME,
+          joinColumns = @JoinColumn(name = WishlistConstant.CUSTOMER_ID),
+          inverseJoinColumns = @JoinColumn(name = WishlistConstant.BOOK_SKU)
+  )
+  private List<Book> wishlist;
 
   public int getCustomerId() {
     return customerId;
@@ -88,5 +98,13 @@ public class Customer {
 
   public void setLibrary(List<Book> library) {
     this.library = library;
+  }
+
+  public List<Book> getWishlist() {
+    return wishlist;
+  }
+
+  public void setWishlist(List<Book> wishlist) {
+    this.wishlist = wishlist;
   }
 }

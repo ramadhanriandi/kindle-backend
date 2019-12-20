@@ -66,6 +66,10 @@ public class Book {
   )
   private List<Category> categories;
 
+  @JsonIgnore
+  @ManyToMany(mappedBy = "wishlist", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+  private List<Customer> likedBook;
+
   public int getBookSku() {
     return bookSku;
   }
@@ -160,5 +164,13 @@ public class Book {
 
   public void setCategories(List<Category> categories) {
     this.categories = categories;
+  }
+
+  public List<Customer> getLikedBook() {
+    return likedBook;
+  }
+
+  public void setLikedBook(List<Customer> likedBook) {
+    this.likedBook = likedBook;
   }
 }
