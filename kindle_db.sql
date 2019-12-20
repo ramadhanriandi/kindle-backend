@@ -115,69 +115,12 @@ ALTER TABLE public.bookcategory OWNER TO postgres;
 --
 
 CREATE TABLE public.cart (
-    cart_id integer NOT NULL,
-    customer_id integer NOT NULL
+    customer_id integer NOT NULL,
+    book_sku integer NOT NULL
 );
 
 
 ALTER TABLE public.cart OWNER TO postgres;
-
---
--- Name: cart_cart_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public.cart_cart_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.cart_cart_id_seq OWNER TO postgres;
-
---
--- Name: cart_cart_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE public.cart_cart_id_seq OWNED BY public.cart.cart_id;
-
-
---
--- Name: cartlist; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.cartlist (
-    cardlist_id integer NOT NULL,
-    book_sku integer NOT NULL,
-    cart_id integer NOT NULL
-);
-
-
-ALTER TABLE public.cartlist OWNER TO postgres;
-
---
--- Name: cartlist_cardlist_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public.cartlist_cardlist_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.cartlist_cardlist_id_seq OWNER TO postgres;
-
---
--- Name: cartlist_cardlist_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE public.cartlist_cardlist_id_seq OWNED BY public.cartlist.cardlist_id;
-
 
 --
 -- Name: category; Type: TABLE; Schema: public; Owner: postgres
@@ -437,20 +380,6 @@ ALTER TABLE ONLY public.book ALTER COLUMN book_sku SET DEFAULT nextval('public.b
 
 
 --
--- Name: cart cart_id; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.cart ALTER COLUMN cart_id SET DEFAULT nextval('public.cart_cart_id_seq'::regclass);
-
-
---
--- Name: cartlist cardlist_id; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.cartlist ALTER COLUMN cardlist_id SET DEFAULT nextval('public.cartlist_cardlist_id_seq'::regclass);
-
-
---
 -- Name: category category_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -529,15 +458,10 @@ COPY public.bookcategory (book_sku, category_id) FROM stdin;
 -- Data for Name: cart; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.cart (cart_id, customer_id) FROM stdin;
-\.
-
-
---
--- Data for Name: cartlist; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.cartlist (cardlist_id, book_sku, cart_id) FROM stdin;
+COPY public.cart (customer_id, book_sku) FROM stdin;
+1	1
+1	2
+3	1
 \.
 
 
@@ -621,6 +545,9 @@ COPY public.transactionlist (transactionlist_id, book_sku, merchant_id, transact
 --
 
 COPY public.wishlist (customer_id, book_sku) FROM stdin;
+1	1
+1	2
+3	2
 \.
 
 
@@ -636,20 +563,6 @@ SELECT pg_catalog.setval('public.admin_admin_id_seq', 4, true);
 --
 
 SELECT pg_catalog.setval('public.book_book_sku_seq', 2, true);
-
-
---
--- Name: cart_cart_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.cart_cart_id_seq', 1, false);
-
-
---
--- Name: cartlist_cardlist_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.cartlist_cardlist_id_seq', 1, false);
 
 
 --
@@ -724,22 +637,6 @@ ALTER TABLE ONLY public.admin
 
 ALTER TABLE ONLY public.book
     ADD CONSTRAINT book_pkey PRIMARY KEY (book_sku);
-
-
---
--- Name: cart cart_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.cart
-    ADD CONSTRAINT cart_pkey PRIMARY KEY (cart_id);
-
-
---
--- Name: cartlist cartlist_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.cartlist
-    ADD CONSTRAINT cartlist_pkey PRIMARY KEY (cardlist_id);
 
 
 --
@@ -847,27 +744,19 @@ ALTER TABLE ONLY public.bookcategory
 
 
 --
+-- Name: cart cart_book_sku_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.cart
+    ADD CONSTRAINT cart_book_sku_fkey FOREIGN KEY (book_sku) REFERENCES public.book(book_sku);
+
+
+--
 -- Name: cart cart_customer_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.cart
     ADD CONSTRAINT cart_customer_id_fkey FOREIGN KEY (customer_id) REFERENCES public.customer(customer_id);
-
-
---
--- Name: cartlist cartlist_book_sku_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.cartlist
-    ADD CONSTRAINT cartlist_book_sku_fkey FOREIGN KEY (book_sku) REFERENCES public.book(book_sku);
-
-
---
--- Name: cartlist cartlist_cart_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.cartlist
-    ADD CONSTRAINT cartlist_cart_id_fkey FOREIGN KEY (cart_id) REFERENCES public.cart(cart_id);
 
 
 --

@@ -3,13 +3,13 @@ package com.kindle.backend.controller;
 import com.kindle.backend.model.constant.ApiPath;
 import com.kindle.backend.model.entity.Book;
 import com.kindle.backend.model.entity.Customer;
+import com.kindle.backend.response.CartResponse;
 import com.kindle.backend.response.PostResponse;
 import com.kindle.backend.response.PutResponse;
 import com.kindle.backend.response.WishlistResponse;
 import com.kindle.backend.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.List;
 
@@ -52,6 +52,11 @@ public class CustomerController {
   @RequestMapping(value = ApiPath.CUSTOMER_REGISTER, method = RequestMethod.POST)
   public PostResponse register(@RequestBody Customer customer) {
     return this.customerService.register(customer);
+  }
+
+  @RequestMapping(value = ApiPath.CUSTOMER_CART, method = RequestMethod.GET)
+  public List<CartResponse> getCustomerCart(@PathVariable Integer customerId) {
+    return this.customerService.findCustomerCart(customerId);
   }
 
   @RequestMapping(value = ApiPath.CUSTOMER_LIBRARY, method = RequestMethod.GET)

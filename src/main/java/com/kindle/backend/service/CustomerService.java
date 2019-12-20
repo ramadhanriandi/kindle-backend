@@ -3,6 +3,7 @@ package com.kindle.backend.service;
 import com.kindle.backend.model.entity.Book;
 import com.kindle.backend.model.entity.Customer;
 import com.kindle.backend.model.repository.CustomerRepository;
+import com.kindle.backend.response.CartResponse;
 import com.kindle.backend.response.PostResponse;
 import com.kindle.backend.response.PutResponse;
 import com.kindle.backend.response.WishlistResponse;
@@ -105,5 +106,16 @@ public class CustomerService {
     }
 
     return wishlistResponses;
+  }
+
+  public List<CartResponse> findCustomerCart(Integer customerId){
+    Customer customerResponse = customerRepository.findFirstByCustomerId(customerId);
+    List<Book> cart = customerResponse.getCart();
+    List<CartResponse> cartResponses = new ArrayList<>();
+    for (Book book : cart) {
+      cartResponses.add(new CartResponse(book, book.getMerchant().getFullname()));
+    }
+
+    return cartResponses;
   }
 }

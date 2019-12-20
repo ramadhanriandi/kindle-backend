@@ -1,6 +1,7 @@
 package com.kindle.backend.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.kindle.backend.model.constant.CartConstant;
 import com.kindle.backend.model.constant.CustomerConstant;
 import com.kindle.backend.model.constant.LibraryConstant;
 import com.kindle.backend.model.constant.WishlistConstant;
@@ -51,6 +52,15 @@ public class Customer {
           inverseJoinColumns = @JoinColumn(name = WishlistConstant.BOOK_SKU)
   )
   private List<Book> wishlist;
+
+  @JsonIgnore
+  @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+  @JoinTable(
+          name = CartConstant.TABLE_NAME,
+          joinColumns = @JoinColumn(name = CartConstant.CUSTOMER_ID),
+          inverseJoinColumns = @JoinColumn(name = CartConstant.BOOK_SKU)
+  )
+  private List<Book> cart;
 
   public int getCustomerId() {
     return customerId;
@@ -106,5 +116,13 @@ public class Customer {
 
   public void setWishlist(List<Book> wishlist) {
     this.wishlist = wishlist;
+  }
+
+  public List<Book> getCart() {
+    return cart;
+  }
+
+  public void setCart(List<Book> cart) {
+    this.cart = cart;
   }
 }

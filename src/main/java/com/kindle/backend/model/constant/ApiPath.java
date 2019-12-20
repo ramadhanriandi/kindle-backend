@@ -18,6 +18,7 @@ public class ApiPath {
   public static final String CUSTOMER_BY_CUSTOMER_ID = CUSTOMER + "/{customerId}";
   public static final String CUSTOMER_LOGIN = CUSTOMER + "/login";
   public static final String CUSTOMER_REGISTER = CUSTOMER + "/register";
+  public static final String CUSTOMER_CART = CUSTOMER_BY_CUSTOMER_ID + "/cart";
   public static final String CUSTOMER_LIBRARY = CUSTOMER_BY_CUSTOMER_ID + "/library";
   public static final String CUSTOMER_WISHLIST = CUSTOMER_BY_CUSTOMER_ID + "/wishlist";
 
