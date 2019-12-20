@@ -7,8 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -44,7 +43,7 @@ public class Merchant {
 
   @JsonIgnore
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "merchant")
-  private Set<Book> catalog = new HashSet<>();
+  private List<Book> catalog;
 
   public int getMerchantId() {
     return merchantId;
@@ -110,11 +109,11 @@ public class Merchant {
     this.status = status;
   }
 
-  public Set<Book> getCatalog() {
+  public List<Book> getCatalog() {
     return catalog;
   }
 
-  public void setCatalog(Set<Book> catalog) {
+  public void setCatalog(List<Book> catalog) {
     this.catalog = catalog;
   }
 }

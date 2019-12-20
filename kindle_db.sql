@@ -274,14 +274,7 @@ CREATE TABLE public.merchant (
     fullname character varying(255),
     description text,
     phone character varying(255),
-    status character varying(255) DEFAULT 'Active'::character varying NOT NULL,
-    merchant_description character varying(255),
-    merchant_email character varying(255),
-    merchant_fullname character varying(255),
-    merchant_password character varying(255),
-    merchant_phone character varying(255),
-    merchant_status character varying(255),
-    merchant_username character varying(255)
+    status character varying(255) DEFAULT 'Active'::character varying NOT NULL
 );
 
 
@@ -585,9 +578,9 @@ COPY public.library (customer_id, book_sku) FROM stdin;
 -- Data for Name: merchant; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.merchant (merchant_id, username, email, password, fullname, description, phone, status, merchant_description, merchant_email, merchant_fullname, merchant_password, merchant_phone, merchant_status, merchant_username) FROM stdin;
-1	gramedia	gramedia@example.com	helloworld	Gramedia	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.	1234567890	Active	\N	\N	\N	\N	\N	\N	\N
-2	gramedia2	gramedia2@example.com	helloworld	Gramedia2	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.	1234567899	Active	\N	\N	\N	\N	\N	\N	\N
+COPY public.merchant (merchant_id, username, email, password, fullname, description, phone, status) FROM stdin;
+1	gramedia	gramedia@example.com	helloworld	Gramedia	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.	1234567890	Active
+2	gramedia2	gramedia2@example.com	helloworld	Gramedia2	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.	1234567899	Active
 \.
 
 
