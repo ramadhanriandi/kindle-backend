@@ -11,6 +11,9 @@ public class ApiPath {
   public static final String BOOK_BY_BOOK_SKU = BOOK + "/{sku}";
   public static final String BOOK_DETAIL = BOOK_BY_BOOK_SKU + "/detail";
 
+  public static final String CATEGORY = API + "/categories";
+  public static final String CATEGORY_BY_CATEGORY_ID = CATEGORY + "/{categoryId}";
+
   public static final String CUSTOMER = API + "/customers";
   public static final String CUSTOMER_BY_CUSTOMER_ID = CUSTOMER + "/{customerId}";
   public static final String CUSTOMER_LOGIN = CUSTOMER + "/login";
