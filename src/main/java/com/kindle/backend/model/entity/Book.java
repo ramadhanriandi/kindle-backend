@@ -48,7 +48,8 @@ public class Book {
   @ManyToMany(mappedBy = "library", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   private List<Customer> ownerBook;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @JsonIgnore
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "merchant_id", nullable = false, insertable = false, updatable = false)
   private Merchant merchant;
 

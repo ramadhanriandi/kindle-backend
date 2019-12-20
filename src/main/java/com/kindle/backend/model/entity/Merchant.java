@@ -1,5 +1,6 @@
 package com.kindle.backend.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.kindle.backend.model.constant.MerchantConstant;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -41,7 +42,8 @@ public class Merchant {
   @Column(name = MerchantConstant.MERCHANT_STATUS)
   private String status;
 
-  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "merchant")
+  @JsonIgnore
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "merchant")
   private Set<Book> catalog = new HashSet<>();
 
   public int getMerchantId() {

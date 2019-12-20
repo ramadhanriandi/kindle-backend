@@ -1,7 +1,7 @@
 package com.kindle.backend.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.hibernate5.h;
+import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
@@ -14,8 +14,7 @@ public class ApplicationConfig extends WebMvcConfigurerAdapter {
     MappingJackson2HttpMessageConverter messageConverter = new MappingJackson2HttpMessageConverter();
 
     ObjectMapper mapper = new ObjectMapper();
-    //Registering Hibernate4Module to support lazy objects
-    mapper.registerModule(new Hibernate4Module());
+    mapper.registerModule(new Hibernate5Module());
 
     messageConverter.setObjectMapper(mapper);
     return messageConverter;

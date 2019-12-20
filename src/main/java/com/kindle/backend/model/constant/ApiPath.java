@@ -9,6 +9,7 @@ public class ApiPath {
 
   public static final String BOOK = API + "/books";
   public static final String BOOK_BY_BOOK_SKU = BOOK + "/{sku}";
+  public static final String BOOK_DETAIL = BOOK_BY_BOOK_SKU + "/detail";
 
   public static final String CUSTOMER = API + "/customers";
   public static final String CUSTOMER_BY_CUSTOMER_ID = CUSTOMER + "/{customerId}";
