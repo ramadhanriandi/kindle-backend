@@ -2,6 +2,7 @@ package com.kindle.backend.controller;
 
 import com.kindle.backend.model.constant.ApiPath;
 import com.kindle.backend.model.entity.Book;
+import com.kindle.backend.response.BookDetailResponse;
 import com.kindle.backend.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -38,4 +39,10 @@ public class BookController {
   public boolean deleteByBookSku(@PathVariable Integer sku) {
     return this.bookService.deleteByBookSku(sku) > 0;
   }
+
+  @RequestMapping(value = ApiPath.BOOK_DETAIL, method = RequestMethod.GET)
+  public BookDetailResponse getBookDetail(@PathVariable Integer sku) {
+    return this.bookService.getBookDetail(sku);
+  }
+
 }

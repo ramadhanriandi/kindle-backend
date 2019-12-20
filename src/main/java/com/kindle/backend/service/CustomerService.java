@@ -3,12 +3,14 @@ package com.kindle.backend.service;
 import com.kindle.backend.model.entity.Book;
 import com.kindle.backend.model.entity.Customer;
 import com.kindle.backend.model.repository.CustomerRepository;
+import com.kindle.backend.response.CartResponse;
 import com.kindle.backend.response.PostResponse;
 import com.kindle.backend.response.PutResponse;
-import org.hibernate.Hibernate;
+import com.kindle.backend.response.WishlistResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -93,5 +95,27 @@ public class CustomerService {
     Customer customerResponse = customerRepository.findFirstByCustomerId(customerId);
 
     return customerResponse.getLibrary();
+  }
+
+  public List<WishlistResponse> findCustomerWishlist(Integer customerId){
+    Customer customerResponse = customerRepository.findFirstByCustomerId(customerId);
+    List<Book> wishlist = customerResponse.getWishlist();
+    List<WishlistResponse> wishlistResponses = new ArrayList<>();
+    for (Book book : wishlist) {
+      wishlistResponses.add(new WishlistResponse(book, book.getMerchant().getFullname()));
+    }
+
+    return wishlistResponses;
+  }
+
+  public List<CartResponse> findCustomerCart(Integer customerId){
+    Customer customerResponse = customerRepository.findFirstByCustomerId(customerId);
+    List<Book> cart = customerResponse.getCart();
+    List<CartResponse> cartResponses = new ArrayList<>();
+    for (Book book : cart) {
+      cartResponses.add(new CartResponse(book, book.getMerchant().getFullname()));
+    }
+
+    return cartResponses;
   }
 }
