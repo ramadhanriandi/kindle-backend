@@ -30,5 +30,4 @@ public class ApiPath {
   public static final String TRANSACTION = API + "/transactions";
 
   public static final String TRANSACTIONLIST = API + "/transactionlists";
-  public static final String TRANSACTIONLIST_BY_TRANSACTION_ID = API + "/transactionlists/{transactionId}";
 }

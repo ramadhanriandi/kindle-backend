@@ -16,7 +16,7 @@ public class TransactionListService {
   private TransactionListRepository transactionListRepository;
 
   @Transactional(propagation =  Propagation.SUPPORTS, readOnly = true)
-  public List<TransactionList> findAllTransactionListByTransactionId(int transactionId){
+  public List<TransactionList> findAllTransactionListByTransactionId(Integer transactionId){
     return transactionListRepository.findAllByTransactionId(transactionId);
   }
 }
