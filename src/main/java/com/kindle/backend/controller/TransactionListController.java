@@ -14,7 +14,7 @@ public class TransactionListController {
   @Autowired
   private TransactionListService transactionListService;
 
-  @RequestMapping(value = ApiPath.TRANSACTIONLIST, method = RequestMethod.GET)
+  @RequestMapping(value = ApiPath.TRANSACTIONLIST_BY_TRANSACTION_ID, method = RequestMethod.GET)
   public List<TransactionList> getAllTransactionListByTransactionId(@RequestParam int transactionId) {
     return this.transactionListService.findAllTransactionListByTransactionId(transactionId);
   }
