@@ -69,7 +69,8 @@ CREATE TABLE public.book (
     price double precision DEFAULT 0 NOT NULL,
     merchant_id integer NOT NULL,
     document character varying(255),
-    merchant character varying(255)
+    merchant character varying(255),
+    variant character varying(255)
 );
 
 
@@ -114,69 +115,12 @@ ALTER TABLE public.bookcategory OWNER TO postgres;
 --
 
 CREATE TABLE public.cart (
-    cart_id integer NOT NULL,
-    customer_id integer NOT NULL
+    customer_id integer NOT NULL,
+    book_sku integer NOT NULL
 );
 
 
 ALTER TABLE public.cart OWNER TO postgres;
-
---
--- Name: cart_cart_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public.cart_cart_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.cart_cart_id_seq OWNER TO postgres;
-
---
--- Name: cart_cart_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE public.cart_cart_id_seq OWNED BY public.cart.cart_id;
-
-
---
--- Name: cartlist; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.cartlist (
-    cardlist_id integer NOT NULL,
-    book_sku integer NOT NULL,
-    cart_id integer NOT NULL
-);
-
-
-ALTER TABLE public.cartlist OWNER TO postgres;
-
---
--- Name: cartlist_cardlist_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public.cartlist_cardlist_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.cartlist_cardlist_id_seq OWNER TO postgres;
-
---
--- Name: cartlist_cardlist_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE public.cartlist_cardlist_id_seq OWNED BY public.cartlist.cardlist_id;
-
 
 --
 -- Name: category; Type: TABLE; Schema: public; Owner: postgres
@@ -307,13 +251,49 @@ ALTER SEQUENCE public.merchant_merchant_id_seq OWNED BY public.merchant.merchant
 
 CREATE TABLE public.transaction (
     transaction_id integer NOT NULL,
-    date timestamp without time zone DEFAULT now() NOT NULL,
+    date timestamp without time zone DEFAULT now(),
     total double precision DEFAULT 0 NOT NULL,
     customer_id integer NOT NULL
 );
 
 
 ALTER TABLE public.transaction OWNER TO postgres;
+
+--
+-- Name: transaction_list; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.transaction_list (
+    transactionlist_id integer NOT NULL,
+    book_sku integer,
+    merchant_id integer,
+    transaction_id integer
+);
+
+
+ALTER TABLE public.transaction_list OWNER TO postgres;
+
+--
+-- Name: transaction_list_transactionlist_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.transaction_list_transactionlist_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.transaction_list_transactionlist_id_seq OWNER TO postgres;
+
+--
+-- Name: transaction_list_transactionlist_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.transaction_list_transactionlist_id_seq OWNED BY public.transaction_list.transactionlist_id;
+
 
 --
 -- Name: transaction_transaction_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -400,20 +380,6 @@ ALTER TABLE ONLY public.book ALTER COLUMN book_sku SET DEFAULT nextval('public.b
 
 
 --
--- Name: cart cart_id; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.cart ALTER COLUMN cart_id SET DEFAULT nextval('public.cart_cart_id_seq'::regclass);
-
-
---
--- Name: cartlist cardlist_id; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.cartlist ALTER COLUMN cardlist_id SET DEFAULT nextval('public.cartlist_cardlist_id_seq'::regclass);
-
-
---
 -- Name: category category_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -442,6 +408,13 @@ ALTER TABLE ONLY public.transaction ALTER COLUMN transaction_id SET DEFAULT next
 
 
 --
+-- Name: transaction_list transactionlist_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.transaction_list ALTER COLUMN transactionlist_id SET DEFAULT nextval('public.transaction_list_transactionlist_id_seq'::regclass);
+
+
+--
 -- Name: transactionlist transactionlist_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -462,9 +435,9 @@ COPY public.admin (admin_id, username, email, password) FROM stdin;
 -- Data for Name: book; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.book (book_sku, title, author, year, description, price, merchant_id, document, merchant) FROM stdin;
-1	All The Light We Cannot See	Anthony Doerr	2009	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.	50000	1	/uploads/book-example.svg	\N
-2	All The Light We Cannot See 2	Anthony Doerr	2009	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.	50000	2	/uploads/book-example.svg	\N
+COPY public.book (book_sku, title, author, year, description, price, merchant_id, document, merchant, variant) FROM stdin;
+1	All The Light We Cannot See	Anthony Doerr	2009	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.	50000	1	/uploads/book-example.svg	\N	Black
+2	All The Light We Cannot See 2	Anthony Doerr	2009	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.	50000	2	/uploads/book-example.svg	\N	Black
 \.
 
 
@@ -485,15 +458,10 @@ COPY public.bookcategory (book_sku, category_id) FROM stdin;
 -- Data for Name: cart; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.cart (cart_id, customer_id) FROM stdin;
-\.
-
-
---
--- Data for Name: cartlist; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.cartlist (cardlist_id, book_sku, cart_id) FROM stdin;
+COPY public.cart (customer_id, book_sku) FROM stdin;
+1	1
+1	2
+3	1
 \.
 
 
@@ -515,8 +483,8 @@ COPY public.category (category_id, name) FROM stdin;
 --
 
 COPY public.customer (customer_id, username, email, password, status) FROM stdin;
-1	riandi	riandi@example.com	helloworld	Active
 3	riandi2	riandi2@example.com	helloworld	Active
+1	riandi	riandi@example.com	helloworld	Active
 \.
 
 
@@ -525,6 +493,8 @@ COPY public.customer (customer_id, username, email, password, status) FROM stdin
 --
 
 COPY public.library (customer_id, book_sku) FROM stdin;
+3	2
+1	1
 \.
 
 
@@ -543,6 +513,17 @@ COPY public.merchant (merchant_id, username, email, password, fullname, descript
 --
 
 COPY public.transaction (transaction_id, date, total, customer_id) FROM stdin;
+1	2019-12-18 14:22:48.863869	100000	1
+2	2019-12-18 14:22:54.907378	100000	1
+3	2019-12-19 10:19:12.701501	50000	3
+\.
+
+
+--
+-- Data for Name: transaction_list; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.transaction_list (transactionlist_id, book_sku, merchant_id, transaction_id) FROM stdin;
 \.
 
 
@@ -551,6 +532,11 @@ COPY public.transaction (transaction_id, date, total, customer_id) FROM stdin;
 --
 
 COPY public.transactionlist (transactionlist_id, book_sku, merchant_id, transaction_id) FROM stdin;
+1	1	1	1
+2	2	2	1
+3	1	1	2
+4	2	2	2
+5	2	2	3
 \.
 
 
@@ -559,6 +545,9 @@ COPY public.transactionlist (transactionlist_id, book_sku, merchant_id, transact
 --
 
 COPY public.wishlist (customer_id, book_sku) FROM stdin;
+1	1
+1	2
+3	2
 \.
 
 
@@ -574,20 +563,6 @@ SELECT pg_catalog.setval('public.admin_admin_id_seq', 4, true);
 --
 
 SELECT pg_catalog.setval('public.book_book_sku_seq', 2, true);
-
-
---
--- Name: cart_cart_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.cart_cart_id_seq', 1, false);
-
-
---
--- Name: cartlist_cardlist_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.cartlist_cardlist_id_seq', 1, false);
 
 
 --
@@ -612,17 +587,24 @@ SELECT pg_catalog.setval('public.merchant_merchant_id_seq', 2, true);
 
 
 --
+-- Name: transaction_list_transactionlist_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.transaction_list_transactionlist_id_seq', 1, false);
+
+
+--
 -- Name: transaction_transaction_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.transaction_transaction_id_seq', 1, false);
+SELECT pg_catalog.setval('public.transaction_transaction_id_seq', 3, true);
 
 
 --
 -- Name: transactionlist_transactionlist_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.transactionlist_transactionlist_id_seq', 1, false);
+SELECT pg_catalog.setval('public.transactionlist_transactionlist_id_seq', 5, true);
 
 
 --
@@ -655,22 +637,6 @@ ALTER TABLE ONLY public.admin
 
 ALTER TABLE ONLY public.book
     ADD CONSTRAINT book_pkey PRIMARY KEY (book_sku);
-
-
---
--- Name: cart cart_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.cart
-    ADD CONSTRAINT cart_pkey PRIMARY KEY (cart_id);
-
-
---
--- Name: cartlist cartlist_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.cartlist
-    ADD CONSTRAINT cartlist_pkey PRIMARY KEY (cardlist_id);
 
 
 --
@@ -730,6 +696,14 @@ ALTER TABLE ONLY public.merchant
 
 
 --
+-- Name: transaction_list transaction_list_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.transaction_list
+    ADD CONSTRAINT transaction_list_pkey PRIMARY KEY (transactionlist_id);
+
+
+--
 -- Name: transaction transaction_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -770,27 +744,19 @@ ALTER TABLE ONLY public.bookcategory
 
 
 --
+-- Name: cart cart_book_sku_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.cart
+    ADD CONSTRAINT cart_book_sku_fkey FOREIGN KEY (book_sku) REFERENCES public.book(book_sku);
+
+
+--
 -- Name: cart cart_customer_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.cart
     ADD CONSTRAINT cart_customer_id_fkey FOREIGN KEY (customer_id) REFERENCES public.customer(customer_id);
-
-
---
--- Name: cartlist cartlist_book_sku_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.cartlist
-    ADD CONSTRAINT cartlist_book_sku_fkey FOREIGN KEY (book_sku) REFERENCES public.book(book_sku);
-
-
---
--- Name: cartlist cartlist_cart_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.cartlist
-    ADD CONSTRAINT cartlist_cart_id_fkey FOREIGN KEY (cart_id) REFERENCES public.cart(cart_id);
 
 
 --
@@ -860,3 +826,4 @@ ALTER TABLE ONLY public.wishlist
 --
 -- PostgreSQL database dump complete
 --
+

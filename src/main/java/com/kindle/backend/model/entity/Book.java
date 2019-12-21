@@ -1,12 +1,15 @@
 package com.kindle.backend.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.kindle.backend.model.constant.BookCategoryConstant;
 import com.kindle.backend.model.constant.BookConstant;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.List;
@@ -43,6 +46,9 @@ public class Book {
   @Column(name = BookConstant.BOOK_DOCUMENT)
   private String document;
 
+  @Column(name = BookConstant.BOOK_VARIANT)
+  private String variant;
+
   @JsonIgnore
   @ManyToMany(mappedBy = "library", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   private List<Customer> ownerBook;
@@ -51,6 +57,28 @@ public class Book {
   @LazyCollection(LazyCollectionOption.FALSE)
   @OneToMany(mappedBy = "bookDetail", fetch = FetchType.LAZY)
   private List<TransactionList> orderList;
+
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "merchant_id", nullable = false, insertable = false, updatable = false)
+  private Merchant merchant;
+
+  @JsonIgnore
+  @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+  @Fetch(value = FetchMode.SUBSELECT)
+  @JoinTable(
+          name = BookCategoryConstant.TABLE_NAME,
+          joinColumns = @JoinColumn(name = BookCategoryConstant.BOOK_SKU),
+          inverseJoinColumns = @JoinColumn(name = BookCategoryConstant.CATEGORY_ID)
+  )
+  private List<Category> categories;
+
+  @JsonIgnore
+  @ManyToMany(mappedBy = "wishlist", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+  private List<Customer> likedBook;
+
+  @JsonIgnore
+  @ManyToMany(mappedBy = "cart", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+  private List<Customer> cartedBook;
 
   public int getBookSku() {
     return bookSku;
@@ -100,6 +128,14 @@ public class Book {
     this.price = price;
   }
 
+  public String getDocument() {
+    return document;
+  }
+
+  public void setDocument(String document) {
+    this.document = document;
+  }
+
   public int getMerchantId() {
     return merchantId;
   }
@@ -108,12 +144,12 @@ public class Book {
     this.merchantId = merchantId;
   }
 
-  public String getDocument() {
-    return document;
+  public String getVariant() {
+    return variant;
   }
 
-  public void setDocument(String document) {
-    this.document = document;
+  public void setVariant(String variant) {
+    this.variant = variant;
   }
 
   public List<Customer> getOwnerBook() {
@@ -130,5 +166,37 @@ public class Book {
 
   public void setOrderList(List<TransactionList> orderList) {
     this.orderList = orderList;
+  }
+
+  public Merchant getMerchant() {
+    return merchant;
+  }
+
+  public void setMerchant(Merchant merchant) {
+    this.merchant = merchant;
+  }
+
+  public List<Category> getCategories() {
+    return categories;
+  }
+
+  public void setCategories(List<Category> categories) {
+    this.categories = categories;
+  }
+
+  public List<Customer> getLikedBook() {
+    return likedBook;
+  }
+
+  public void setLikedBook(List<Customer> likedBook) {
+    this.likedBook = likedBook;
+  }
+
+  public List<Customer> getCartedBook() {
+    return cartedBook;
+  }
+
+  public void setCartedBook(List<Customer> cartedBook) {
+    this.cartedBook = cartedBook;
   }
 }
