@@ -14,7 +14,7 @@ public class TransactionListService {
   @Autowired
   private TransactionListRepository transactionListRepository;
 
-  public List<TransactionListResponse> findAllTranscationListByTransactionId(int transactionId){
+  public List<TransactionListResponse> findAllTranscationListByTransactionId(int transactionId) {
     List<TransactionList> transactionLists = transactionListRepository.findAllByTransactionId(transactionId);
     List<TransactionListResponse> transactionListResponses = new ArrayList<>();
     for (TransactionList transactionList : transactionLists) {
