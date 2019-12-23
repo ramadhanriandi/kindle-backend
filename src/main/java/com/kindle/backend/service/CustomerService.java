@@ -23,41 +23,6 @@ public class CustomerService {
   @Autowired
   private BookRepository bookRepository;
 
-//  private EntityManager entityManager;
-//
-//  public CustomerService(EntityManager entityManager) {
-//    this.entityManager = entityManager;
-//  }
-//
-//  public Optional<Customer> save(Customer customer) {
-//    try {
-//      entityManager.getTransaction().begin();
-//      entityManager.persist(customer);
-//      entityManager.getTransaction().commit();
-//
-//      return Optional.of(customer);
-//    } catch (Exception e) {
-//      e.printStackTrace();
-//    }
-//    return Optional.empty();
-//  }
-//
-//  public void deleteByCustomerId(int customerId) {
-//    Customer customer = entityManager.find(Customer.class, customerId);
-//    if (customer != null) {
-//      try {
-//        entityManager.getTransaction().begin();
-//        customer.getWishlist().forEach(wishlist -> {
-//          wishlist.getLikedBook().remove(customer);
-//        });
-//        entityManager.remove(customer);
-//        entityManager.getTransaction().commit();
-//      } catch (Exception e) {
-//        e.printStackTrace();
-//      }
-//    }
-//  }
-
   public Customer findByCustomerId(Integer customerId){
     return customerRepository.findFirstByCustomerId(customerId);
   }
@@ -170,11 +135,61 @@ public class CustomerService {
     return customerRepository.save(customerResponse);
   }
 
+  public Customer deleteCustomerWishlist(Integer customerId, Integer bookSku) {
+    Customer customerResponse = customerRepository.findFirstByCustomerId(customerId);
+    Book bookResponse = bookRepository.findFirstByBookSku(bookSku);
+
+    List<Book> bookList = new ArrayList<>();
+    for (Book book : customerResponse.getWishlist()) {
+      if (book.getBookSku() != bookResponse.getBookSku()) {
+        bookList.add(book);
+      }
+    }
+
+    List<Customer> customerList = new ArrayList<>();
+    for (Customer customer : bookResponse.getLikedBook()) {
+      if (customer.getCustomerId() != customerResponse.getCustomerId()) {
+        customerList.add(customer);
+      }
+    }
+
+    customerResponse.setWishlist(bookList);
+    bookResponse.setLikedBook(customerList);
+    bookRepository.save(bookResponse);
+
+    return customerRepository.save(customerResponse);
+  }
+
   public Customer addCustomerCart(Integer customerId, Integer bookSku) {
     Customer customerResponse = customerRepository.findFirstByCustomerId(customerId);
     Book bookResponse = bookRepository.findFirstByBookSku(bookSku);
     customerResponse.getCart().add(bookResponse);
     bookResponse.getCartedBook().add(customerResponse);
+    bookRepository.save(bookResponse);
+
+    return customerRepository.save(customerResponse);
+  }
+
+  public Customer deleteCustomerCart(Integer customerId, Integer bookSku) {
+    Customer customerResponse = customerRepository.findFirstByCustomerId(customerId);
+    Book bookResponse = bookRepository.findFirstByBookSku(bookSku);
+
+    List<Book> bookList = new ArrayList<>();
+    for (Book book : customerResponse.getCart()) {
+      if (book.getBookSku() != bookResponse.getBookSku()) {
+        bookList.add(book);
+      }
+    }
+
+    List<Customer> customerList = new ArrayList<>();
+    for (Customer customer : bookResponse.getCartedBook()) {
+      if (customer.getCustomerId() != customerResponse.getCustomerId()) {
+        customerList.add(customer);
+      }
+    }
+
+    customerResponse.setCart(bookList);
+    bookResponse.setCartedBook(customerList);
     bookRepository.save(bookResponse);
 
     return customerRepository.save(customerResponse);

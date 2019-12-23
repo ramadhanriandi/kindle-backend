@@ -78,4 +78,14 @@ public class CustomerController {
   public Customer addCustomerCart(@PathVariable Integer customerId, @RequestParam Integer bookSku) {
     return this.customerService.addCustomerCart(customerId, bookSku);
   }
+
+  @RequestMapping(value = ApiPath.CUSTOMER_WISHLIST, method = RequestMethod.DELETE)
+  public Customer deleteCustomerWishlist(@PathVariable Integer customerId, @RequestParam Integer bookSku) {
+    return this.customerService.deleteCustomerWishlist(customerId, bookSku);
+  }
+
+  @RequestMapping(value = ApiPath.CUSTOMER_CART, method = RequestMethod.DELETE)
+  public Customer deleteCustomerCart(@PathVariable Integer customerId, @RequestParam Integer bookSku) {
+    return this.customerService.deleteCustomerCart(customerId, bookSku);
+  }
 }
