@@ -73,7 +73,7 @@ public class Book {
   private List<Category> categories;
 
   @JsonIgnore
-  @ManyToMany(mappedBy = "wishlist", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+  @ManyToMany(mappedBy = "wishlist", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
   private List<Customer> likedBook;
 
   @JsonIgnore

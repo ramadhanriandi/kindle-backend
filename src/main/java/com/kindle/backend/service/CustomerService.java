@@ -2,6 +2,7 @@ package com.kindle.backend.service;
 
 import com.kindle.backend.model.entity.Book;
 import com.kindle.backend.model.entity.Customer;
+import com.kindle.backend.model.repository.BookRepository;
 import com.kindle.backend.model.repository.CustomerRepository;
 import com.kindle.backend.response.CartResponse;
 import com.kindle.backend.response.PostResponse;
@@ -18,6 +19,44 @@ import java.util.List;
 public class CustomerService {
   @Autowired
   private CustomerRepository customerRepository;
+
+  @Autowired
+  private BookRepository bookRepository;
+
+//  private EntityManager entityManager;
+//
+//  public CustomerService(EntityManager entityManager) {
+//    this.entityManager = entityManager;
+//  }
+//
+//  public Optional<Customer> save(Customer customer) {
+//    try {
+//      entityManager.getTransaction().begin();
+//      entityManager.persist(customer);
+//      entityManager.getTransaction().commit();
+//
+//      return Optional.of(customer);
+//    } catch (Exception e) {
+//      e.printStackTrace();
+//    }
+//    return Optional.empty();
+//  }
+//
+//  public void deleteByCustomerId(int customerId) {
+//    Customer customer = entityManager.find(Customer.class, customerId);
+//    if (customer != null) {
+//      try {
+//        entityManager.getTransaction().begin();
+//        customer.getWishlist().forEach(wishlist -> {
+//          wishlist.getLikedBook().remove(customer);
+//        });
+//        entityManager.remove(customer);
+//        entityManager.getTransaction().commit();
+//      } catch (Exception e) {
+//        e.printStackTrace();
+//      }
+//    }
+//  }
 
   public Customer findByCustomerId(Integer customerId){
     return customerRepository.findFirstByCustomerId(customerId);
@@ -119,5 +158,15 @@ public class CustomerService {
     }
 
     return cartResponses;
+  }
+
+  public Customer addCustomerWishlist(Integer customerId, Integer bookSku) {
+    Customer customerResponse = customerRepository.findFirstByCustomerId(customerId);
+    Book bookResponse = bookRepository.findFirstByBookSku(bookSku);
+    customerResponse.getWishlist().add(bookResponse);
+    bookResponse.getLikedBook().add(customerResponse);
+    bookRepository.save(bookResponse);
+
+    return customerRepository.save(customerResponse);
   }
 }

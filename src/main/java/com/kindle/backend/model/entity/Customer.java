@@ -44,8 +44,7 @@ public class Customer {
   )
   private List<Book> library;
 
-  @JsonIgnore
-  @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+  @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
   @JoinTable(
           name = WishlistConstant.TABLE_NAME,
           joinColumns = @JoinColumn(name = WishlistConstant.CUSTOMER_ID),

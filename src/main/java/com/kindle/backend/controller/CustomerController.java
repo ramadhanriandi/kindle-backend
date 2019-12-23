@@ -68,4 +68,9 @@ public class CustomerController {
   public List<WishlistResponse> getCustomerWishlist(@PathVariable Integer customerId) {
     return this.customerService.findCustomerWishlist(customerId);
   }
+
+  @RequestMapping(value = ApiPath.CUSTOMER_WISHLIST, method = RequestMethod.POST)
+  public Customer addCustomerWishlist(@PathVariable Integer customerId, @RequestParam Integer bookSku) {
+    return this.customerService.addCustomerWishlist(customerId, bookSku);
+  }
 }
