@@ -14,11 +14,6 @@ public class TransactionListService {
   @Autowired
   private TransactionListRepository transactionListRepository;
 
-//  @Transactional(propagation =  Propagation.SUPPORTS, readOnly = true)
-//  public List<TransactionList> findAllTransactionListByTransactionId(int transactionId){
-//    return transactionListRepository.findAllByTransactionId(transactionId);
-//  }
-
   public List<TransactionListResponse> findAllTranscationListByTransactionId(int transactionId){
     List<TransactionList> transactionLists = transactionListRepository.findAllByTransactionId(transactionId);
     List<TransactionListResponse> transactionListResponses = new ArrayList<>();
