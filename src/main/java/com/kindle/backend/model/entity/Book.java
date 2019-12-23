@@ -77,7 +77,7 @@ public class Book {
   private List<Customer> likedBook;
 
   @JsonIgnore
-  @ManyToMany(mappedBy = "cart", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+  @ManyToMany(mappedBy = "cart", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
   private List<Customer> cartedBook;
 
   public int getBookSku() {

@@ -73,4 +73,9 @@ public class CustomerController {
   public Customer addCustomerWishlist(@PathVariable Integer customerId, @RequestParam Integer bookSku) {
     return this.customerService.addCustomerWishlist(customerId, bookSku);
   }
+
+  @RequestMapping(value = ApiPath.CUSTOMER_CART, method = RequestMethod.POST)
+  public Customer addCustomerCart(@PathVariable Integer customerId, @RequestParam Integer bookSku) {
+    return this.customerService.addCustomerCart(customerId, bookSku);
+  }
 }

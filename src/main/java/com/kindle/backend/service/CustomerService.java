@@ -169,4 +169,14 @@ public class CustomerService {
 
     return customerRepository.save(customerResponse);
   }
+
+  public Customer addCustomerCart(Integer customerId, Integer bookSku) {
+    Customer customerResponse = customerRepository.findFirstByCustomerId(customerId);
+    Book bookResponse = bookRepository.findFirstByBookSku(bookSku);
+    customerResponse.getCart().add(bookResponse);
+    bookResponse.getCartedBook().add(customerResponse);
+    bookRepository.save(bookResponse);
+
+    return customerRepository.save(customerResponse);
+  }
 }
