@@ -6,6 +6,8 @@ import com.kindle.backend.model.constant.BookConstant;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -52,6 +54,10 @@ public class Book {
   private List<Customer> ownerBook;
 
   @JsonIgnore
+  @LazyCollection(LazyCollectionOption.FALSE)
+  @OneToMany(mappedBy = "bookDetail", fetch = FetchType.EAGER)
+  private List<TransactionList> orderList;
+
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "merchant_id", nullable = false, insertable = false, updatable = false)
   private Merchant merchant;
@@ -152,6 +158,14 @@ public class Book {
 
   public void setOwnerBook(List<Customer> ownerBook) {
     this.ownerBook = ownerBook;
+  }
+
+  public List<TransactionList> getOrderList() {
+    return orderList;
+  }
+
+  public void setOrderList(List<TransactionList> orderList) {
+    this.orderList = orderList;
   }
 
   public Merchant getMerchant() {

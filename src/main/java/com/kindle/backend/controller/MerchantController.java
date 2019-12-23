@@ -50,7 +50,7 @@ public class MerchantController {
   }
 
   @RequestMapping(value = ApiPath.MERCHANT_CATALOG, method = RequestMethod.GET)
-  public List<Book> merchantCatalog(@PathVariable Integer merchantId){
+  public List<Book> getMerchantCatalog(@PathVariable Integer merchantId){
     return this.bookService.findBookByMerchantId(merchantId);
   }
 }

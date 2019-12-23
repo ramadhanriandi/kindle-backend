@@ -9,6 +9,7 @@ import java.util.List;
 
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, Integer> {
+  @Transactional
   Customer findFirstByCustomerId(Integer customerId);
 
   Customer findFirstByEmailAndPassword(String email, String password);

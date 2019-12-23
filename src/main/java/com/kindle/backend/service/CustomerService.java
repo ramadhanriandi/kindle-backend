@@ -10,6 +10,7 @@ import com.kindle.backend.response.WishlistResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -91,6 +92,7 @@ public class CustomerService {
     return registerResponse;
   }
 
+  @Transactional
   public List<Book> findCustomerLibrary(Integer customerId){
     Customer customerResponse = customerRepository.findFirstByCustomerId(customerId);
 
