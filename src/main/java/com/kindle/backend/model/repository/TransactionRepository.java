@@ -8,5 +8,7 @@ import java.util.List;
 
 @Repository
 public interface TransactionRepository extends CrudRepository<Transaction, Integer> {
+  Transaction findByTransactionId(int transactionId);
+
   List<Transaction> findAllByCustomerId(int customerId);
 }

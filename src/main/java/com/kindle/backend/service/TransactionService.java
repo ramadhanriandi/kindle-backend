@@ -12,6 +12,10 @@ public class TransactionService {
   @Autowired
   private TransactionRepository transactionRepository;
 
+  public Transaction findByTransactionId(int transactionId) {
+    return transactionRepository.findByTransactionId(transactionId);
+  }
+
   public List<Transaction> findAllTransactionByCustomerId(int customerId){
     return transactionRepository.findAllByCustomerId(customerId);
   }

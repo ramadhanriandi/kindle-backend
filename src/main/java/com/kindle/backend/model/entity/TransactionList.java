@@ -1,14 +1,12 @@
 package com.kindle.backend.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.kindle.backend.model.constant.BookConstant;
 import com.kindle.backend.model.constant.TransactionListConstant;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 
 @Data
 @NoArgsConstructor
@@ -31,7 +29,7 @@ public class TransactionList {
   private int transactionId;
 
   @JsonIgnore
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = TransactionListConstant.TRANSACTIONLIST_BOOK_SKU, insertable = false, updatable = false)
   private Book bookDetail;
 

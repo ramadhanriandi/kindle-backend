@@ -55,7 +55,7 @@ public class Book {
 
   @JsonIgnore
   @LazyCollection(LazyCollectionOption.FALSE)
-  @OneToMany(mappedBy = "bookDetail", fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "bookDetail", fetch = FetchType.EAGER)
   private List<TransactionList> orderList;
 
   @ManyToOne(fetch = FetchType.EAGER)
