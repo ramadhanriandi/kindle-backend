@@ -13,40 +13,6 @@ public class BookService {
   @Autowired
   private BookRepository bookRepository;
 
-//  private EntityManager entityManager;
-//
-//  public BookService(EntityManager entityManager) {
-//    this.entityManager = entityManager;
-//  }
-//
-//  public Optional<Book> save(Book book) {
-//    try {
-//      entityManager.getTransaction().begin();
-//      entityManager.persist(book);
-//      entityManager.getTransaction().commit();
-//      return Optional.of(book);
-//    } catch (Exception e) {
-//      e.printStackTrace();
-//    }
-//    return Optional.empty();
-//  }
-//
-//  public void deleteByBookSku(int bookSku) {
-//    Book book = entityManager.find(Book.class, bookSku);
-//    if (book != null) {
-//      try {
-//        entityManager.getTransaction().begin();
-//        book.getLikedBook().forEach(customer -> {
-//          customer.getWishlist().remove(book);
-//        });
-//        entityManager.remove(book);
-//        entityManager.getTransaction().commit();
-//      } catch (Exception e) {
-//        e.printStackTrace();
-//      }
-//    }
-//  }
-
   public Book findByBookSku(Integer sku){
     return bookRepository.findFirstByBookSku(sku);
   }
