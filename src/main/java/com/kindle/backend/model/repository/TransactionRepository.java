@@ -11,4 +11,6 @@ public interface TransactionRepository extends CrudRepository<Transaction, Integ
   Transaction findByTransactionId(int transactionId);
 
   List<Transaction> findAllByCustomerId(int customerId);
+
+  Transaction save(Transaction transaction);
 }

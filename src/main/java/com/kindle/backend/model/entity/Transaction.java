@@ -1,6 +1,5 @@
 package com.kindle.backend.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.kindle.backend.model.constant.TransactionConstant;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,7 +19,7 @@ public class Transaction {
   @Column(name = TransactionConstant.TRANSACTION_ID)
   private int transactionId;
 
-  @Column(name = TransactionConstant.TRANSACTION_DATE)
+  @Column(name = TransactionConstant.TRANSACTION_DATE, insertable = false, updatable = false)
   private Timestamp date;
 
   @Column(name = TransactionConstant.TRANSACTION_TOTAL)
