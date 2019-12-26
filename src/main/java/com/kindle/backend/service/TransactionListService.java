@@ -23,4 +23,8 @@ public class TransactionListService {
 
     return transactionListResponses;
   }
+
+  public TransactionList save(TransactionList transactionList) {
+    return transactionListRepository.save(transactionList);
+  }
 }
