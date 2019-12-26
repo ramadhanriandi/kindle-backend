@@ -194,4 +194,14 @@ public class CustomerService {
 
     return customerRepository.save(customerResponse);
   }
+
+  public Customer addCustomerLibrary(Integer customerId, Integer bookSku) {
+    Customer customerResponse = customerRepository.findFirstByCustomerId(customerId);
+    Book bookResponse = bookRepository.findFirstByBookSku(bookSku);
+    customerResponse.getLibrary().add(bookResponse);
+    bookResponse.getOwnerBook().add(customerResponse);
+    bookRepository.save(bookResponse);
+
+    return customerRepository.save(customerResponse);
+  }
 }

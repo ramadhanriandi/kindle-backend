@@ -79,6 +79,11 @@ public class CustomerController {
     return this.customerService.addCustomerCart(customerId, bookSku);
   }
 
+  @RequestMapping(value = ApiPath.CUSTOMER_LIBRARY, method = RequestMethod.POST)
+  public Customer addCustomerLibrary(@PathVariable Integer customerId, @RequestParam Integer bookSku) {
+    return this.customerService.addCustomerLibrary(customerId, bookSku);
+  }
+
   @RequestMapping(value = ApiPath.CUSTOMER_WISHLIST, method = RequestMethod.DELETE)
   public Customer deleteCustomerWishlist(@PathVariable Integer customerId, @RequestParam Integer bookSku) {
     return this.customerService.deleteCustomerWishlist(customerId, bookSku);
