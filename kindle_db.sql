@@ -459,9 +459,8 @@ COPY public.bookcategory (book_sku, category_id) FROM stdin;
 --
 
 COPY public.cart (customer_id, book_sku) FROM stdin;
-1	1
-1	2
 3	1
+1	2
 \.
 
 
@@ -495,6 +494,7 @@ COPY public.customer (customer_id, username, email, password, status) FROM stdin
 COPY public.library (customer_id, book_sku) FROM stdin;
 3	2
 1	1
+1	2
 \.
 
 
@@ -516,6 +516,10 @@ COPY public.transaction (transaction_id, date, total, customer_id) FROM stdin;
 1	2019-12-18 14:22:48.863869	100000	1
 2	2019-12-18 14:22:54.907378	100000	1
 3	2019-12-19 10:19:12.701501	50000	3
+4	2019-12-26 10:04:13.752701	100000	1
+168	2019-12-26 16:14:26.564348	100000	1
+169	2019-12-26 16:16:41.186695	100000	1
+167	2019-12-26 15:47:48.88482	100000	1
 \.
 
 
@@ -537,6 +541,14 @@ COPY public.transactionlist (transactionlist_id, book_sku, merchant_id, transact
 3	1	1	2
 4	2	2	2
 5	2	2	3
+6	1	1	4
+7	2	2	4
+88	2	2	167
+89	1	1	167
+90	1	1	168
+91	2	2	168
+92	2	2	169
+93	1	1	169
 \.
 
 
@@ -545,9 +557,21 @@ COPY public.transactionlist (transactionlist_id, book_sku, merchant_id, transact
 --
 
 COPY public.wishlist (customer_id, book_sku) FROM stdin;
+3	2
 1	1
 1	2
-3	2
+1	2
+1	1
+1	2
+1	1
+1	1
+1	1
+1	2
+1	2
+1	1
+1	2
+1	1
+1	2
 \.
 
 
@@ -597,14 +621,14 @@ SELECT pg_catalog.setval('public.transaction_list_transactionlist_id_seq', 1, fa
 -- Name: transaction_transaction_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.transaction_transaction_id_seq', 3, true);
+SELECT pg_catalog.setval('public.transaction_transaction_id_seq', 169, true);
 
 
 --
 -- Name: transactionlist_transactionlist_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.transactionlist_transactionlist_id_seq', 5, true);
+SELECT pg_catalog.setval('public.transactionlist_transactionlist_id_seq', 93, true);
 
 
 --
