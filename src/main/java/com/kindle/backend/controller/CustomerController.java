@@ -69,6 +69,16 @@ public class CustomerController {
     return this.customerService.findCustomerWishlist(customerId);
   }
 
+  @RequestMapping(value = ApiPath.CUSTOMER_CART_CHECK, method = RequestMethod.GET)
+  public boolean isOnCart(@PathVariable Integer customerId, @PathVariable Integer bookSku) {
+    return this.customerService.isOnCart(customerId, bookSku);
+  }
+
+  @RequestMapping(value = ApiPath.CUSTOMER_LIBRARY_CHECK, method = RequestMethod.GET)
+  public boolean inOnLibrary(@PathVariable Integer customerId, @PathVariable Integer bookSku) {
+    return this.customerService.isOnLibrary(customerId, bookSku);
+  }
+
   @RequestMapping(value = ApiPath.CUSTOMER_WISHLIST_CHECK, method = RequestMethod.GET)
   public boolean isOnWishlist(@PathVariable Integer customerId, @PathVariable Integer bookSku) {
     return this.customerService.isOnWishlist(customerId, bookSku);

@@ -103,6 +103,17 @@ public class CustomerService {
     return customerResponse.getLibrary();
   }
 
+  public boolean isOnLibrary(Integer customerId, Integer bookSku){
+    Customer customerResponse = customerRepository.findFirstByCustomerId(customerId);
+    List<Book> library = customerResponse.getLibrary();
+    for (Book book : library) {
+      if (book.getBookSku() == bookSku) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   public List<WishlistResponse> findCustomerWishlist(Integer customerId){
     Customer customerResponse = customerRepository.findFirstByCustomerId(customerId);
     List<Book> wishlist = customerResponse.getWishlist();
@@ -134,6 +145,17 @@ public class CustomerService {
     }
 
     return cartResponses;
+  }
+
+  public boolean isOnCart(Integer customerId, Integer bookSku){
+    Customer customerResponse = customerRepository.findFirstByCustomerId(customerId);
+    List<Book> cart = customerResponse.getCart();
+    for (Book book : cart) {
+      if (book.getBookSku() == bookSku) {
+        return true;
+      }
+    }
+    return false;
   }
 
   public Customer addCustomerWishlist(Integer customerId, Integer bookSku) {
