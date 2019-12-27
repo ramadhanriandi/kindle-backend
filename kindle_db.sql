@@ -38,6 +38,17 @@ CREATE FUNCTION public.delete_from_cart() RETURNS trigger
 
 ALTER FUNCTION public.delete_from_cart() OWNER TO postgres;
 
+--
+-- Name: delete_from_wishlist(); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.delete_from_wishlist() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$ begin delete from wishlist where customer_id = new.customer_id and book_sku = new.book_sku; return new; end; $$;
+
+
+ALTER FUNCTION public.delete_from_wishlist() OWNER TO postgres;
+
 SET default_tablespace = '';
 
 SET default_with_oids = false;
@@ -533,6 +544,10 @@ COPY public.merchant (merchant_id, username, email, password, fullname, descript
 --
 
 COPY public.transaction (transaction_id, date, total, customer_id) FROM stdin;
+223	2019-12-27 13:51:25.079138	100000	1
+224	2019-12-27 14:59:35.824231	100000	1
+225	2019-12-27 15:00:03.274806	50000	1
+226	2019-12-27 15:02:30.020992	50000	1
 \.
 
 
@@ -549,6 +564,12 @@ COPY public.transaction_list (transactionlist_id, book_sku, merchant_id, transac
 --
 
 COPY public.transactionlist (transactionlist_id, book_sku, merchant_id, transaction_id) FROM stdin;
+172	1	1	223
+173	2	2	223
+174	2	2	224
+175	1	1	224
+176	1	1	225
+177	2	2	226
 \.
 
 
@@ -557,9 +578,7 @@ COPY public.transactionlist (transactionlist_id, book_sku, merchant_id, transact
 --
 
 COPY public.wishlist (customer_id, book_sku) FROM stdin;
-1	1
 3	2
-1	2
 \.
 
 
@@ -609,14 +628,14 @@ SELECT pg_catalog.setval('public.transaction_list_transactionlist_id_seq', 1, fa
 -- Name: transaction_transaction_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.transaction_transaction_id_seq', 219, true);
+SELECT pg_catalog.setval('public.transaction_transaction_id_seq', 226, true);
 
 
 --
 -- Name: transactionlist_transactionlist_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.transactionlist_transactionlist_id_seq', 171, true);
+SELECT pg_catalog.setval('public.transactionlist_transactionlist_id_seq', 177, true);
 
 
 --
@@ -736,6 +755,13 @@ ALTER TABLE ONLY public.transactionlist
 --
 
 CREATE TRIGGER delete_from_cart AFTER INSERT ON public.library FOR EACH ROW EXECUTE PROCEDURE public.delete_from_cart();
+
+
+--
+-- Name: library delete_from_wishlist; Type: TRIGGER; Schema: public; Owner: postgres
+--
+
+CREATE TRIGGER delete_from_wishlist AFTER INSERT ON public.library FOR EACH ROW EXECUTE PROCEDURE public.delete_from_wishlist();
 
 
 --
