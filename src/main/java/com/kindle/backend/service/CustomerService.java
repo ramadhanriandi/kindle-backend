@@ -198,6 +198,7 @@ public class CustomerService {
   public Customer addCustomerLibrary(Integer customerId, Integer bookSku) {
     Customer customerResponse = customerRepository.findFirstByCustomerId(customerId);
     Book bookResponse = bookRepository.findFirstByBookSku(bookSku);
+
     customerResponse.getLibrary().add(bookResponse);
     bookResponse.getOwnerBook().add(customerResponse);
     bookRepository.save(bookResponse);

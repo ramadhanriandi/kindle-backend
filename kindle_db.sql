@@ -16,6 +16,28 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
+--
+-- Name: delete_duplicated_value(); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.delete_duplicated_value() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$ begin delete from library where customer_id = new.customer_id and book_sku = new.book_sku; return new; end; $$;
+
+
+ALTER FUNCTION public.delete_duplicated_value() OWNER TO postgres;
+
+--
+-- Name: delete_from_cart(); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.delete_from_cart() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$ begin delete from cart where customer_id = new.customer_id and book_sku = new.book_sku; return new; end; $$;
+
+
+ALTER FUNCTION public.delete_from_cart() OWNER TO postgres;
+
 SET default_tablespace = '';
 
 SET default_with_oids = false;
@@ -459,8 +481,6 @@ COPY public.bookcategory (book_sku, category_id) FROM stdin;
 --
 
 COPY public.cart (customer_id, book_sku) FROM stdin;
-3	1
-1	2
 \.
 
 
@@ -492,7 +512,6 @@ COPY public.customer (customer_id, username, email, password, status) FROM stdin
 --
 
 COPY public.library (customer_id, book_sku) FROM stdin;
-3	2
 1	1
 1	2
 \.
@@ -513,13 +532,6 @@ COPY public.merchant (merchant_id, username, email, password, fullname, descript
 --
 
 COPY public.transaction (transaction_id, date, total, customer_id) FROM stdin;
-1	2019-12-18 14:22:48.863869	100000	1
-2	2019-12-18 14:22:54.907378	100000	1
-3	2019-12-19 10:19:12.701501	50000	3
-4	2019-12-26 10:04:13.752701	100000	1
-168	2019-12-26 16:14:26.564348	100000	1
-169	2019-12-26 16:16:41.186695	100000	1
-167	2019-12-26 15:47:48.88482	100000	1
 \.
 
 
@@ -536,19 +548,6 @@ COPY public.transaction_list (transactionlist_id, book_sku, merchant_id, transac
 --
 
 COPY public.transactionlist (transactionlist_id, book_sku, merchant_id, transaction_id) FROM stdin;
-1	1	1	1
-2	2	2	1
-3	1	1	2
-4	2	2	2
-5	2	2	3
-6	1	1	4
-7	2	2	4
-88	2	2	167
-89	1	1	167
-90	1	1	168
-91	2	2	168
-92	2	2	169
-93	1	1	169
 \.
 
 
@@ -557,20 +556,8 @@ COPY public.transactionlist (transactionlist_id, book_sku, merchant_id, transact
 --
 
 COPY public.wishlist (customer_id, book_sku) FROM stdin;
+1	1
 3	2
-1	1
-1	2
-1	2
-1	1
-1	2
-1	1
-1	1
-1	1
-1	2
-1	2
-1	1
-1	2
-1	1
 1	2
 \.
 
@@ -621,14 +608,14 @@ SELECT pg_catalog.setval('public.transaction_list_transactionlist_id_seq', 1, fa
 -- Name: transaction_transaction_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.transaction_transaction_id_seq', 169, true);
+SELECT pg_catalog.setval('public.transaction_transaction_id_seq', 219, true);
 
 
 --
 -- Name: transactionlist_transactionlist_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.transactionlist_transactionlist_id_seq', 93, true);
+SELECT pg_catalog.setval('public.transactionlist_transactionlist_id_seq', 171, true);
 
 
 --
@@ -741,6 +728,20 @@ ALTER TABLE ONLY public.transaction
 
 ALTER TABLE ONLY public.transactionlist
     ADD CONSTRAINT transactionlist_pkey PRIMARY KEY (transactionlist_id);
+
+
+--
+-- Name: library delete_from_cart; Type: TRIGGER; Schema: public; Owner: postgres
+--
+
+CREATE TRIGGER delete_from_cart AFTER INSERT ON public.library FOR EACH ROW EXECUTE PROCEDURE public.delete_from_cart();
+
+
+--
+-- Name: library insert_library; Type: TRIGGER; Schema: public; Owner: postgres
+--
+
+CREATE TRIGGER insert_library BEFORE INSERT ON public.library FOR EACH ROW EXECUTE PROCEDURE public.delete_duplicated_value();
 
 
 --

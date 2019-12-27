@@ -15,13 +15,22 @@ public class TransactionListController {
   @Autowired
   private TransactionListService transactionListService;
 
+//  @Autowired
+//  private CustomerService customerService;
+
   @RequestMapping(value = ApiPath.TRANSACTIONLIST, method = RequestMethod.GET)
   public List<TransactionListResponse> getAllTransactionListByTransactionId(@RequestParam int transactionId) {
     return this.transactionListService.findAllTranscationListByTransactionId(transactionId);
   }
 
   @RequestMapping(value = ApiPath.TRANSACTIONLIST, method = RequestMethod.POST)
-  public TransactionList save(@RequestBody TransactionList transactionList) {
-    return this.transactionListService.save(transactionList);
+  public TransactionList save(@RequestParam Integer customerId, @RequestBody TransactionList transactionList) {
+//    Customer deleteResponse = customerService.deleteCustomerCart(customerId, transactionList.getBookSku());
+//    Customer addedResponse = customerService.addCustomerLibrary(customerId, transactionList.getBookSku());
+
+//    if (deleteResponse != null && addedResponse != null) {
+      return this.transactionListService.save(customerId, transactionList);
+//    }
+//    return null;
   }
 }
