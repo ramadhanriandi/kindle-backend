@@ -49,6 +49,9 @@ public class Book {
   @Column(name = BookConstant.BOOK_VARIANT)
   private String variant;
 
+  @Column(name = BookConstant.BOOK_URL)
+  private String url;
+
   @JsonIgnore
   @ManyToMany(mappedBy = "library", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   private List<Customer> ownerBook;
@@ -150,6 +153,14 @@ public class Book {
 
   public void setVariant(String variant) {
     this.variant = variant;
+  }
+
+  public String getUrl() {
+    return url;
+  }
+
+  public void setUrl(String url) {
+    this.url = url;
   }
 
   public List<Customer> getOwnerBook() {

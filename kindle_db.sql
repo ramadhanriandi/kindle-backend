@@ -92,7 +92,8 @@ CREATE TABLE public.book (
     merchant_id integer NOT NULL,
     document character varying(255),
     merchant character varying(255),
-    variant character varying(255)
+    variant character varying(255),
+    url character varying(255)
 );
 
 
@@ -457,9 +458,9 @@ COPY public.admin (admin_id, username, email, password) FROM stdin;
 -- Data for Name: book; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.book (book_sku, title, author, year, description, price, merchant_id, document, merchant, variant) FROM stdin;
-1	All The Light We Cannot See	Anthony Doerr	2009	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.	50000	1	/uploads/book-example.svg	\N	Black
-2	All The Light We Cannot See 2	Anthony Doerr	2009	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.	50000	2	/uploads/book-example.svg	\N	Black
+COPY public.book (book_sku, title, author, year, description, price, merchant_id, document, merchant, variant, url) FROM stdin;
+1	All The Light We Cannot See	Anthony Doerr	2009	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.	50000	1	/uploads/book-example.svg	\N	Black	/files/Book1.pdf
+2	All The Light We Cannot See 2	Anthony Doerr	2009	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.	50000	2	/uploads/book-example.svg	\N	Black	/files/Book1.pdf
 \.
 
 

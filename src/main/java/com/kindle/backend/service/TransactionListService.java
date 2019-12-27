@@ -38,25 +38,6 @@ public class TransactionListService {
     Customer customerResponse = customerRepository.findFirstByCustomerId(customerId);
     Book bookResponse = bookRepository.findFirstByBookSku(transactionList.getBookSku());
 
-//    List<Book> bookList = new ArrayList<>();
-//    for (Book book : customerResponse.getCart()) {
-//      if (book.getBookSku() != transactionList.getBookSku()) {
-//        bookList.add(book);
-//      }
-//    }
-//
-//    List<Customer> customerList = new ArrayList<>();
-//    for (Customer customer : bookResponse.getCartedBook()) {
-//      if (customer.getCustomerId() != customerResponse.getCustomerId()) {
-//        customerList.add(customer);
-//      }
-//    }
-
-//    customerResponse.getCart().remove(bookResponse);
-//    bookResponse.getCartedBook().remove(customerResponse);
-//    customerResponse.setCart(bookList);
-//    bookResponse.setCartedBook(customerList);
-
     customerResponse.getLibrary().add(bookResponse);
     bookResponse.getOwnerBook().add(customerResponse);
 
