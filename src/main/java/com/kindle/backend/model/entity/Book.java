@@ -49,6 +49,9 @@ public class Book {
   @Column(name = BookConstant.BOOK_VARIANT)
   private String variant;
 
+  @Column(name = BookConstant.BOOK_URL)
+  private String url;
+
   @JsonIgnore
   @ManyToMany(mappedBy = "library", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   private List<Customer> ownerBook;
@@ -73,11 +76,11 @@ public class Book {
   private List<Category> categories;
 
   @JsonIgnore
-  @ManyToMany(mappedBy = "wishlist", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+  @ManyToMany(mappedBy = "wishlist", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
   private List<Customer> likedBook;
 
   @JsonIgnore
-  @ManyToMany(mappedBy = "cart", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+  @ManyToMany(mappedBy = "cart", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
   private List<Customer> cartedBook;
 
   public int getBookSku() {
@@ -150,6 +153,14 @@ public class Book {
 
   public void setVariant(String variant) {
     this.variant = variant;
+  }
+
+  public String getUrl() {
+    return url;
+  }
+
+  public void setUrl(String url) {
+    this.url = url;
   }
 
   public List<Customer> getOwnerBook() {

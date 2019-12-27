@@ -11,4 +11,5 @@ public class BookConstant {
   public static final String BOOK_MERCHANT_ID = "merchant_id";
   public static final String BOOK_DOCUMENT = "document";
   public static final String BOOK_VARIANT = "variant";
+  public static final String BOOK_URL = "url";
 }

@@ -68,4 +68,44 @@ public class CustomerController {
   public List<WishlistResponse> getCustomerWishlist(@PathVariable Integer customerId) {
     return this.customerService.findCustomerWishlist(customerId);
   }
+
+  @RequestMapping(value = ApiPath.CUSTOMER_CART_CHECK, method = RequestMethod.GET)
+  public boolean isOnCart(@PathVariable Integer customerId, @PathVariable Integer bookSku) {
+    return this.customerService.isOnCart(customerId, bookSku);
+  }
+
+  @RequestMapping(value = ApiPath.CUSTOMER_LIBRARY_CHECK, method = RequestMethod.GET)
+  public boolean inOnLibrary(@PathVariable Integer customerId, @PathVariable Integer bookSku) {
+    return this.customerService.isOnLibrary(customerId, bookSku);
+  }
+
+  @RequestMapping(value = ApiPath.CUSTOMER_WISHLIST_CHECK, method = RequestMethod.GET)
+  public boolean isOnWishlist(@PathVariable Integer customerId, @PathVariable Integer bookSku) {
+    return this.customerService.isOnWishlist(customerId, bookSku);
+  }
+
+  @RequestMapping(value = ApiPath.CUSTOMER_WISHLIST, method = RequestMethod.POST)
+  public Customer addCustomerWishlist(@PathVariable Integer customerId, @RequestParam Integer bookSku) {
+    return this.customerService.addCustomerWishlist(customerId, bookSku);
+  }
+
+  @RequestMapping(value = ApiPath.CUSTOMER_CART, method = RequestMethod.POST)
+  public Customer addCustomerCart(@PathVariable Integer customerId, @RequestParam Integer bookSku) {
+    return this.customerService.addCustomerCart(customerId, bookSku);
+  }
+
+  @RequestMapping(value = ApiPath.CUSTOMER_LIBRARY, method = RequestMethod.POST)
+  public Customer addCustomerLibrary(@PathVariable Integer customerId, @RequestParam Integer bookSku) {
+    return this.customerService.addCustomerLibrary(customerId, bookSku);
+  }
+
+  @RequestMapping(value = ApiPath.CUSTOMER_WISHLIST, method = RequestMethod.DELETE)
+  public Customer deleteCustomerWishlist(@PathVariable Integer customerId, @RequestParam Integer bookSku) {
+    return this.customerService.deleteCustomerWishlist(customerId, bookSku);
+  }
+
+  @RequestMapping(value = ApiPath.CUSTOMER_CART, method = RequestMethod.DELETE)
+  public Customer deleteCustomerCart(@PathVariable Integer customerId, @RequestParam Integer bookSku) {
+    return this.customerService.deleteCustomerCart(customerId, bookSku);
+  }
 }

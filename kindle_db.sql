@@ -16,6 +16,39 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
+--
+-- Name: delete_duplicated_value(); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.delete_duplicated_value() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$ begin delete from library where customer_id = new.customer_id and book_sku = new.book_sku; return new; end; $$;
+
+
+ALTER FUNCTION public.delete_duplicated_value() OWNER TO postgres;
+
+--
+-- Name: delete_from_cart(); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.delete_from_cart() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$ begin delete from cart where customer_id = new.customer_id and book_sku = new.book_sku; return new; end; $$;
+
+
+ALTER FUNCTION public.delete_from_cart() OWNER TO postgres;
+
+--
+-- Name: delete_from_wishlist(); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.delete_from_wishlist() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$ begin delete from wishlist where customer_id = new.customer_id and book_sku = new.book_sku; return new; end; $$;
+
+
+ALTER FUNCTION public.delete_from_wishlist() OWNER TO postgres;
+
 SET default_tablespace = '';
 
 SET default_with_oids = false;
@@ -70,7 +103,8 @@ CREATE TABLE public.book (
     merchant_id integer NOT NULL,
     document character varying(255),
     merchant character varying(255),
-    variant character varying(255)
+    variant character varying(255),
+    url character varying(255)
 );
 
 
@@ -435,9 +469,9 @@ COPY public.admin (admin_id, username, email, password) FROM stdin;
 -- Data for Name: book; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.book (book_sku, title, author, year, description, price, merchant_id, document, merchant, variant) FROM stdin;
-1	All The Light We Cannot See	Anthony Doerr	2009	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.	50000	1	/uploads/book-example.svg	\N	Black
-2	All The Light We Cannot See 2	Anthony Doerr	2009	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.	50000	2	/uploads/book-example.svg	\N	Black
+COPY public.book (book_sku, title, author, year, description, price, merchant_id, document, merchant, variant, url) FROM stdin;
+1	All The Light We Cannot See	Anthony Doerr	2009	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.	50000	1	/uploads/book-example.svg	\N	Black	/files/Book1.pdf
+2	All The Light We Cannot See 2	Anthony Doerr	2009	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.	50000	2	/uploads/book-example.svg	\N	Black	/files/Book1.pdf
 \.
 
 
@@ -459,9 +493,6 @@ COPY public.bookcategory (book_sku, category_id) FROM stdin;
 --
 
 COPY public.cart (customer_id, book_sku) FROM stdin;
-1	1
-1	2
-3	1
 \.
 
 
@@ -493,8 +524,8 @@ COPY public.customer (customer_id, username, email, password, status) FROM stdin
 --
 
 COPY public.library (customer_id, book_sku) FROM stdin;
-3	2
 1	1
+1	2
 \.
 
 
@@ -513,9 +544,10 @@ COPY public.merchant (merchant_id, username, email, password, fullname, descript
 --
 
 COPY public.transaction (transaction_id, date, total, customer_id) FROM stdin;
-1	2019-12-18 14:22:48.863869	100000	1
-2	2019-12-18 14:22:54.907378	100000	1
-3	2019-12-19 10:19:12.701501	50000	3
+223	2019-12-27 13:51:25.079138	100000	1
+224	2019-12-27 14:59:35.824231	100000	1
+225	2019-12-27 15:00:03.274806	50000	1
+226	2019-12-27 15:02:30.020992	50000	1
 \.
 
 
@@ -532,11 +564,12 @@ COPY public.transaction_list (transactionlist_id, book_sku, merchant_id, transac
 --
 
 COPY public.transactionlist (transactionlist_id, book_sku, merchant_id, transaction_id) FROM stdin;
-1	1	1	1
-2	2	2	1
-3	1	1	2
-4	2	2	2
-5	2	2	3
+172	1	1	223
+173	2	2	223
+174	2	2	224
+175	1	1	224
+176	1	1	225
+177	2	2	226
 \.
 
 
@@ -545,8 +578,6 @@ COPY public.transactionlist (transactionlist_id, book_sku, merchant_id, transact
 --
 
 COPY public.wishlist (customer_id, book_sku) FROM stdin;
-1	1
-1	2
 3	2
 \.
 
@@ -597,14 +628,14 @@ SELECT pg_catalog.setval('public.transaction_list_transactionlist_id_seq', 1, fa
 -- Name: transaction_transaction_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.transaction_transaction_id_seq', 3, true);
+SELECT pg_catalog.setval('public.transaction_transaction_id_seq', 226, true);
 
 
 --
 -- Name: transactionlist_transactionlist_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.transactionlist_transactionlist_id_seq', 5, true);
+SELECT pg_catalog.setval('public.transactionlist_transactionlist_id_seq', 177, true);
 
 
 --
@@ -717,6 +748,27 @@ ALTER TABLE ONLY public.transaction
 
 ALTER TABLE ONLY public.transactionlist
     ADD CONSTRAINT transactionlist_pkey PRIMARY KEY (transactionlist_id);
+
+
+--
+-- Name: library delete_from_cart; Type: TRIGGER; Schema: public; Owner: postgres
+--
+
+CREATE TRIGGER delete_from_cart AFTER INSERT ON public.library FOR EACH ROW EXECUTE PROCEDURE public.delete_from_cart();
+
+
+--
+-- Name: library delete_from_wishlist; Type: TRIGGER; Schema: public; Owner: postgres
+--
+
+CREATE TRIGGER delete_from_wishlist AFTER INSERT ON public.library FOR EACH ROW EXECUTE PROCEDURE public.delete_from_wishlist();
+
+
+--
+-- Name: library insert_library; Type: TRIGGER; Schema: public; Owner: postgres
+--
+
+CREATE TRIGGER insert_library BEFORE INSERT ON public.library FOR EACH ROW EXECUTE PROCEDURE public.delete_duplicated_value();
 
 
 --

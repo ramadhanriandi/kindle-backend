@@ -19,4 +19,8 @@ public class TransactionService {
   public List<Transaction> findAllTransactionByCustomerId(int customerId){
     return transactionRepository.findAllByCustomerId(customerId);
   }
+
+  public Transaction save(Transaction transaction) {
+    return transactionRepository.save(transaction);
+  }
 }

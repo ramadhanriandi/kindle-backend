@@ -23,4 +23,9 @@ public class TransactionController {
   public List<Transaction> getAllTransactionByCustomerId(@RequestParam int customerId) {
     return this.transactionService.findAllTransactionByCustomerId(customerId);
   }
+
+  @RequestMapping(value = ApiPath.TRANSACTION, method = RequestMethod.POST)
+  public Transaction save(@RequestBody Transaction transaction) {
+    return this.transactionService.save(transaction);
+  }
 }
