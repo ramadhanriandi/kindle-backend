@@ -69,6 +69,11 @@ public class CustomerController {
     return this.customerService.findCustomerWishlist(customerId);
   }
 
+  @RequestMapping(value = ApiPath.CUSTOMER_WISHLIST_CHECK, method = RequestMethod.GET)
+  public boolean isOnWishlist(@PathVariable Integer customerId, @PathVariable Integer bookSku) {
+    return this.customerService.isOnWishlist(customerId, bookSku);
+  }
+
   @RequestMapping(value = ApiPath.CUSTOMER_WISHLIST, method = RequestMethod.POST)
   public Customer addCustomerWishlist(@PathVariable Integer customerId, @RequestParam Integer bookSku) {
     return this.customerService.addCustomerWishlist(customerId, bookSku);

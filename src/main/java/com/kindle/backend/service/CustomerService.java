@@ -114,6 +114,17 @@ public class CustomerService {
     return wishlistResponses;
   }
 
+  public boolean isOnWishlist(Integer customerId, Integer bookSku){
+    Customer customerResponse = customerRepository.findFirstByCustomerId(customerId);
+    List<Book> wishlist = customerResponse.getWishlist();
+    for (Book book : wishlist) {
+      if (book.getBookSku() == bookSku) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   public List<CartResponse> findCustomerCart(Integer customerId){
     Customer customerResponse = customerRepository.findFirstByCustomerId(customerId);
     List<Book> cart = customerResponse.getCart();

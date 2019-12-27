@@ -21,6 +21,7 @@ public class ApiPath {
   public static final String CUSTOMER_CART = CUSTOMER_BY_CUSTOMER_ID + "/cart";
   public static final String CUSTOMER_LIBRARY = CUSTOMER_BY_CUSTOMER_ID + "/library";
   public static final String CUSTOMER_WISHLIST = CUSTOMER_BY_CUSTOMER_ID + "/wishlist";
+  public static final String CUSTOMER_WISHLIST_CHECK = CUSTOMER_WISHLIST + "/{bookSku}/check";
 
   public static final String MERCHANT = API + "/merchants";
   public static final String MERCHANT_BY_MERCHANT_ID = MERCHANT + "/{merchantId}";
