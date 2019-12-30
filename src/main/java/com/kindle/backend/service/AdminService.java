@@ -11,8 +11,12 @@ public class AdminService {
   @Autowired
   private AdminRepository adminRepository;
 
-  public void updateAdmin(Integer id, Admin admin) {
-    admin.setAdminId(id);
+  public Admin findByAdminId(Integer adminId) {
+    return adminRepository.findFirstByAdminId(adminId);
+  }
+
+  public void updateAdmin(Integer adminId, Admin admin) {
+    admin.setAdminId(adminId);
     adminRepository.save(admin);
   }
 
