@@ -4,6 +4,7 @@ import com.kindle.backend.model.constant.ApiPath;
 import com.kindle.backend.model.entity.Book;
 import com.kindle.backend.model.entity.Merchant;
 import com.kindle.backend.response.PostResponse;
+import com.kindle.backend.response.PutResponse;
 import com.kindle.backend.service.BookService;
 import com.kindle.backend.service.MerchantService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,8 +36,8 @@ public class MerchantController {
   }
 
   @RequestMapping(value = ApiPath.MERCHANT_BY_MERCHANT_ID, method = RequestMethod.PUT)
-  public void updateMerchant(@PathVariable Integer merchantId, @RequestBody Merchant merchant) {
-    this.merchantService.updateMerchant(merchantId, merchant);
+  public PutResponse updateMerchant(@PathVariable Integer merchantId, @RequestBody Merchant merchant) {
+    return this.merchantService.updateMerchant(merchantId, merchant);
   }
 
   @RequestMapping(value = ApiPath.MERCHANT_BY_MERCHANT_ID, method = RequestMethod.DELETE)

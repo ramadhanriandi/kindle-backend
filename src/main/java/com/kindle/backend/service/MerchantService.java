@@ -3,6 +3,7 @@ package com.kindle.backend.service;
 import com.kindle.backend.model.entity.Merchant;
 import com.kindle.backend.model.repository.MerchantRepository;
 import com.kindle.backend.response.PostResponse;
+import com.kindle.backend.response.PutResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,9 +26,20 @@ public class MerchantService {
     return merchantRepository.save(merchant);
   }
 
-  public void updateMerchant(Integer merchantId, Merchant merchant) {
+  public PutResponse updateMerchant(Integer merchantId, Merchant merchant) {
+    PutResponse updateResponse = new PutResponse();
     merchant.setMerchantId(merchantId);
-    merchantRepository.save(merchant);
+    Merchant merchantResponse = merchantRepository.save(merchant);
+
+    if (merchantResponse == null) {
+      updateResponse.setCode(401);
+      updateResponse.setMessage("Error: update fail");
+    } else {
+      updateResponse.setCode(200);
+      updateResponse.setMessage("Update success");
+    }
+
+    return updateResponse;
   }
 
   public long deleteByMerchantId(Integer merchantId) {

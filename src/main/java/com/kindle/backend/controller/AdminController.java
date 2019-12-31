@@ -13,10 +13,16 @@ public class AdminController {
   @Autowired
   private AdminService adminService;
 
-  @RequestMapping(value = ApiPath.ADMIN_BY_ADMIN_ID, method = RequestMethod.PUT)
-  public void updateAdmin(@PathVariable Integer id, @RequestBody Admin admin) {
-    this.adminService.updateAdmin(id, admin);
+  @RequestMapping(value = ApiPath.ADMIN_BY_ADMIN_ID, method = RequestMethod.GET)
+  public Admin getAdminById(@PathVariable Integer adminId) {
+    return this.adminService.findByAdminId(adminId);
   }
+
+  @RequestMapping(value = ApiPath.ADMIN_BY_ADMIN_ID, method = RequestMethod.PUT)
+  public void updateAdmin(@PathVariable Integer adminId, @RequestBody Admin admin) {
+    this.adminService.updateAdmin(adminId, admin);
+  }
+
   @RequestMapping(value = ApiPath.ADMIN_LOGIN, method = RequestMethod.POST)
   public PostResponse login(@RequestBody Admin admin) {
     return this.adminService.login(admin);
