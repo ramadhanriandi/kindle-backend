@@ -30,6 +30,11 @@ public class TransactionList {
 
   @JsonIgnore
   @ManyToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = TransactionListConstant.TRANSACTIONLIST_TRANSACTION_ID, insertable = false, updatable = false)
+  private Transaction transactionDetail;
+
+  @JsonIgnore
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = TransactionListConstant.TRANSACTIONLIST_BOOK_SKU, insertable = false, updatable = false)
   private Book bookDetail;
 
@@ -72,4 +77,8 @@ public class TransactionList {
   public void setBookDetail(Book bookDetail) {
     this.bookDetail = bookDetail;
   }
+
+  public Transaction getTransactionDetail() {return transactionDetail;}
+
+  public void setTransactionDetail(Transaction transactionDetail){ this.transactionDetail = transactionDetail; }
 }

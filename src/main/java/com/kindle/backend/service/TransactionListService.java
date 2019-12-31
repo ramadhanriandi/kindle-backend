@@ -24,11 +24,25 @@ public class TransactionListService {
   @Autowired
   private BookRepository bookRepository;
 
-  public List<TransactionListResponse> findAllTranscationListByTransactionId(int transactionId) {
-    List<TransactionList> transactionLists = transactionListRepository.findAllByTransactionId(transactionId);
+  public List<TransactionListResponse> findAllTranscationListByQuery(String transactionId, String merchantId) {
     List<TransactionListResponse> transactionListResponses = new ArrayList<>();
-    for (TransactionList transactionList : transactionLists) {
-      transactionListResponses.add(new TransactionListResponse(transactionList.getBookDetail()));
+
+    if(transactionId != null) {
+      int intTransactionId = Integer.parseInt(transactionId);
+      List<TransactionList> transactionLists = transactionListRepository.findAllByTransactionId(intTransactionId);
+
+      for (TransactionList transactionList : transactionLists) {
+        transactionListResponses.add(new TransactionListResponse(transactionList.getBookDetail()));
+      }
+    }
+
+    else if(merchantId != null){
+      int intMerchantId = Integer.parseInt(merchantId);
+      List<TransactionList> transactionLists = transactionListRepository.findAllByMerchantId(intMerchantId);
+
+      for (TransactionList transactionList : transactionLists){
+        transactionListResponses.add(new TransactionListResponse(transactionList.getTransactionDetail(), transactionList.getBookDetail()));
+      }
     }
 
     return transactionListResponses;

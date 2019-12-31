@@ -16,12 +16,14 @@ public class TransactionListController {
   private TransactionListService transactionListService;
 
   @RequestMapping(value = ApiPath.TRANSACTIONLIST, method = RequestMethod.GET)
-  public List<TransactionListResponse> getAllTransactionListByTransactionId(@RequestParam int transactionId) {
-    return this.transactionListService.findAllTranscationListByTransactionId(transactionId);
+  public List<TransactionListResponse> getAllTransactionListByQuery(@RequestParam(required = false) String transactionId, @RequestParam(required = false) String merchantId) {
+      return this.transactionListService.findAllTranscationListByQuery(transactionId, merchantId);
   }
 
   @RequestMapping(value = ApiPath.TRANSACTIONLIST, method = RequestMethod.POST)
   public TransactionList save(@RequestParam Integer customerId, @RequestBody TransactionList transactionList) {
       return this.transactionListService.save(customerId, transactionList);
   }
+
+
 }
