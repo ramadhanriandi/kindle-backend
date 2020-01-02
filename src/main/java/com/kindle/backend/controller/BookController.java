@@ -3,6 +3,7 @@ package com.kindle.backend.controller;
 import com.kindle.backend.model.constant.ApiPath;
 import com.kindle.backend.model.entity.Book;
 import com.kindle.backend.response.BookDetailResponse;
+import com.kindle.backend.response.PutResponse;
 import com.kindle.backend.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -31,8 +32,8 @@ public class BookController {
   }
 
   @RequestMapping(value = ApiPath.BOOK_BY_BOOK_SKU, method = RequestMethod.PUT)
-  public void updateBook(@PathVariable Integer sku, @RequestBody Book book) {
-    this.bookService.updateBook(sku, book);
+  public PutResponse updateBook(@PathVariable Integer sku, @RequestBody Book book) {
+    return this.bookService.updateBook(sku, book);
   }
 
   @RequestMapping(value = ApiPath.BOOK_BY_BOOK_SKU, method = RequestMethod.DELETE)

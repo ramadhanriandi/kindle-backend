@@ -26,9 +26,6 @@ public class CategoryService {
   }
 
   public PutResponse updateCategory(Integer categoryId, Category category) {
-    category.setCategoryId(categoryId);
-    categoryRepository.save(category);
-
     PutResponse updateResponse = new PutResponse();
     category.setCategoryId(categoryId);
     Category categoryResponse = categoryRepository.save(category);
