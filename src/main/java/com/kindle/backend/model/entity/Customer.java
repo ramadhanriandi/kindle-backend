@@ -36,7 +36,7 @@ public class Customer {
   private String status;
 
   @JsonIgnore
-  @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+  @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
   @JoinTable(
           name = LibraryConstant.TABLE_NAME,
           joinColumns = @JoinColumn(name = LibraryConstant.CUSTOMER_ID),
