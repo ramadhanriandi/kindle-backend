@@ -34,6 +34,16 @@
 	}]
 }
 ```
+```
+{
+	"code": 500,
+	"status": "Internal server error",
+	"errors": [{
+		"status": 500,
+		"detail": "Cannot fetch admin data"
+	}]
+}
+```
 
 ## Update Admin
 - Endpoint : `/kindle-backend/api/admins/{adminId}`
@@ -69,6 +79,16 @@
 	}]
 }
 ```
+```
+{
+	"code": 500,
+	"status": "Internal server error",
+	"errors": [{
+		"status": 500,
+		"detail": "Cannot update admin data"
+	}]
+}
+```
 
 ## Login Admin
 - Endpoint : `/kindle-backend/api/admins/login`
@@ -99,3 +119,14 @@
 		"detail": "Wrong email or password"
 	}]
 }
+```
+```
+{
+	"code": 500,
+	"status": "Internal server error",
+	"errors": [{
+		"status": 500,
+		"detail": "Cannot fetch admin data"
+	}]
+}
+```
