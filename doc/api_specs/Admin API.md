@@ -72,7 +72,7 @@
 
 ## Login Admin
 - Endpoint : `/kindle-backend/api/admins/login`
-- HTTP Method : `PUT`
+- HTTP Method : `POST`
 - Request Header :
 	- Accept : `application/json`
 - Request Body :
