@@ -26,10 +26,10 @@
     		},
 		"relationships": {
 			"merchant": {
-				"data": {
+				"data": [{
 					"id": 1,
 					"type": "merchant"
-				},
+				}]
 			}
 		}
 	}, {
@@ -48,10 +48,10 @@
     		},
 		"relationships": {
 			"merchant": {
-				"data": {
+				"data": [{
 					"id": 2,
 					"type": "merchant"
-				},
+				}]
 			}
 		}
 	}],
@@ -119,10 +119,10 @@
     		},
 		"relationships": {
 			"merchant": {
-				"data": {
+				"data": [{
 					"id": 1,
 					"type": "merchant"
-				},
+				}]
 			}
 		}
 	}],
