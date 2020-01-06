@@ -54,7 +54,7 @@
 	"status" : "OK",
 	"data": [{
 		"id" : 1,
-        "types" : "admin"
+		"types" : "admin"
 	}]
 }
 ```
@@ -65,7 +65,7 @@
 	"status" : "Bad Request",
 	"errors" : [{
 		"status" : 404,
-        "detail" : "AdminId not found"
+		"detail" : "AdminId not found"
 	}]
 }
 ```
@@ -96,6 +96,6 @@
 	"status" : "Bad Request",
 	"errors" : [{
 		"status" : 404,
-        "detail" : "Wrong email or password"
+		"detail" : "Wrong email or password"
 	}]
 }
