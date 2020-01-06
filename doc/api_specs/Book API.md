@@ -32,13 +32,6 @@
 				},
 			}
 		}
-	}],
-	"included": [{
-		"id": 1,
-		"type": "merchant",
-		"attributes": {
-			"fullname": "Gramedia"
-		}
 	}, {
 		"id": 2,
 		"type": "book",
@@ -63,6 +56,11 @@
 		}
 	}],
 	"included": [{
+		"id": 1,
+		"type": "merchant",
+		"attributes": {
+			"fullname": "Gramedia"
+	}, {
 		"id": 2,
 		"type": "merchant",
 		"attributes": {
