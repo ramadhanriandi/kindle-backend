@@ -14,12 +14,12 @@
 	"status" : "OK",
 	"data": [{
 		"id" : 1,
-        "types" : "admin",
-        "attributes" : {
-            "email" : "admin@admin.com",
-		    "username" : "admin",
-		    "password" : "admin"
-        }
+		"types" : "admin",
+		"attributes" : {
+			"email" : "admin@admin.com",
+			"username" : "admin",
+			"password" : "admin"
+        	}
 	}]
 }
 ```
@@ -30,7 +30,7 @@
 	"status" : "Bad Request",
 	"errors" : [{
 		"status" : 404,
-        "detail" : "AdminId not found"
+		"detail" : "AdminId not found"
 	}]
 }
 ```
