@@ -104,7 +104,8 @@ CREATE TABLE public.book (
     document character varying(255),
     merchant character varying(255),
     variant character varying(255),
-    url character varying(255)
+    url character varying(255),
+    categories character varying(255)
 );
 
 
@@ -131,18 +132,6 @@ ALTER TABLE public.book_book_sku_seq OWNER TO postgres;
 
 ALTER SEQUENCE public.book_book_sku_seq OWNED BY public.book.book_sku;
 
-
---
--- Name: bookcategory; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.bookcategory (
-    book_sku integer NOT NULL,
-    category_id integer NOT NULL
-);
-
-
-ALTER TABLE public.bookcategory OWNER TO postgres;
 
 --
 -- Name: cart; Type: TABLE; Schema: public; Owner: postgres
@@ -460,8 +449,8 @@ ALTER TABLE ONLY public.transactionlist ALTER COLUMN transactionlist_id SET DEFA
 --
 
 COPY public.admin (admin_id, username, email, password) FROM stdin;
-1	admin	admin@admin.com	admin
 2	admin2	admin2@admin.com	admin3
+1	admin5	admin@admin.com	admin
 \.
 
 
@@ -469,22 +458,11 @@ COPY public.admin (admin_id, username, email, password) FROM stdin;
 -- Data for Name: book; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.book (book_sku, title, author, year, description, price, merchant_id, document, merchant, variant, url) FROM stdin;
-1	All The Light We Cannot See	Anthony Doerr	2009	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.	50000	1	/uploads/book-example.svg	\N	Black	/files/Book1.pdf
-2	All The Light We Cannot See 2	Anthony Doerr	2009	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.	50000	2	/uploads/book-example.svg	\N	Black	/files/Book1.pdf
-\.
-
-
---
--- Data for Name: bookcategory; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.bookcategory (book_sku, category_id) FROM stdin;
-1	1
-1	3
-1	5
-2	2
-2	4
+COPY public.book (book_sku, title, author, year, description, price, merchant_id, document, merchant, variant, url, categories) FROM stdin;
+4	All The Light We Cannot See3	Anthony Doerr	2009	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.	50000	1	/uploads/book-example.svg	\N	Black	/files/Book1.pdf	Fiction;Drama;Romance
+1	All The Light We Cannot See	Anthony Doerr	2009	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.	50000	1	/uploads/book-example.svg	\N	Black	/files/Book1.pdf	Fiction;Drama;Romance
+3	All The Light We Cannot See3	Anthony Doerr	2009	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.	50000	1	/uploads/book_image-1578048893949.svg	\N	Black	/files/book_file-1578048830503.pdf	Fiction;Drama;Romance
+2	All The Light We Cannot See 2	Anthony Doerr	2009	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.	50000	2	/uploads/book-example.svg	\N	Black	/files/Book1.pdf	Non-fiction;Horror
 \.
 
 
@@ -514,8 +492,8 @@ COPY public.category (category_id, name) FROM stdin;
 --
 
 COPY public.customer (customer_id, username, email, password, status) FROM stdin;
-3	riandi2	riandi2@example.com	helloworld	Active
-1	riandi	riandi@example.com	helloworld	Active
+1	riandi123	riandi@example.com	helloworld	Active
+6	user3	user3@example.com	helloworld	Inactive
 \.
 
 
@@ -524,8 +502,6 @@ COPY public.customer (customer_id, username, email, password, status) FROM stdin
 --
 
 COPY public.library (customer_id, book_sku) FROM stdin;
-1	1
-1	2
 \.
 
 
@@ -536,6 +512,7 @@ COPY public.library (customer_id, book_sku) FROM stdin;
 COPY public.merchant (merchant_id, username, email, password, fullname, description, phone, status) FROM stdin;
 1	gramedia	gramedia@example.com	helloworld	Gramedia	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.	1234567890	Active
 2	gramedia2	gramedia2@example.com	helloworld	Gramedia2	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.	1234567899	Active
+5	gramedia3	gramedia3@example.com	helloworld	Gramedia5	sadioasgfoasivfbouqwvfouasvfouasvfasuovdoas	134567890	Active
 \.
 
 
@@ -548,6 +525,7 @@ COPY public.transaction (transaction_id, date, total, customer_id) FROM stdin;
 224	2019-12-27 14:59:35.824231	100000	1
 225	2019-12-27 15:00:03.274806	50000	1
 226	2019-12-27 15:02:30.020992	50000	1
+227	2019-12-30 10:37:38.422045	50000	1
 \.
 
 
@@ -570,6 +548,7 @@ COPY public.transactionlist (transactionlist_id, book_sku, merchant_id, transact
 175	1	1	224
 176	1	1	225
 177	2	2	226
+178	1	1	227
 \.
 
 
@@ -578,7 +557,6 @@ COPY public.transactionlist (transactionlist_id, book_sku, merchant_id, transact
 --
 
 COPY public.wishlist (customer_id, book_sku) FROM stdin;
-3	2
 \.
 
 
@@ -593,28 +571,28 @@ SELECT pg_catalog.setval('public.admin_admin_id_seq', 4, true);
 -- Name: book_book_sku_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.book_book_sku_seq', 2, true);
+SELECT pg_catalog.setval('public.book_book_sku_seq', 5, true);
 
 
 --
 -- Name: category_category_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.category_category_id_seq', 5, true);
+SELECT pg_catalog.setval('public.category_category_id_seq', 7, true);
 
 
 --
 -- Name: customer_customer_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.customer_customer_id_seq', 3, true);
+SELECT pg_catalog.setval('public.customer_customer_id_seq', 7, true);
 
 
 --
 -- Name: merchant_merchant_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.merchant_merchant_id_seq', 2, true);
+SELECT pg_catalog.setval('public.merchant_merchant_id_seq', 5, true);
 
 
 --
@@ -628,14 +606,14 @@ SELECT pg_catalog.setval('public.transaction_list_transactionlist_id_seq', 1, fa
 -- Name: transaction_transaction_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.transaction_transaction_id_seq', 226, true);
+SELECT pg_catalog.setval('public.transaction_transaction_id_seq', 227, true);
 
 
 --
 -- Name: transactionlist_transactionlist_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.transactionlist_transactionlist_id_seq', 177, true);
+SELECT pg_catalog.setval('public.transactionlist_transactionlist_id_seq', 178, true);
 
 
 --
@@ -780,51 +758,51 @@ ALTER TABLE ONLY public.book
 
 
 --
--- Name: bookcategory bookcategory_book_sku_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.bookcategory
-    ADD CONSTRAINT bookcategory_book_sku_fkey FOREIGN KEY (book_sku) REFERENCES public.book(book_sku);
-
-
---
--- Name: bookcategory bookcategory_category_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.bookcategory
-    ADD CONSTRAINT bookcategory_category_id_fkey FOREIGN KEY (category_id) REFERENCES public.category(category_id);
-
-
---
--- Name: cart cart_book_sku_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.cart
-    ADD CONSTRAINT cart_book_sku_fkey FOREIGN KEY (book_sku) REFERENCES public.book(book_sku);
-
-
---
--- Name: cart cart_customer_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.cart
-    ADD CONSTRAINT cart_customer_id_fkey FOREIGN KEY (customer_id) REFERENCES public.customer(customer_id);
-
-
---
--- Name: library library_book_sku_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: library fk54gtsoqq0x2lrv5shywv46qjh; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.library
-    ADD CONSTRAINT library_book_sku_fkey FOREIGN KEY (book_sku) REFERENCES public.book(book_sku);
+    ADD CONSTRAINT fk54gtsoqq0x2lrv5shywv46qjh FOREIGN KEY (customer_id) REFERENCES public.customer(customer_id);
 
 
 --
--- Name: library library_customer_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: cart fk88o5eyf3qrsya0hd2xmdcjaf4; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.cart
+    ADD CONSTRAINT fk88o5eyf3qrsya0hd2xmdcjaf4 FOREIGN KEY (book_sku) REFERENCES public.book(book_sku);
+
+
+--
+-- Name: wishlist fkb6xak0rjui1rsok8ll7ln59cs; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.wishlist
+    ADD CONSTRAINT fkb6xak0rjui1rsok8ll7ln59cs FOREIGN KEY (customer_id) REFERENCES public.customer(customer_id);
+
+
+--
+-- Name: cart fkdebwvad6pp1ekiqy5jtixqbaj; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.cart
+    ADD CONSTRAINT fkdebwvad6pp1ekiqy5jtixqbaj FOREIGN KEY (customer_id) REFERENCES public.customer(customer_id);
+
+
+--
+-- Name: library fkgc9eh02trhkfmypan0h3d171v; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.library
-    ADD CONSTRAINT library_customer_id_fkey FOREIGN KEY (customer_id) REFERENCES public.customer(customer_id);
+    ADD CONSTRAINT fkgc9eh02trhkfmypan0h3d171v FOREIGN KEY (book_sku) REFERENCES public.book(book_sku);
+
+
+--
+-- Name: wishlist fkmxiw4elwsameupoyyqydg9khf; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.wishlist
+    ADD CONSTRAINT fkmxiw4elwsameupoyyqydg9khf FOREIGN KEY (book_sku) REFERENCES public.book(book_sku);
 
 
 --
@@ -857,22 +835,6 @@ ALTER TABLE ONLY public.transactionlist
 
 ALTER TABLE ONLY public.transactionlist
     ADD CONSTRAINT transactionlist_transaction_id_fkey FOREIGN KEY (transaction_id) REFERENCES public.transaction(transaction_id);
-
-
---
--- Name: wishlist wishlist_book_sku_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.wishlist
-    ADD CONSTRAINT wishlist_book_sku_fkey FOREIGN KEY (book_sku) REFERENCES public.book(book_sku);
-
-
---
--- Name: wishlist wishlist_customer_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.wishlist
-    ADD CONSTRAINT wishlist_customer_id_fkey FOREIGN KEY (customer_id) REFERENCES public.customer(customer_id);
 
 
 --
