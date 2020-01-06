@@ -221,7 +221,7 @@
 	"status": "OK",
 	"data": [{
 		"id": 1,
-		"type": "admin"
+		"type": "book"
 	}]
 }
 ```
@@ -261,7 +261,7 @@
 	"status": "OK",
 	"data": [{
 		"id": 1,
-		"type": "admin"
+		"type": "book"
 	}]
 }
 ```
