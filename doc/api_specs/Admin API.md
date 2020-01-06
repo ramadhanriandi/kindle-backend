@@ -14,7 +14,7 @@
 	"status": "OK",
 	"data": [{
 		"id": 1,
-		"types": "admin",
+		"type": "admin",
 		"attributes": {
 			"email": "admin@admin.com",
 			"username": "admin",
@@ -54,7 +54,7 @@
 	"status": "OK",
 	"data": [{
 		"id": 1,
-		"types": "admin"
+		"type": "admin"
 	}]
 }
 ```
@@ -85,7 +85,7 @@
 	"status": "Created",
 	"data": [{
 		"id": 1,
-		"types": "admin"
+		"type": "admin"
 	}]
 }
 ```
