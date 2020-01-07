@@ -251,3 +251,222 @@
 	}]
 }
 ```
+
+## Get Customer Cart
+- Endpoint : `/kindle-backend/api/customers/{customerId}/cart`
+- HTTP Method : `GET`
+- Path Variable :
+	- `customerId` : Integer
+- Request Header :
+	- Accept : `application/json`
+- Response Body (Success) :
+```
+{
+	"code": 200,
+	"status": "OK",
+	"data": [{
+		"sku": 1,
+		"type": "book",
+		"attributes": {
+			"title": "All The Light We Cannot See",
+			"author": "Anthony Doerr",
+			"year": 2009,
+			"price": 50000,
+			"document": "/uploads/book-example.svg"
+    		},
+		"relationships": {
+			"merchant": {
+				"data": [{
+					"id": 1,
+					"type": "merchant"
+				}]
+			}
+		}
+	}, {
+		"sku": 2,
+		"type": "book",
+		"attributes": {
+			"title": "All The Light We Cannot See 2",
+			"author": "Anthony Doerr 2",
+			"year": 2010,
+			"price": 100000,
+			"document": "/uploads/book-example.svg"
+    		},
+		"relationships": {
+			"merchant": {
+				"data": [{
+					"id": 2,
+					"type": "merchant"
+				}]
+			}
+		}
+	}],
+	"included": [{
+		"id": 1,
+		"type": "merchant",
+		"attributes": {
+			"fullname": "Gramedia"
+	}, {
+		"id": 2,
+		"type": "merchant",
+		"attributes": {
+			"fullname": "Gramedia 2"
+		}
+	}]
+}
+```
+- Response Body (Fail) :
+```
+{
+	"code": 400,
+	"status": "Bad Request",
+	"errors": [{
+		"status": 404,
+		"detail": "CustomerId not found"
+	}]
+}
+```
+```
+{
+	"code": 500,
+	"status": "Internal server error",
+	"errors": [{
+		"status": 500,
+		"detail": "Cannot fetch customer cart data"
+	}]
+}
+```
+
+## Get Customer Library
+- Endpoint : `/kindle-backend/api/customers/{customerId}/library`
+- HTTP Method : `GET`
+- Path Variable :
+	- `customerId` : Integer
+- Request Header :
+	- Accept : `application/json`
+- Response Body (Success) :
+```
+{
+	"code": 200,
+	"status": "OK",
+	"data": [{
+		"sku": 1,
+		"type": "book",
+		"attributes": {
+			"document": "/uploads/book-example.svg"
+    		}
+	}, {
+		"sku": 2,
+		"type": "book",
+		"attributes": {
+			"document": "/uploads/book-example.svg"
+    		},
+	}]
+}
+```
+- Response Body (Fail) :
+```
+{
+	"code": 400,
+	"status": "Bad Request",
+	"errors": [{
+		"status": 404,
+		"detail": "CustomerId not found"
+	}]
+}
+```
+```
+{
+	"code": 500,
+	"status": "Internal server error",
+	"errors": [{
+		"status": 500,
+		"detail": "Cannot fetch customer library data"
+	}]
+}
+```
+
+## Get Customer Wishlist
+- Endpoint : `/kindle-backend/api/customers/{customerId}/wishlist`
+- HTTP Method : `GET`
+- Path Variable :
+	- `customerId` : Integer
+- Request Header :
+	- Accept : `application/json`
+- Response Body (Success) :
+```
+{
+	"code": 200,
+	"status": "OK",
+	"data": [{
+		"sku": 1,
+		"type": "book",
+		"attributes": {
+			"title": "All The Light We Cannot See",
+			"author": "Anthony Doerr",
+			"year": 2009,
+			"price": 50000,
+			"document": "/uploads/book-example.svg"
+    		},
+		"relationships": {
+			"merchant": {
+				"data": [{
+					"id": 1,
+					"type": "merchant"
+				}]
+			}
+		}
+	}, {
+		"sku": 2,
+		"type": "book",
+		"attributes": {
+			"title": "All The Light We Cannot See 2",
+			"author": "Anthony Doerr 2",
+			"year": 2010,
+			"price": 100000,
+			"document": "/uploads/book-example.svg"
+    		},
+		"relationships": {
+			"merchant": {
+				"data": [{
+					"id": 2,
+					"type": "merchant"
+				}]
+			}
+		}
+	}],
+	"included": [{
+		"id": 1,
+		"type": "merchant",
+		"attributes": {
+			"fullname": "Gramedia"
+	}, {
+		"id": 2,
+		"type": "merchant",
+		"attributes": {
+			"fullname": "Gramedia 2"
+		}
+	}]
+}
+```
+- Response Body (Fail) :
+```
+{
+	"code": 400,
+	"status": "Bad Request",
+	"errors": [{
+		"status": 404,
+		"detail": "CustomerId not found"
+	}]
+}
+```
+```
+{
+	"code": 500,
+	"status": "Internal server error",
+	"errors": [{
+		"status": 500,
+		"detail": "Cannot fetch customer wishlist data"
+	}]
+}
+```
