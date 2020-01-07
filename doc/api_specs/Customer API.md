@@ -719,3 +719,87 @@
 	}]
 }
 ```
+
+## Delete Book Customer Cart
+- Endpoint : `/kindle-backend/api/customers/{customerId}/cart`
+- HTTP Method : `DELETE`
+- Path Variable :
+	- `customerId` : Integer
+- Request Parameter :
+	- `bookSku` : Integer
+- Request Header :
+	- Accept : `application/json`
+- Response Body (Success) :
+```
+{
+	"code": 200,
+	"status": "OK",
+	"data": [{
+		"sku": 1,
+		"type": "book"
+	}]
+}
+```
+- Response Body (Fail) :
+```
+{
+	"code": 400,
+	"status": "Bad Request",
+	"errors": [{
+		"status": 404,
+		"detail": "CustomerId or bookSku not found"
+	}]
+}
+```
+```
+{
+	"code": 500,
+	"status": "Internal server error",
+	"errors": [{
+		"status": 500,
+		"detail": "Cannot delete from customer cart data"
+	}]
+}
+```
+
+## Delete Book Customer Wishlist
+- Endpoint : `/kindle-backend/api/customers/{customerId}/wishlist`
+- HTTP Method : `DELETE`
+- Path Variable :
+	- `customerId` : Integer
+- Request Parameter :
+	- `bookSku` : Integer
+- Request Header :
+	- Accept : `application/json`
+- Response Body (Success) :
+```
+{
+	"code": 200,
+	"status": "OK",
+	"data": [{
+		"sku": 1,
+		"type": "book"
+	}]
+}
+```
+- Response Body (Fail) :
+```
+{
+	"code": 400,
+	"status": "Bad Request",
+	"errors": [{
+		"status": 404,
+		"detail": "CustomerId or bookSku not found"
+	}]
+}
+```
+```
+{
+	"code": 500,
+	"status": "Internal server error",
+	"errors": [{
+		"status": 500,
+		"detail": "Cannot delete from customer wishlist data"
+	}]
+}
+```
