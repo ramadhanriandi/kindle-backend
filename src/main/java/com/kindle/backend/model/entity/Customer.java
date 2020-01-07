@@ -8,6 +8,8 @@ import com.kindle.backend.model.constant.WishlistConstant;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.util.List;
@@ -34,6 +36,10 @@ public class Customer {
 
   @Column(name = CustomerConstant.CUSTOMER_STATUS)
   private String status;
+
+  @JsonIgnore
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "customerDetail")
+  private List<Transaction> customerTransactions;
 
   @JsonIgnore
   @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
