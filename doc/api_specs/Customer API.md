@@ -593,3 +593,129 @@
 	}]
 }
 ```
+
+## Add Book to Customer Cart
+- Endpoint : `/kindle-backend/api/customers/{customerId}/cart`
+- HTTP Method : `POST`
+- Path Variable :
+	- `customerId` : Integer
+- Request Parameter :
+	- `bookSku` : Integer
+- Request Header :
+	- Accept : `application/json`
+- Response Body (Success) :
+```
+{
+	"code": 201,
+	"status": "Created",
+	"data": [{
+		"sku": 1,
+		"type": "book",
+	}]
+}
+```
+- Response Body (Fail) :
+```
+{
+	"code": 400,
+	"status": "Bad Request",
+	"errors": [{
+		"status": 404,
+		"detail": "CustomerId or bookSku not found"
+	}]
+}
+```
+```
+{
+	"code": 500,
+	"status": "Internal server error",
+	"errors": [{
+		"status": 500,
+		"detail": "Cannot add the book into customer cart"
+	}]
+}
+```
+
+## Add Book to Customer Library
+- Endpoint : `/kindle-backend/api/customers/{customerId}/library`
+- HTTP Method : `POST`
+- Path Variable :
+	- `customerId` : Integer
+- Request Parameter :
+	- `bookSku` : Integer
+- Request Header :
+	- Accept : `application/json`
+- Response Body (Success) :
+```
+{
+	"code": 201,
+	"status": "Created",
+	"data": [{
+		"sku": 1,
+		"type": "book",
+	}]
+}
+```
+- Response Body (Fail) :
+```
+{
+	"code": 400,
+	"status": "Bad Request",
+	"errors": [{
+		"status": 404,
+		"detail": "CustomerId or bookSku not found"
+	}]
+}
+```
+```
+{
+	"code": 500,
+	"status": "Internal server error",
+	"errors": [{
+		"status": 500,
+		"detail": "Cannot add the book into customer library"
+	}]
+}
+```
+
+## Add Book to Customer Wishlist
+- Endpoint : `/kindle-backend/api/customers/{customerId}/wishlist`
+- HTTP Method : `POST`
+- Path Variable :
+	- `customerId` : Integer
+- Request Parameter :
+	- `bookSku` : Integer
+- Request Header :
+	- Accept : `application/json`
+- Response Body (Success) :
+```
+{
+	"code": 201,
+	"status": "Created",
+	"data": [{
+		"sku": 1,
+		"type": "book",
+	}]
+}
+```
+- Response Body (Fail) :
+```
+{
+	"code": 400,
+	"status": "Bad Request",
+	"errors": [{
+		"status": 404,
+		"detail": "CustomerId or bookSku not found"
+	}]
+}
+```
+```
+{
+	"code": 500,
+	"status": "Internal server error",
+	"errors": [{
+		"status": 500,
+		"detail": "Cannot add the book into customer wishlist"
+	}]
+}
+```
