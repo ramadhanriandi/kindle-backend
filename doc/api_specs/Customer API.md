@@ -470,3 +470,126 @@
 	}]
 }
 ```
+
+## Is On Cart
+- Endpoint : `/kindle-backend/api/customers/{customerId}/cart/{bookSku}/check`
+- HTTP Method : `GET`
+- Path Variable :
+	- `customerId` : Integer
+	- `bookSku` : Integer
+- Request Header :
+	- Accept : `application/json`
+- Response Body (Success) :
+```
+{
+	"code": 200,
+	"status": "OK",
+	"data": [{
+		"sku": 1,
+		"type": "book",
+	}]
+}
+```
+- Response Body (Fail) :
+```
+{
+	"code": 400,
+	"status": "Bad Request",
+	"errors": [{
+		"status": 404,
+		"detail": "CustomerId or bookSku not found"
+	}]
+}
+```
+```
+{
+	"code": 500,
+	"status": "Internal server error",
+	"errors": [{
+		"status": 500,
+		"detail": "Cannot check customer cart data"
+	}]
+}
+```
+
+## Is On Library
+- Endpoint : `/kindle-backend/api/customers/{customerId}/library/{bookSku}/check`
+- HTTP Method : `GET`
+- Path Variable :
+	- `customerId` : Integer
+	- `bookSku` : Integer
+- Request Header :
+	- Accept : `application/json`
+- Response Body (Success) :
+```
+{
+	"code": 200,
+	"status": "OK",
+	"data": [{
+		"sku": 1,
+		"type": "book",
+	}]
+}
+```
+- Response Body (Fail) :
+```
+{
+	"code": 400,
+	"status": "Bad Request",
+	"errors": [{
+		"status": 404,
+		"detail": "CustomerId or bookSku not found"
+	}]
+}
+```
+```
+{
+	"code": 500,
+	"status": "Internal server error",
+	"errors": [{
+		"status": 500,
+		"detail": "Cannot check customer library data"
+	}]
+}
+```
+
+## Is On Wishlist
+- Endpoint : `/kindle-backend/api/customers/{customerId}/wishlist/{bookSku}/check`
+- HTTP Method : `GET`
+- Path Variable :
+	- `customerId` : Integer
+	- `bookSku` : Integer
+- Request Header :
+	- Accept : `application/json`
+- Response Body (Success) :
+```
+{
+	"code": 200,
+	"status": "OK",
+	"data": [{
+		"sku": 1,
+		"type": "book",
+	}]
+}
+```
+- Response Body (Fail) :
+```
+{
+	"code": 400,
+	"status": "Bad Request",
+	"errors": [{
+		"status": 404,
+		"detail": "CustomerId or bookSku not found"
+	}]
+}
+```
+```
+{
+	"code": 500,
+	"status": "Internal server error",
+	"errors": [{
+		"status": 500,
+		"detail": "Cannot check customer wishlist data"
+	}]
+}
+```
