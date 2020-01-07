@@ -78,7 +78,7 @@
 	"status": "Bad Request",
 	"errors": [{
 		"status": 404,
-		"detail": "CustomerId not found"
+		"detail": "Customer not found"
 	}]
 }
 ```
@@ -101,7 +101,7 @@
 - Request Body :
     	- `username` : String
     	- `email` : String
-	- `password` : int
+	- `password` : String
 	- `status` : String, default is `"Active"`
 - Response Body (Success) :
 ```
