@@ -1,15 +1,12 @@
 package com.kindle.backend.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.kindle.backend.model.constant.BookCategoryConstant;
 import com.kindle.backend.model.constant.BookConstant;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.List;
@@ -52,8 +49,11 @@ public class Book {
   @Column(name = BookConstant.BOOK_URL)
   private String url;
 
+  @Column(name = BookConstant.BOOK_CATEGORIES)
+  private String categories;
+
   @JsonIgnore
-  @ManyToMany(mappedBy = "library", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+  @ManyToMany(mappedBy = "library", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
   private List<Customer> ownerBook;
 
   @JsonIgnore
@@ -64,16 +64,6 @@ public class Book {
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "merchant_id", nullable = false, insertable = false, updatable = false)
   private Merchant merchant;
-
-  @JsonIgnore
-  @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-  @Fetch(value = FetchMode.SUBSELECT)
-  @JoinTable(
-          name = BookCategoryConstant.TABLE_NAME,
-          joinColumns = @JoinColumn(name = BookCategoryConstant.BOOK_SKU),
-          inverseJoinColumns = @JoinColumn(name = BookCategoryConstant.CATEGORY_ID)
-  )
-  private List<Category> categories;
 
   @JsonIgnore
   @ManyToMany(mappedBy = "wishlist", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
@@ -187,14 +177,6 @@ public class Book {
     this.merchant = merchant;
   }
 
-  public List<Category> getCategories() {
-    return categories;
-  }
-
-  public void setCategories(List<Category> categories) {
-    this.categories = categories;
-  }
-
   public List<Customer> getLikedBook() {
     return likedBook;
   }
@@ -209,5 +191,13 @@ public class Book {
 
   public void setCartedBook(List<Customer> cartedBook) {
     this.cartedBook = cartedBook;
+  }
+
+  public String getCategories() {
+    return categories;
+  }
+
+  public void setCategories(String categories) {
+    this.categories = categories;
   }
 }

@@ -2,6 +2,7 @@ package com.kindle.backend.controller;
 
 import com.kindle.backend.model.constant.ApiPath;
 import com.kindle.backend.model.entity.Category;
+import com.kindle.backend.response.PutResponse;
 import com.kindle.backend.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -30,8 +31,8 @@ public class CategoryController {
   }
 
   @RequestMapping(value = ApiPath.CATEGORY_BY_CATEGORY_ID, method = RequestMethod.PUT)
-  public void updateCategory(@PathVariable Integer categoryId, @RequestBody Category category) {
-    this.categoryService.updateCategory(categoryId, category);
+  public PutResponse updateCategory(@PathVariable Integer categoryId, @RequestBody Category category) {
+    return this.categoryService.updateCategory(categoryId, category);
   }
 
   @RequestMapping(value = ApiPath.CATEGORY_BY_CATEGORY_ID, method = RequestMethod.DELETE)

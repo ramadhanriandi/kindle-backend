@@ -12,4 +12,5 @@ public class BookConstant {
   public static final String BOOK_DOCUMENT = "document";
   public static final String BOOK_VARIANT = "variant";
   public static final String BOOK_URL = "url";
+  public static final String BOOK_CATEGORIES = "categories";
 }
