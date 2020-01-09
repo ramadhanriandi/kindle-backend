@@ -1,0 +1,67 @@
+DATABASE MODEL
+
+#1 users
+id              : int(11)           not null      primary key
+username        : varchar(255)      not null
+email           : varchar(255)      not null
+password        : varchar(255)      not null
+status          : varchar(255)      not null
+
+#2 merchants
+id              : int(11)           not null      primary key
+email           : varchar(255)      not null
+name            : varchar(255)      not null
+password        : varchar(255)      not null
+description     : text              null
+phone           : varchar(255)      null
+status          : varchar(255)      not null
+
+#3 admins
+id              : int(11)           not null      primary key
+username        : varchar(255)      not null
+email           : varchar(255)      not null
+password        : varchar(255)      not null
+
+#4 books
+sku             : int(11)           not null      primary key
+title           : varchar(255)      not null
+author          : varchar(255)      not null
+year            : int(11)           not null
+description     : text              not null
+link            : varchar(255)      not null
+price           : int(11)           not null
+variant         : varchar(255)      not null
+merchant_id     : int(11)           not null      foreign key
+
+#5 bookCategories
+book_sku        : int(11)           not null      foreign key
+category_id     : int(11)           not null      foreign key
+
+#6 categories
+id              : int(11)           not null      primary key
+name            : varchar(255)      not null
+
+#7 wishlists
+book_sku        : int(11)           not null      foreign key
+user_id         : int(11)           not null      foreign key         
+
+#8 orders
+id              : int(11)           not null      primary key
+user_id         : int(11)           not null      foreign key
+date            : datetime          not null
+total           : int(11)           not null
+
+#9 orderLists
+id              : int(11)           not null      primary key
+book_sku        : int(11)           not null      foreign key
+order_id        : int(11)           not null      foreign key
+merchant_id     : int(11)           not null      foreign key  
+
+#10 carts
+cart_id         : int(11)           not null      primary key
+user_id         : int(11)           not null      foreign key
+
+#11 cartLists
+id              : int(11)           not null      primary key
+book_sku        : int(11)           not null      foreign key
+cart_id         : int(11)           not null      foreign key 
