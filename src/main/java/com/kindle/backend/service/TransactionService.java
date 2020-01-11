@@ -40,8 +40,28 @@ public class TransactionService {
     }
   }
 
-  public Transaction findByTransactionId(int transactionId) {
-    return transactionRepository.findByTransactionId(transactionId);
+  public BaseResponse findByTransactionId(int transactionId) {
+    Transaction transaction = transactionRepository.findByTransactionId(transactionId);
+
+    if (transaction == null) {
+      ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(404, "TransactionId not found");
+
+      List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
+      errorDetailResponses.add(errorDetailResponse);
+      FailureDataResponse failureDataResponse = new FailureDataResponse(400, "Bad Request", errorDetailResponses);
+
+      return failureDataResponse;
+    } else {
+      List<DataNoRelationResponse> dataNoRelationResponses = new ArrayList<>();
+
+      GetTransactionByTransactionIdResponse getTransactionByTransactionIdResponse = new GetTransactionByTransactionIdResponse(transaction.getDate(), transaction.getTotal(), transaction.getCustomerId());
+      DataNoRelationResponse<GetTransactionByTransactionIdResponse> dataNoRelationResponse = new DataNoRelationResponse<>(transaction.getTransactionId(), "transaction", getTransactionByTransactionIdResponse);
+      dataNoRelationResponses.add(dataNoRelationResponse);
+
+      SuccessDataResponse<DataNoRelationResponse> successDataResponse = new SuccessDataResponse<>(200, "OK", dataNoRelationResponses);
+
+      return successDataResponse;
+    }
   }
 
   public Transaction save(Transaction transaction) {

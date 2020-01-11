@@ -21,7 +21,7 @@ public class TransactionController {
   }
 
   @RequestMapping(value = ApiPath.TRANSACTION_BY_TRANSACTION_ID, method = RequestMethod.GET)
-  public Transaction getByTransactionId(@PathVariable Integer transactionId) {
+  public BaseResponse getByTransactionId(@PathVariable Integer transactionId) {
     return this.transactionService.findByTransactionId(transactionId);
   }
 
