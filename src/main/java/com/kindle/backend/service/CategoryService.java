@@ -2,10 +2,11 @@ package com.kindle.backend.service;
 
 import com.kindle.backend.model.entity.Category;
 import com.kindle.backend.model.repository.CategoryRepository;
-import com.kindle.backend.response.PutResponse;
+import com.kindle.backend.response.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -17,8 +18,30 @@ public class CategoryService {
     return categoryRepository.findFirstByCategoryId(categoryId);
   }
 
-  public List<Category> findAllCategory(){
-    return categoryRepository.findAll();
+  public BaseResponse findAllCategory(){
+    List<Category> categories = categoryRepository.findAll();
+
+    if (categories == null) {
+      ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(404, "Category not found");
+
+      List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
+      errorDetailResponses.add(errorDetailResponse);
+      FailureDataResponse failureDataResponse = new FailureDataResponse(400, "Bad Request", errorDetailResponses);
+
+      return failureDataResponse;
+    } else {
+      List<DataNoRelationResponse> dataNoRelationResponses = new ArrayList<>();
+
+      for (Category category : categories) {
+        GetCategoryByCategoryIdResponse getCategoryByCategoryIdResponse = new GetCategoryByCategoryIdResponse(category.getName());
+        DataNoRelationResponse<GetCategoryByCategoryIdResponse> dataNoRelationResponse = new DataNoRelationResponse<>(category.getCategoryId(), "category", getCategoryByCategoryIdResponse);
+        dataNoRelationResponses.add(dataNoRelationResponse);
+      }
+
+      SuccessDataResponse<DataNoRelationResponse> successDataResponse = new SuccessDataResponse<>(200, "OK", dataNoRelationResponses);
+
+      return successDataResponse;
+    }
   }
 
   public Category save(Category category) {

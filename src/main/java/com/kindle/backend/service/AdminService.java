@@ -28,9 +28,7 @@ public class AdminService {
     } else {
       GetAdminByAdminIdResponse getAdminByAdminIdResponse = new GetAdminByAdminIdResponse(admin.getEmail(), admin.getUsername(), admin.getPassword());
 
-      List<GetAdminByAdminIdResponse> getAdminByAdminIdResponses = new ArrayList<>();
-      getAdminByAdminIdResponses.add(getAdminByAdminIdResponse);
-      DataNoRelationResponse<GetAdminByAdminIdResponse> dataNoRelationResponse = new DataNoRelationResponse<>(admin.getAdminId(), "admin", getAdminByAdminIdResponses);
+      DataNoRelationResponse<GetAdminByAdminIdResponse> dataNoRelationResponse = new DataNoRelationResponse<>(admin.getAdminId(), "admin", getAdminByAdminIdResponse);
 
       List<DataNoRelationResponse> dataNoRelationResponses = new ArrayList<>();
       dataNoRelationResponses.add(dataNoRelationResponse);
