@@ -136,8 +136,38 @@ public class CustomerService {
     }
   }
 
-  public long deleteByCustomerId(Integer customerId) {
-    return customerRepository.deleteByCustomerId(customerId);
+  public BaseResponse deleteByCustomerId(Integer customerId) {
+    Customer fetchResponse = customerRepository.findFirstByCustomerId(customerId);
+
+    if (fetchResponse == null) {
+      ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(404, "CustomerId not found");
+
+      List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
+      errorDetailResponses.add(errorDetailResponse);
+      FailureDataResponse failureDataResponse = new FailureDataResponse(400, "Bad Request", errorDetailResponses);
+
+      return failureDataResponse;
+    } else {
+      long customerResponse = customerRepository.deleteByCustomerId(customerId);
+
+      if (customerResponse <= 0) {
+        ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(500, "Cannot delete customer data");
+
+        List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
+        errorDetailResponses.add(errorDetailResponse);
+        FailureDataResponse failureDataResponse = new FailureDataResponse(500, "Internal server error", errorDetailResponses);
+
+        return failureDataResponse;
+      } else {
+        DataNoAttributeResponse dataNoAttributeResponse = new DataNoAttributeResponse(customerId, "customer");
+
+        List<DataNoAttributeResponse> dataNoAttributeResponses = new ArrayList<>();
+        dataNoAttributeResponses.add(dataNoAttributeResponse);
+        SuccessDataResponse<DataNoAttributeResponse> successDataResponse = new SuccessDataResponse<>(200, "OK", dataNoAttributeResponses);
+
+        return successDataResponse;
+      }
+    }
   }
 
   public PostResponse login(Customer customer) {

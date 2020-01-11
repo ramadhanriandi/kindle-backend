@@ -6,7 +6,6 @@ import com.kindle.backend.model.entity.Customer;
 import com.kindle.backend.response.BaseResponse;
 import com.kindle.backend.response.oldResponse.CartResponse;
 import com.kindle.backend.response.oldResponse.PostResponse;
-import com.kindle.backend.response.oldResponse.PutResponse;
 import com.kindle.backend.response.oldResponse.WishlistResponse;
 import com.kindle.backend.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,8 +40,8 @@ public class CustomerController {
   }
 
   @RequestMapping(value = ApiPath.CUSTOMER_BY_CUSTOMER_ID, method = RequestMethod.DELETE)
-  public boolean deleteByCustomerId(@PathVariable Integer customerId) {
-    return this.customerService.deleteByCustomerId(customerId) > 0;
+  public BaseResponse deleteByCustomerId(@PathVariable Integer customerId) {
+    return this.customerService.deleteByCustomerId(customerId);
   }
 
   @RequestMapping(value = ApiPath.CUSTOMER_LOGIN, method = RequestMethod.POST)
