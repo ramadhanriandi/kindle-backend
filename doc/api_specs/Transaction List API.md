@@ -110,9 +110,9 @@
 - Request Header :
 	- Accept : `application/json`
 - Request Body :
-    	- `bookSku` : int
+	- `bookSku` : int
 	- `merchantId` : int
-    	- `transactionId` : int
+	- `transactionId` : int
 - Response Body (Success) :
 ```
 {
