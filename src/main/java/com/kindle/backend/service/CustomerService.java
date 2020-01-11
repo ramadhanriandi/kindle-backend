@@ -6,6 +6,7 @@ import com.kindle.backend.model.repository.BookRepository;
 import com.kindle.backend.model.repository.CustomerRepository;
 import com.kindle.backend.response.BaseResponse;
 import com.kindle.backend.response.attributeResponse.GetAllCustomerResponse;
+import com.kindle.backend.response.dataResponse.DataNoAttributeResponse;
 import com.kindle.backend.response.dataResponse.DataNoRelationResponse;
 import com.kindle.backend.response.errorResponse.ErrorDetailResponse;
 import com.kindle.backend.response.oldResponse.CartResponse;
@@ -79,8 +80,26 @@ public class CustomerService {
     }
   }
 
-  public Customer save(Customer customer) {
-    return customerRepository.save(customer);
+  public BaseResponse save(Customer customer) {
+    Customer customerResponse = customerRepository.save(customer);
+
+    if (customerResponse == null) {
+      ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(500, "Cannot create customer data");
+
+      List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
+      errorDetailResponses.add(errorDetailResponse);
+      FailureDataResponse failureDataResponse = new FailureDataResponse(500, "Internal server error", errorDetailResponses);
+
+      return failureDataResponse;
+    } else {
+      DataNoAttributeResponse dataNoAttributeResponse = new DataNoAttributeResponse(customerResponse.getCustomerId(), "customer");
+
+      List<DataNoAttributeResponse> dataNoAttributeResponses = new ArrayList<>();
+      dataNoAttributeResponses.add(dataNoAttributeResponse);
+      SuccessDataResponse<DataNoAttributeResponse> successDataResponse = new SuccessDataResponse<>(201, "Created", dataNoAttributeResponses);
+
+      return successDataResponse;
+    }
   }
 
   public PutResponse updateCustomer(Integer customerId, Customer customer) {

@@ -31,7 +31,7 @@ public class CustomerController {
   }
 
   @RequestMapping(value = ApiPath.CUSTOMER, method = RequestMethod.POST)
-  public Customer save(@RequestBody Customer customer) {
+  public BaseResponse save(@RequestBody Customer customer) {
     return this.customerService.save(customer);
   }
 
@@ -48,11 +48,6 @@ public class CustomerController {
   @RequestMapping(value = ApiPath.CUSTOMER_LOGIN, method = RequestMethod.POST)
   public PostResponse login(@RequestBody Customer customer) {
     return this.customerService.login(customer);
-  }
-
-  @RequestMapping(value = ApiPath.CUSTOMER_REGISTER, method = RequestMethod.POST)
-  public PostResponse register(@RequestBody Customer customer) {
-    return this.customerService.register(customer);
   }
 
   @RequestMapping(value = ApiPath.CUSTOMER_CART, method = RequestMethod.GET)
