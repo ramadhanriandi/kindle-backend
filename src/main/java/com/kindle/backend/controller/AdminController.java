@@ -25,7 +25,7 @@ public class AdminController {
   }
 
   @RequestMapping(value = ApiPath.ADMIN_LOGIN, method = RequestMethod.POST)
-  public PostResponse login(@RequestBody Admin admin) {
+  public BaseResponse login(@RequestBody Admin admin) {
     return this.adminService.login(admin);
   }
 }

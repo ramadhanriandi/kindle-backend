@@ -65,22 +65,28 @@ public class AdminService {
     }
   }
 
-  public PostResponse login(Admin admin) {
+  public BaseResponse login(Admin admin) {
     String email = admin.getEmail();
     String password = admin.getPassword();
-    PostResponse loginResponse = new PostResponse();
 
-    Admin adminResponse = adminRepository.findFirstByEmailAndPassword(email, password);
+    Admin fetchResponse = adminRepository.findFirstByEmailAndPassword(email, password);
 
-    if (adminResponse == null) {
-      loginResponse.setCode(401);
-      loginResponse.setMessage("Login failed: wrong email or password");
+    if (fetchResponse == null) {
+      ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(404, "Wrong email or password");
+
+      List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
+      errorDetailResponses.add(errorDetailResponse);
+      FailureDataResponse failureDataResponse = new FailureDataResponse(400, "Bad Request", errorDetailResponses);
+
+      return failureDataResponse;
     } else {
-      loginResponse.setUserId(adminResponse.getAdminId());
-      loginResponse.setCode(200);
-      loginResponse.setMessage("Login success");
-    }
+      DataNoAttributeResponse dataNoAttributeResponse = new DataNoAttributeResponse(fetchResponse.getAdminId(), "admin");
 
-    return loginResponse;
+      List<DataNoAttributeResponse> dataNoAttributeResponses = new ArrayList<>();
+      dataNoAttributeResponses.add(dataNoAttributeResponse);
+      SuccessDataResponse<DataNoAttributeResponse> successDataResponse = new SuccessDataResponse<>(200, "OK", dataNoAttributeResponses);
+
+      return successDataResponse;
+    }
   }
 }
