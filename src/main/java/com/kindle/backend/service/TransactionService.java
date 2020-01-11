@@ -64,7 +64,25 @@ public class TransactionService {
     }
   }
 
-  public Transaction save(Transaction transaction) {
-    return transactionRepository.save(transaction);
+  public BaseResponse save(Transaction transaction) {
+    Transaction transactionResponse = transactionRepository.save(transaction);
+
+    if (transactionResponse == null) {
+      ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(500, "Cannot create transaction data");
+
+      List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
+      errorDetailResponses.add(errorDetailResponse);
+      FailureDataResponse failureDataResponse = new FailureDataResponse(500, "Internal server error", errorDetailResponses);
+
+      return failureDataResponse;
+    } else {
+      DataNoAttributeResponse dataNoAttributeResponse = new DataNoAttributeResponse(transactionResponse.getTransactionId(), "transaction");
+
+      List<DataNoAttributeResponse> dataNoAttributeResponses = new ArrayList<>();
+      dataNoAttributeResponses.add(dataNoAttributeResponse);
+      SuccessDataResponse<DataNoAttributeResponse> successDataResponse = new SuccessDataResponse<>(201, "Created", dataNoAttributeResponses);
+
+      return successDataResponse;
+    }
   }
 }

@@ -26,7 +26,7 @@ public class TransactionController {
   }
 
   @RequestMapping(value = ApiPath.TRANSACTION, method = RequestMethod.POST)
-  public Transaction save(@RequestBody Transaction transaction) {
+  public BaseResponse save(@RequestBody Transaction transaction) {
     return this.transactionService.save(transaction);
   }
 }
