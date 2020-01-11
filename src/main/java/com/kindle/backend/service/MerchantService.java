@@ -129,8 +129,38 @@ public class MerchantService {
     }
   }
 
-  public long deleteByMerchantId(Integer merchantId) {
-    return merchantRepository.deleteByMerchantId(merchantId);
+  public BaseResponse deleteByMerchantId(Integer merchantId) {
+    Merchant fetchResponse = merchantRepository.findFirstByMerchantId(merchantId);
+
+    if (fetchResponse == null) {
+      ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(404, "MerchantId not found");
+
+      List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
+      errorDetailResponses.add(errorDetailResponse);
+      FailureDataResponse failureDataResponse = new FailureDataResponse(400, "Bad Request", errorDetailResponses);
+
+      return failureDataResponse;
+    } else {
+      long merchantResponse = merchantRepository.deleteByMerchantId(merchantId);
+
+      if (merchantResponse <= 0) {
+        ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(500, "Cannot delete merchant data");
+
+        List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
+        errorDetailResponses.add(errorDetailResponse);
+        FailureDataResponse failureDataResponse = new FailureDataResponse(500, "Internal server error", errorDetailResponses);
+
+        return failureDataResponse;
+      } else {
+        DataNoAttributeResponse dataNoAttributeResponse = new DataNoAttributeResponse(merchantId, "merchant");
+
+        List<DataNoAttributeResponse> dataNoAttributeResponses = new ArrayList<>();
+        dataNoAttributeResponses.add(dataNoAttributeResponse);
+        SuccessDataResponse<DataNoAttributeResponse> successDataResponse = new SuccessDataResponse<>(200, "OK", dataNoAttributeResponses);
+
+        return successDataResponse;
+      }
+    }
   }
 
   public PostResponse login(Merchant merchant) {

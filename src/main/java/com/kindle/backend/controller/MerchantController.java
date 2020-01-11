@@ -41,8 +41,8 @@ public class MerchantController {
   }
 
   @RequestMapping(value = ApiPath.MERCHANT_BY_MERCHANT_ID, method = RequestMethod.DELETE)
-  public boolean deleteByMerchantId(@PathVariable Integer merchantId) {
-    return this.merchantService.deleteByMerchantId(merchantId) > 0;
+  public BaseResponse deleteByMerchantId(@PathVariable Integer merchantId) {
+    return this.merchantService.deleteByMerchantId(merchantId);
   }
 
   @RequestMapping(value = ApiPath.MERCHANT_LOGIN, method = RequestMethod.POST)
