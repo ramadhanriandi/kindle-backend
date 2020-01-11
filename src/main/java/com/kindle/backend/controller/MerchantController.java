@@ -46,7 +46,7 @@ public class MerchantController {
   }
 
   @RequestMapping(value = ApiPath.MERCHANT_LOGIN, method = RequestMethod.POST)
-  public PostResponse login(@RequestBody Merchant merchant) {
+  public BaseResponse login(@RequestBody Merchant merchant) {
     return this.merchantService.login(merchant);
   }
 

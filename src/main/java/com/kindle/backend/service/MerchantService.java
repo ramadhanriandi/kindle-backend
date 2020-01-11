@@ -8,7 +8,6 @@ import com.kindle.backend.response.attributeResponse.GetMerchantByMerchantIdResp
 import com.kindle.backend.response.dataResponse.DataNoAttributeResponse;
 import com.kindle.backend.response.dataResponse.DataNoRelationResponse;
 import com.kindle.backend.response.errorResponse.ErrorDetailResponse;
-import com.kindle.backend.response.oldResponse.PostResponse;
 import com.kindle.backend.response.statusResponse.FailureDataResponse;
 import com.kindle.backend.response.statusResponse.SuccessDataResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -163,27 +162,28 @@ public class MerchantService {
     }
   }
 
-  public PostResponse login(Merchant merchant) {
+  public BaseResponse login(Merchant merchant) {
     String email = merchant.getEmail();
     String password = merchant.getPassword();
-    PostResponse loginResponse = new PostResponse();
 
-    Merchant merchantResponse = merchantRepository.findFirstByEmailAndPassword(email, password);
+    Merchant fetchResponse = merchantRepository.findFirstByEmailAndPassword(email, password);
 
-    if (merchantResponse == null) {
-      loginResponse.setCode(401);
-      loginResponse.setMessage("Login failed: wrong email or password");
+    if (fetchResponse == null) {
+      ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(404, "Wrong email or password");
+
+      List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
+      errorDetailResponses.add(errorDetailResponse);
+      FailureDataResponse failureDataResponse = new FailureDataResponse(400, "Bad Request", errorDetailResponses);
+
+      return failureDataResponse;
     } else {
-      if (merchantResponse.getStatus().equals("Active")) {
-        loginResponse.setUserId(merchantResponse.getMerchantId());
-        loginResponse.setCode(200);
-        loginResponse.setMessage("Login success");
-      } else {
-        loginResponse.setCode(402);
-        loginResponse.setMessage("Login failed: your account is " + merchantResponse.getStatus());
-      }
-    }
+      DataNoAttributeResponse dataNoAttributeResponse = new DataNoAttributeResponse(fetchResponse.getMerchantId(), "merchant");
 
-    return loginResponse;
+      List<DataNoAttributeResponse> dataNoAttributeResponses = new ArrayList<>();
+      dataNoAttributeResponses.add(dataNoAttributeResponse);
+      SuccessDataResponse<DataNoAttributeResponse> successDataResponse = new SuccessDataResponse<>(200, "OK", dataNoAttributeResponses);
+
+      return successDataResponse;
+    }
   }
 }
