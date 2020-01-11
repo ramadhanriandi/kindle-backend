@@ -36,7 +36,11 @@ public class Customer {
   private String status;
 
   @JsonIgnore
-  @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "customerDetail")
+  private List<Transaction> customerTransactions;
+
+  @JsonIgnore
+  @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   @JoinTable(
           name = LibraryConstant.TABLE_NAME,
           joinColumns = @JoinColumn(name = LibraryConstant.CUSTOMER_ID),
@@ -44,7 +48,8 @@ public class Customer {
   )
   private List<Book> library;
 
-  @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+  @JsonIgnore
+  @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
   @JoinTable(
           name = WishlistConstant.TABLE_NAME,
           joinColumns = @JoinColumn(name = WishlistConstant.CUSTOMER_ID),
@@ -52,7 +57,8 @@ public class Customer {
   )
   private List<Book> wishlist;
 
-  @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+  @JsonIgnore
+  @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
   @JoinTable(
           name = CartConstant.TABLE_NAME,
           joinColumns = @JoinColumn(name = CartConstant.CUSTOMER_ID),
