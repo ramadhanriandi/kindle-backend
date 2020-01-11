@@ -40,9 +40,29 @@ public class AdminService {
     }
   }
 
-  public void updateAdmin(Integer adminId, Admin admin) {
-    admin.setAdminId(adminId);
-    adminRepository.save(admin);
+  public BaseResponse updateAdmin(Integer adminId, Admin admin) {
+    Admin fetchResponse = adminRepository.findFirstByAdminId(adminId);
+
+    if (fetchResponse == null) {
+      ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(404, "AdminId not found");
+
+      List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
+      errorDetailResponses.add(errorDetailResponse);
+      FailureDataResponse failureDataResponse = new FailureDataResponse(400, "Bad Request", errorDetailResponses);
+
+      return failureDataResponse;
+    } else {
+      admin.setAdminId(adminId);
+      adminRepository.save(admin);
+
+      DataNoAttributeResponse dataNoAttributeResponse = new DataNoAttributeResponse(admin.getAdminId(), "admin");
+
+      List<DataNoAttributeResponse> dataNoAttributeResponses = new ArrayList<>();
+      dataNoAttributeResponses.add(dataNoAttributeResponse);
+      SuccessDataResponse<DataNoAttributeResponse> successDataResponse = new SuccessDataResponse<>(200, "OK", dataNoAttributeResponses);
+
+      return successDataResponse;
+    }
   }
 
   public PostResponse login(Admin admin) {
