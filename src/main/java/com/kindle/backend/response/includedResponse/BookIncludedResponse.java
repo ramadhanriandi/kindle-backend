@@ -11,7 +11,7 @@ public class BookIncludedResponse {
   private String title;
   private String author;
   private int year;
-  private int price;
+  private float price;
   private String document;
 
   public String getTitle() {
@@ -38,11 +38,11 @@ public class BookIncludedResponse {
     this.year = year;
   }
 
-  public int getPrice() {
+  public float getPrice() {
     return price;
   }
 
-  public void setPrice(int price) {
+  public void setPrice(float price) {
     this.price = price;
   }
 

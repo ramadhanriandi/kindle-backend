@@ -7,7 +7,23 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TransactionListRelationshipResponse<T> {
-  private T merchant;
-  private T book;
+public class TransactionListRelationshipResponse {
+  private BaseRelationshipDataResponse merchant;
+  private BaseRelationshipDataResponse book;
+
+  public BaseRelationshipDataResponse getMerchant() {
+    return merchant;
+  }
+
+  public void setMerchant(BaseRelationshipDataResponse merchant) {
+    this.merchant = merchant;
+  }
+
+  public BaseRelationshipDataResponse getBook() {
+    return book;
+  }
+
+  public void setBook(BaseRelationshipDataResponse book) {
+    this.book = book;
+  }
 }
