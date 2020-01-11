@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GetAdminByAdminIdResponse<T> {
+public class GetAdminByAdminIdResponse {
   private String email;
   private String username;
   private String password;

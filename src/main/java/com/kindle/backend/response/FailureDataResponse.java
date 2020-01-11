@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class FailureDataResponse {
+public class FailureDataResponse extends BaseResponse {
   private int code;
   private String status;
   private List<ErrorDetailResponse> errors;

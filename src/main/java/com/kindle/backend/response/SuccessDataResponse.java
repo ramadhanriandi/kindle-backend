@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SuccessDataResponse<T> {
+public class SuccessDataResponse<T> extends BaseResponse {
   private int code;
   private String status;
   private List<T> data;
@@ -35,6 +35,6 @@ public class SuccessDataResponse<T> {
   }
 
   public void setData(List<T> data) {
-    this.data = data;
+    this.data.addAll(data);
   }
 }
