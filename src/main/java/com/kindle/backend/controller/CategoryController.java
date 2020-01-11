@@ -34,7 +34,7 @@ public class CategoryController {
   }
 
   @RequestMapping(value = ApiPath.CATEGORY_BY_CATEGORY_ID, method = RequestMethod.DELETE)
-  public boolean deleteByCategoryId(@PathVariable Integer categoryId) {
-    return this.categoryService.deleteByCategoryId(categoryId) > 0;
+  public BaseResponse deleteByCategoryId(@PathVariable Integer categoryId) {
+    return this.categoryService.deleteByCategoryId(categoryId);
   }
 }

@@ -121,7 +121,37 @@ public class CategoryService {
     }
   }
 
-  public long deleteByCategoryId(Integer categoryId) {
-    return categoryRepository.deleteCategoryByCategoryId(categoryId);
+  public BaseResponse deleteByCategoryId(Integer categoryId) {
+    Category fetchResponse = categoryRepository.findFirstByCategoryId(categoryId);
+
+    if (fetchResponse == null) {
+      ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(404, "CategoryId not found");
+
+      List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
+      errorDetailResponses.add(errorDetailResponse);
+      FailureDataResponse failureDataResponse = new FailureDataResponse(400, "Bad Request", errorDetailResponses);
+
+      return failureDataResponse;
+    } else {
+      long categoryResponse = categoryRepository.deleteCategoryByCategoryId(categoryId);
+
+      if (categoryResponse <= 0) {
+        ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(500, "Cannot delete the category");
+
+        List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
+        errorDetailResponses.add(errorDetailResponse);
+        FailureDataResponse failureDataResponse = new FailureDataResponse(500, "Internal server error", errorDetailResponses);
+
+        return failureDataResponse;
+      } else {
+        DataNoAttributeResponse dataNoAttributeResponse = new DataNoAttributeResponse(categoryId, "category");
+
+        List<DataNoAttributeResponse> dataNoAttributeResponses = new ArrayList<>();
+        dataNoAttributeResponses.add(dataNoAttributeResponse);
+        SuccessDataResponse<DataNoAttributeResponse> successDataResponse = new SuccessDataResponse<>(200, "OK", dataNoAttributeResponses);
+
+        return successDataResponse;
+      }
+    }
   }
 }
