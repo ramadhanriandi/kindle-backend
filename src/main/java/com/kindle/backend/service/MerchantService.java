@@ -9,7 +9,6 @@ import com.kindle.backend.response.dataResponse.DataNoAttributeResponse;
 import com.kindle.backend.response.dataResponse.DataNoRelationResponse;
 import com.kindle.backend.response.errorResponse.ErrorDetailResponse;
 import com.kindle.backend.response.oldResponse.PostResponse;
-import com.kindle.backend.response.oldResponse.PutResponse;
 import com.kindle.backend.response.statusResponse.FailureDataResponse;
 import com.kindle.backend.response.statusResponse.SuccessDataResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -95,20 +94,39 @@ public class MerchantService {
     }
   }
 
-  public PutResponse updateMerchant(Integer merchantId, Merchant merchant) {
-    PutResponse updateResponse = new PutResponse();
-    merchant.setMerchantId(merchantId);
-    Merchant merchantResponse = merchantRepository.save(merchant);
+  public BaseResponse updateMerchant(Integer merchantId, Merchant merchant) {
+    Merchant fetchResponse = merchantRepository.findFirstByMerchantId(merchantId);
 
-    if (merchantResponse == null) {
-      updateResponse.setCode(401);
-      updateResponse.setMessage("Error: update fail");
+    if (fetchResponse == null) {
+      ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(404, "MerchantId not found");
+
+      List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
+      errorDetailResponses.add(errorDetailResponse);
+      FailureDataResponse failureDataResponse = new FailureDataResponse(400, "Bad Request", errorDetailResponses);
+
+      return failureDataResponse;
     } else {
-      updateResponse.setCode(200);
-      updateResponse.setMessage("Update success");
-    }
+      merchant.setMerchantId(merchantId);
+      Merchant merchantResponse = merchantRepository.save(merchant);
 
-    return updateResponse;
+      if (merchantResponse == null) {
+        ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(500, "Cannot update merchant data");
+
+        List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
+        errorDetailResponses.add(errorDetailResponse);
+        FailureDataResponse failureDataResponse = new FailureDataResponse(500, "Internal server error", errorDetailResponses);
+
+        return failureDataResponse;
+      } else {
+        DataNoAttributeResponse dataNoAttributeResponse = new DataNoAttributeResponse(merchantId, "merchant");
+
+        List<DataNoAttributeResponse> dataNoAttributeResponses = new ArrayList<>();
+        dataNoAttributeResponses.add(dataNoAttributeResponse);
+        SuccessDataResponse<DataNoAttributeResponse> successDataResponse = new SuccessDataResponse<>(200, "OK", dataNoAttributeResponses);
+
+        return successDataResponse;
+      }
+    }
   }
 
   public long deleteByMerchantId(Integer merchantId) {
