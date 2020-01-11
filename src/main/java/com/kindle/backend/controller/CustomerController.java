@@ -36,7 +36,7 @@ public class CustomerController {
   }
 
   @RequestMapping(value = ApiPath.CUSTOMER_BY_CUSTOMER_ID, method = RequestMethod.PUT)
-  public PutResponse updateCustomer(@PathVariable Integer customerId, @RequestBody Customer customer) {
+  public BaseResponse updateCustomer(@PathVariable Integer customerId, @RequestBody Customer customer) {
     return this.customerService.updateCustomer(customerId, customer);
   }
 

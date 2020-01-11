@@ -11,7 +11,6 @@ import com.kindle.backend.response.dataResponse.DataNoRelationResponse;
 import com.kindle.backend.response.errorResponse.ErrorDetailResponse;
 import com.kindle.backend.response.oldResponse.CartResponse;
 import com.kindle.backend.response.oldResponse.PostResponse;
-import com.kindle.backend.response.oldResponse.PutResponse;
 import com.kindle.backend.response.oldResponse.WishlistResponse;
 import com.kindle.backend.response.statusResponse.FailureDataResponse;
 import com.kindle.backend.response.statusResponse.SuccessDataResponse;
@@ -102,20 +101,39 @@ public class CustomerService {
     }
   }
 
-  public PutResponse updateCustomer(Integer customerId, Customer customer) {
-    PutResponse updateResponse = new PutResponse();
-    customer.setCustomerId(customerId);
-    Customer customerResponse = customerRepository.save(customer);
+  public BaseResponse updateCustomer(Integer customerId, Customer customer) {
+    Customer fetchResponse = customerRepository.findFirstByCustomerId(customerId);
 
-    if (customerResponse == null) {
-      updateResponse.setCode(401);
-      updateResponse.setMessage("Error: update fail");
+    if (fetchResponse == null) {
+      ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(404, "CustomerId not found");
+
+      List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
+      errorDetailResponses.add(errorDetailResponse);
+      FailureDataResponse failureDataResponse = new FailureDataResponse(400, "Bad Request", errorDetailResponses);
+
+      return failureDataResponse;
     } else {
-      updateResponse.setCode(200);
-      updateResponse.setMessage("Update success");
-    }
+      customer.setCustomerId(customerId);
+      Customer customerResponse = customerRepository.save(customer);
 
-    return updateResponse;
+      if (customerResponse == null) {
+        ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(500, "Cannot update customer data");
+
+        List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
+        errorDetailResponses.add(errorDetailResponse);
+        FailureDataResponse failureDataResponse = new FailureDataResponse(500, "Internal server error", errorDetailResponses);
+
+        return failureDataResponse;
+      } else {
+        DataNoAttributeResponse dataNoAttributeResponse = new DataNoAttributeResponse(customerId, "customer");
+
+        List<DataNoAttributeResponse> dataNoAttributeResponses = new ArrayList<>();
+        dataNoAttributeResponses.add(dataNoAttributeResponse);
+        SuccessDataResponse<DataNoAttributeResponse> successDataResponse = new SuccessDataResponse<>(200, "OK", dataNoAttributeResponses);
+
+        return successDataResponse;
+      }
+    }
   }
 
   public long deleteByCustomerId(Integer customerId) {
