@@ -16,6 +16,7 @@ import com.kindle.backend.response.includedResponse.MerchantIncludedResponse;
 import com.kindle.backend.response.relationshipResponse.BaseRelationshipDataResponse;
 import com.kindle.backend.response.relationshipResponse.TransactionListRelationshipResponse;
 import com.kindle.backend.response.statusResponse.FailureDataResponse;
+import com.kindle.backend.response.statusResponse.SuccessDataResponse;
 import com.kindle.backend.response.statusResponse.SuccessDataWithIncludedResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -89,16 +90,33 @@ public class TransactionListService {
     }
   }
 
-  public TransactionList save(Integer customerId, TransactionList transactionList) {
+  public BaseResponse save(Integer customerId, TransactionList transactionList) {
     Customer customerResponse = customerRepository.findFirstByCustomerId(customerId);
     Book bookResponse = bookRepository.findFirstByBookSku(transactionList.getBookSku());
 
     customerResponse.getLibrary().add(bookResponse);
     bookResponse.getOwnerBook().add(customerResponse);
 
-    customerRepository.save(customerResponse);
-    bookRepository.save(bookResponse);
+    Customer savedCustomer = customerRepository.save(customerResponse);
+    Book savedBook = bookRepository.save(bookResponse);
+    TransactionList savedTransactionList = transactionListRepository.save(transactionList);
 
-    return transactionListRepository.save(transactionList);
+    if (savedCustomer == null || savedBook == null || savedTransactionList == null) {
+      ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(500, "Cannot create transaction list data");
+
+      List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
+      errorDetailResponses.add(errorDetailResponse);
+      FailureDataResponse failureDataResponse = new FailureDataResponse(500, "Internal server error", errorDetailResponses);
+
+      return failureDataResponse;
+    } else {
+      DataNoAttributeResponse dataNoAttributeResponse = new DataNoAttributeResponse(savedTransactionList.getTransactionListId(), "transactionlist");
+
+      List<DataNoAttributeResponse> dataNoAttributeResponses = new ArrayList<>();
+      dataNoAttributeResponses.add(dataNoAttributeResponse);
+      SuccessDataResponse<DataNoAttributeResponse> successDataResponse = new SuccessDataResponse<>(201, "Created", dataNoAttributeResponses);
+
+      return successDataResponse;
+    }
   }
 }

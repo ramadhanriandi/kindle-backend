@@ -19,7 +19,7 @@ public class TransactionListController {
   }
 
   @RequestMapping(value = ApiPath.TRANSACTIONLIST, method = RequestMethod.POST)
-  public TransactionList save(@RequestParam Integer customerId, @RequestBody TransactionList transactionList) {
+  public BaseResponse save(@RequestParam Integer customerId, @RequestBody TransactionList transactionList) {
       return this.transactionListService.save(customerId, transactionList);
   }
 }
