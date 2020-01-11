@@ -4,10 +4,16 @@ import com.kindle.backend.model.entity.Book;
 import com.kindle.backend.model.entity.Customer;
 import com.kindle.backend.model.repository.BookRepository;
 import com.kindle.backend.model.repository.CustomerRepository;
+import com.kindle.backend.response.BaseResponse;
+import com.kindle.backend.response.attributeResponse.GetAllCustomerResponse;
+import com.kindle.backend.response.dataResponse.DataNoRelationResponse;
+import com.kindle.backend.response.errorResponse.ErrorDetailResponse;
 import com.kindle.backend.response.oldResponse.CartResponse;
 import com.kindle.backend.response.oldResponse.PostResponse;
 import com.kindle.backend.response.oldResponse.PutResponse;
 import com.kindle.backend.response.oldResponse.WishlistResponse;
+import com.kindle.backend.response.statusResponse.FailureDataResponse;
+import com.kindle.backend.response.statusResponse.SuccessDataResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,12 +29,34 @@ public class CustomerService {
   @Autowired
   private BookRepository bookRepository;
 
-  public Customer findByCustomerId(Integer customerId){
-    return customerRepository.findFirstByCustomerId(customerId);
+  public BaseResponse findAllCustomer(){
+    List<Customer> customers = customerRepository.findAll();
+
+    if (customers == null) {
+      ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(404, "Customer not found");
+
+      List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
+      errorDetailResponses.add(errorDetailResponse);
+      FailureDataResponse failureDataResponse = new FailureDataResponse(400, "Bad Request", errorDetailResponses);
+
+      return failureDataResponse;
+    } else {
+      List<DataNoRelationResponse> dataNoRelationResponses = new ArrayList<>();
+
+      for (Customer customer : customers) {
+        GetAllCustomerResponse getAllCustomerResponse = new GetAllCustomerResponse(customer.getUsername(), customer.getStatus());
+        DataNoRelationResponse<GetAllCustomerResponse> dataNoRelationResponse = new DataNoRelationResponse<>(customer.getCustomerId(), "customer", getAllCustomerResponse);
+        dataNoRelationResponses.add(dataNoRelationResponse);
+      }
+
+      SuccessDataResponse<DataNoRelationResponse> successDataResponse = new SuccessDataResponse<>(200, "OK", dataNoRelationResponses);
+
+      return successDataResponse;
+    }
   }
 
-  public List<Customer> findAllCustomer(){
-    return customerRepository.findAll();
+  public Customer findByCustomerId(Integer customerId){
+    return customerRepository.findFirstByCustomerId(customerId);
   }
 
   public Customer save(Customer customer) {

@@ -3,6 +3,7 @@ package com.kindle.backend.controller;
 import com.kindle.backend.model.constant.ApiPath;
 import com.kindle.backend.model.entity.Book;
 import com.kindle.backend.model.entity.Customer;
+import com.kindle.backend.response.BaseResponse;
 import com.kindle.backend.response.oldResponse.CartResponse;
 import com.kindle.backend.response.oldResponse.PostResponse;
 import com.kindle.backend.response.oldResponse.PutResponse;
@@ -20,7 +21,7 @@ public class CustomerController {
   private CustomerService customerService;
 
   @RequestMapping(value = ApiPath.CUSTOMER, method = RequestMethod.GET)
-  public List<Customer> getAllCustomer() {
+  public BaseResponse getAllCustomer() {
     return this.customerService.findAllCustomer();
   }
 
