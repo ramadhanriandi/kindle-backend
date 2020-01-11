@@ -68,20 +68,29 @@ public class CategoryService {
     return categoryRepository.save(category);
   }
 
-  public PutResponse updateCategory(Integer categoryId, Category category) {
-    PutResponse updateResponse = new PutResponse();
-    category.setCategoryId(categoryId);
-    Category categoryResponse = categoryRepository.save(category);
+  public BaseResponse updateCategory(Integer categoryId, Category category) {
+    Category fetchResponse = categoryRepository.findFirstByCategoryId(categoryId);
 
-    if (categoryResponse == null) {
-      updateResponse.setCode(401);
-      updateResponse.setMessage("Error: update fail");
+    if (fetchResponse == null) {
+      ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(404, "CategoryId not found");
+
+      List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
+      errorDetailResponses.add(errorDetailResponse);
+      FailureDataResponse failureDataResponse = new FailureDataResponse(400, "Bad Request", errorDetailResponses);
+
+      return failureDataResponse;
     } else {
-      updateResponse.setCode(200);
-      updateResponse.setMessage("Update success");
-    }
+      category.setCategoryId(categoryId);
+      categoryRepository.save(category);
 
-    return updateResponse;
+      DataNoAttributeResponse dataNoAttributeResponse = new DataNoAttributeResponse(categoryId, "category");
+
+      List<DataNoAttributeResponse> dataNoAttributeResponses = new ArrayList<>();
+      dataNoAttributeResponses.add(dataNoAttributeResponse);
+      SuccessDataResponse<DataNoAttributeResponse> successDataResponse = new SuccessDataResponse<>(200, "OK", dataNoAttributeResponses);
+
+      return successDataResponse;
+    }
   }
 
   public long deleteByCategoryId(Integer categoryId) {

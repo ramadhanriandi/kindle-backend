@@ -53,7 +53,7 @@ public class AdminService {
       admin.setAdminId(adminId);
       adminRepository.save(admin);
 
-      DataNoAttributeResponse dataNoAttributeResponse = new DataNoAttributeResponse(admin.getAdminId(), "admin");
+      DataNoAttributeResponse dataNoAttributeResponse = new DataNoAttributeResponse(adminId, "admin");
 
       List<DataNoAttributeResponse> dataNoAttributeResponses = new ArrayList<>();
       dataNoAttributeResponses.add(dataNoAttributeResponse);
