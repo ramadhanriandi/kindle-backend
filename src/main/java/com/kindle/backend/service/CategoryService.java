@@ -14,10 +14,6 @@ public class CategoryService {
   @Autowired
   private CategoryRepository categoryRepository;
 
-  public Category findByCategoryId(Integer categoryId){
-    return categoryRepository.findFirstByCategoryId(categoryId);
-  }
-
   public BaseResponse findAllCategory(){
     List<Category> categories = categoryRepository.findAll();
 
@@ -37,6 +33,30 @@ public class CategoryService {
         DataNoRelationResponse<GetCategoryByCategoryIdResponse> dataNoRelationResponse = new DataNoRelationResponse<>(category.getCategoryId(), "category", getCategoryByCategoryIdResponse);
         dataNoRelationResponses.add(dataNoRelationResponse);
       }
+
+      SuccessDataResponse<DataNoRelationResponse> successDataResponse = new SuccessDataResponse<>(200, "OK", dataNoRelationResponses);
+
+      return successDataResponse;
+    }
+  }
+
+  public BaseResponse findByCategoryId(Integer categoryId){
+    Category category = categoryRepository.findFirstByCategoryId(categoryId);
+
+    if (category == null) {
+      ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(404, "CategoryId not found");
+
+      List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
+      errorDetailResponses.add(errorDetailResponse);
+      FailureDataResponse failureDataResponse = new FailureDataResponse(400, "Bad Request", errorDetailResponses);
+
+      return failureDataResponse;
+    } else {
+      List<DataNoRelationResponse> dataNoRelationResponses = new ArrayList<>();
+
+      GetCategoryByCategoryIdResponse getCategoryByCategoryIdResponse = new GetCategoryByCategoryIdResponse(category.getName());
+      DataNoRelationResponse<GetCategoryByCategoryIdResponse> dataNoRelationResponse = new DataNoRelationResponse<>(category.getCategoryId(), "category", getCategoryByCategoryIdResponse);
+      dataNoRelationResponses.add(dataNoRelationResponse);
 
       SuccessDataResponse<DataNoRelationResponse> successDataResponse = new SuccessDataResponse<>(200, "OK", dataNoRelationResponses);
 

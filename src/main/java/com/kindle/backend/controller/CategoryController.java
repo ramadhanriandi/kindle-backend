@@ -20,7 +20,7 @@ public class CategoryController {
   }
 
   @RequestMapping(value = ApiPath.CATEGORY_BY_CATEGORY_ID, method = RequestMethod.GET)
-  public Category getCategoryByCategoryId(@PathVariable Integer categoryId) {
+  public BaseResponse getCategoryByCategoryId(@PathVariable Integer categoryId) {
     return this.categoryService.findByCategoryId(categoryId);
   }
 
