@@ -1,4 +1,4 @@
-package com.kindle.backend.response;
+package com.kindle.backend.response.errorResponse;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

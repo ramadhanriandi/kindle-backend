@@ -1,4 +1,4 @@
-package com.kindle.backend.response;
+package com.kindle.backend.response.attributeResponse;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,9 +9,10 @@ import java.sql.Timestamp;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GetAllTransactionByCustomerIdResponse {
+public class GetTransactionByTransactionIdResponse {
   private Timestamp date;
   private int total;
+  private int customerId;
 
   public Timestamp getDate() {
     return date;
@@ -27,5 +28,13 @@ public class GetAllTransactionByCustomerIdResponse {
 
   public void setTotal(int total) {
     this.total = total;
+  }
+
+  public int getCustomerId() {
+    return customerId;
+  }
+
+  public void setCustomerId(int customerId) {
+    this.customerId = customerId;
   }
 }
