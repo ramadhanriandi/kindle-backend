@@ -55,8 +55,28 @@ public class CustomerService {
     }
   }
 
-  public Customer findByCustomerId(Integer customerId){
-    return customerRepository.findFirstByCustomerId(customerId);
+  public BaseResponse findByCustomerId(Integer customerId){
+    Customer customer = customerRepository.findFirstByCustomerId(customerId);
+
+    if (customer == null) {
+      ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(404, "CustomerId not found");
+
+      List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
+      errorDetailResponses.add(errorDetailResponse);
+      FailureDataResponse failureDataResponse = new FailureDataResponse(400, "Bad Request", errorDetailResponses);
+
+      return failureDataResponse;
+    } else {
+      List<DataNoRelationResponse> dataNoRelationResponses = new ArrayList<>();
+
+      GetAllCustomerResponse getAllCustomerResponse = new GetAllCustomerResponse(customer.getUsername(), customer.getStatus());
+      DataNoRelationResponse<GetAllCustomerResponse> dataNoRelationResponse = new DataNoRelationResponse<>(customerId, "customer", getAllCustomerResponse);
+      dataNoRelationResponses.add(dataNoRelationResponse);
+
+      SuccessDataResponse<DataNoRelationResponse> successDataResponse = new SuccessDataResponse<>(200, "OK", dataNoRelationResponses);
+
+      return successDataResponse;
+    }
   }
 
   public Customer save(Customer customer) {

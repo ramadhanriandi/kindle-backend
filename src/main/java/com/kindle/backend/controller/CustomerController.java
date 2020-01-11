@@ -26,7 +26,7 @@ public class CustomerController {
   }
 
   @RequestMapping(value = ApiPath.CUSTOMER_BY_CUSTOMER_ID, method = RequestMethod.GET)
-  public Customer getCustomerById(@PathVariable Integer customerId) {
+  public BaseResponse getCustomerById(@PathVariable Integer customerId) {
     return this.customerService.findByCustomerId(customerId);
   }
 
