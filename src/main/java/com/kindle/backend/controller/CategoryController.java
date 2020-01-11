@@ -24,7 +24,7 @@ public class CategoryController {
   }
 
   @RequestMapping(value = ApiPath.CATEGORY, method = RequestMethod.POST)
-  public Category save(@RequestBody Category category) {
+  public BaseResponse save(@RequestBody Category category) {
     return this.categoryService.save(category);
   }
 

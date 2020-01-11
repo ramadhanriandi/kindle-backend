@@ -64,8 +64,26 @@ public class CategoryService {
     }
   }
 
-  public Category save(Category category) {
-    return categoryRepository.save(category);
+  public BaseResponse save(Category category) {
+    Category categoryResponse = categoryRepository.save(category);
+
+    if (categoryResponse == null) {
+      ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(500, "Cannot create the category");
+
+      List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
+      errorDetailResponses.add(errorDetailResponse);
+      FailureDataResponse failureDataResponse = new FailureDataResponse(500, "Internal server error", errorDetailResponses);
+
+      return failureDataResponse;
+    } else {
+      DataNoAttributeResponse dataNoAttributeResponse = new DataNoAttributeResponse(categoryResponse.getCategoryId(), "category");
+
+      List<DataNoAttributeResponse> dataNoAttributeResponses = new ArrayList<>();
+      dataNoAttributeResponses.add(dataNoAttributeResponse);
+      SuccessDataResponse<DataNoAttributeResponse> successDataResponse = new SuccessDataResponse<>(201, "Created", dataNoAttributeResponses);
+
+      return successDataResponse;
+    }
   }
 
   public BaseResponse updateCategory(Integer categoryId, Category category) {
@@ -81,15 +99,25 @@ public class CategoryService {
       return failureDataResponse;
     } else {
       category.setCategoryId(categoryId);
-      categoryRepository.save(category);
+      Category categoryResponse = categoryRepository.save(category);
 
-      DataNoAttributeResponse dataNoAttributeResponse = new DataNoAttributeResponse(categoryId, "category");
+      if (categoryResponse == null) {
+        ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(500, "Cannot update category data");
 
-      List<DataNoAttributeResponse> dataNoAttributeResponses = new ArrayList<>();
-      dataNoAttributeResponses.add(dataNoAttributeResponse);
-      SuccessDataResponse<DataNoAttributeResponse> successDataResponse = new SuccessDataResponse<>(200, "OK", dataNoAttributeResponses);
+        List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
+        errorDetailResponses.add(errorDetailResponse);
+        FailureDataResponse failureDataResponse = new FailureDataResponse(500, "Internal server error", errorDetailResponses);
 
-      return successDataResponse;
+        return failureDataResponse;
+      } else {
+        DataNoAttributeResponse dataNoAttributeResponse = new DataNoAttributeResponse(categoryId, "category");
+
+        List<DataNoAttributeResponse> dataNoAttributeResponses = new ArrayList<>();
+        dataNoAttributeResponses.add(dataNoAttributeResponse);
+        SuccessDataResponse<DataNoAttributeResponse> successDataResponse = new SuccessDataResponse<>(200, "OK", dataNoAttributeResponses);
+
+        return successDataResponse;
+      }
     }
   }
 

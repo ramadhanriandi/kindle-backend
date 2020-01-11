@@ -51,15 +51,26 @@ public class AdminService {
       return failureDataResponse;
     } else {
       admin.setAdminId(adminId);
-      adminRepository.save(admin);
+      Admin adminResponse = adminRepository.save(admin);
 
-      DataNoAttributeResponse dataNoAttributeResponse = new DataNoAttributeResponse(adminId, "admin");
+      if (adminResponse == null) {
+        ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(500, "Cannot update admin data");
 
-      List<DataNoAttributeResponse> dataNoAttributeResponses = new ArrayList<>();
-      dataNoAttributeResponses.add(dataNoAttributeResponse);
-      SuccessDataResponse<DataNoAttributeResponse> successDataResponse = new SuccessDataResponse<>(200, "OK", dataNoAttributeResponses);
+        List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
+        errorDetailResponses.add(errorDetailResponse);
+        FailureDataResponse failureDataResponse = new FailureDataResponse(500, "Internal server error", errorDetailResponses);
 
-      return successDataResponse;
+        return failureDataResponse;
+      } else {
+        DataNoAttributeResponse dataNoAttributeResponse = new DataNoAttributeResponse(adminId, "admin");
+
+        List<DataNoAttributeResponse> dataNoAttributeResponses = new ArrayList<>();
+        dataNoAttributeResponses.add(dataNoAttributeResponse);
+        SuccessDataResponse<DataNoAttributeResponse> successDataResponse = new SuccessDataResponse<>(200, "OK", dataNoAttributeResponses);
+
+        return successDataResponse;
+      }
+
     }
   }
 
