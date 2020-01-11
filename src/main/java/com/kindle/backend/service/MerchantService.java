@@ -4,6 +4,8 @@ import com.kindle.backend.model.entity.Merchant;
 import com.kindle.backend.model.repository.MerchantRepository;
 import com.kindle.backend.response.BaseResponse;
 import com.kindle.backend.response.attributeResponse.GetAllMerchantResponse;
+import com.kindle.backend.response.attributeResponse.GetMerchantByMerchantIdResponse;
+import com.kindle.backend.response.dataResponse.DataNoAttributeResponse;
 import com.kindle.backend.response.dataResponse.DataNoRelationResponse;
 import com.kindle.backend.response.errorResponse.ErrorDetailResponse;
 import com.kindle.backend.response.oldResponse.PostResponse;
@@ -47,12 +49,11 @@ public class MerchantService {
     }
   }
 
-  public Merchant findByMerchantId(Integer merchantId){
-//    return merchantRepository.findFirstByMerchantId(merchantId);
-    Category category = categoryRepository.findFirstByCategoryId(categoryId);
+  public BaseResponse findByMerchantId(Integer merchantId){
+    Merchant merchant = merchantRepository.findFirstByMerchantId(merchantId);
 
-    if (category == null) {
-      ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(404, "CategoryId not found");
+    if (merchant == null) {
+      ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(404, "MerchantId not found");
 
       List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
       errorDetailResponses.add(errorDetailResponse);
@@ -62,8 +63,8 @@ public class MerchantService {
     } else {
       List<DataNoRelationResponse> dataNoRelationResponses = new ArrayList<>();
 
-      GetCategoryByCategoryIdResponse getCategoryByCategoryIdResponse = new GetCategoryByCategoryIdResponse(category.getName());
-      DataNoRelationResponse<GetCategoryByCategoryIdResponse> dataNoRelationResponse = new DataNoRelationResponse<>(category.getCategoryId(), "category", getCategoryByCategoryIdResponse);
+      GetMerchantByMerchantIdResponse getMerchantByMerchantIdResponse = new GetMerchantByMerchantIdResponse(merchant.getUsername(), merchant.getEmail(), merchant.getPassword(), merchant.getFullname(), merchant.getDescription(), merchant.getPhone(), merchant.getStatus());
+      DataNoRelationResponse<GetMerchantByMerchantIdResponse> dataNoRelationResponse = new DataNoRelationResponse<>(merchant.getMerchantId(), "merchant", getMerchantByMerchantIdResponse);
       dataNoRelationResponses.add(dataNoRelationResponse);
 
       SuccessDataResponse<DataNoRelationResponse> successDataResponse = new SuccessDataResponse<>(200, "OK", dataNoRelationResponses);
@@ -72,8 +73,26 @@ public class MerchantService {
     }
   }
 
-  public Merchant save(Merchant merchant) {
-    return merchantRepository.save(merchant);
+  public BaseResponse save(Merchant merchant) {
+    Merchant merchantResponse = merchantRepository.save(merchant);
+
+    if (merchantResponse == null) {
+      ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(500, "Cannot create merchant data");
+
+      List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
+      errorDetailResponses.add(errorDetailResponse);
+      FailureDataResponse failureDataResponse = new FailureDataResponse(500, "Internal server error", errorDetailResponses);
+
+      return failureDataResponse;
+    } else {
+      DataNoAttributeResponse dataNoAttributeResponse = new DataNoAttributeResponse(merchantResponse.getMerchantId(), "merchant");
+
+      List<DataNoAttributeResponse> dataNoAttributeResponses = new ArrayList<>();
+      dataNoAttributeResponses.add(dataNoAttributeResponse);
+      SuccessDataResponse<DataNoAttributeResponse> successDataResponse = new SuccessDataResponse<>(201, "Created", dataNoAttributeResponses);
+
+      return successDataResponse;
+    }
   }
 
   public PutResponse updateMerchant(Integer merchantId, Merchant merchant) {

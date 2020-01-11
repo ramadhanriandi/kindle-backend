@@ -27,12 +27,12 @@ public class MerchantController {
   }
 
   @RequestMapping(value = ApiPath.MERCHANT_BY_MERCHANT_ID, method = RequestMethod.GET)
-  public Merchant getMerchantById(@PathVariable Integer merchantId) {
+  public BaseResponse getMerchantById(@PathVariable Integer merchantId) {
     return this.merchantService.findByMerchantId(merchantId);
   }
 
   @RequestMapping(value = ApiPath.MERCHANT, method = RequestMethod.POST)
-  public Merchant save(@RequestBody Merchant merchant) {
+  public BaseResponse save(@RequestBody Merchant merchant) {
     return this.merchantService.save(merchant);
   }
 
