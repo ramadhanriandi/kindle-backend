@@ -2,7 +2,7 @@ package com.kindle.backend.service;
 
 import com.kindle.backend.model.entity.Book;
 import com.kindle.backend.model.repository.BookRepository;
-import com.kindle.backend.response.PutResponse;
+import com.kindle.backend.response.oldResponse.PutResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

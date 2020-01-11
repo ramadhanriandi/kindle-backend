@@ -1,5 +1,6 @@
-package com.kindle.backend.response;
+package com.kindle.backend.response.statusResponse;
 
+import com.kindle.backend.response.BaseResponse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,10 +10,10 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class FailureDataResponse extends BaseResponse {
+public class SuccessDataResponse<T> extends BaseResponse {
   private int code;
   private String status;
-  private List<ErrorDetailResponse> errors;
+  private List<T> data;
 
   public int getCode() {
     return code;
@@ -30,11 +31,11 @@ public class FailureDataResponse extends BaseResponse {
     this.status = status;
   }
 
-  public List<ErrorDetailResponse> getErrors() {
-    return errors;
+  public List<T> getData() {
+    return data;
   }
 
-  public void setErrors(List<ErrorDetailResponse> errors) {
-    this.errors = errors;
+  public void setData(List<T> data) {
+    this.data.addAll(data);
   }
 }

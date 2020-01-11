@@ -3,6 +3,12 @@ package com.kindle.backend.service;
 import com.kindle.backend.model.entity.Category;
 import com.kindle.backend.model.repository.CategoryRepository;
 import com.kindle.backend.response.*;
+import com.kindle.backend.response.attributeResponse.GetCategoryByCategoryIdResponse;
+import com.kindle.backend.response.errorResponse.ErrorDetailResponse;
+import com.kindle.backend.response.dataResponse.DataNoAttributeResponse;
+import com.kindle.backend.response.dataResponse.DataNoRelationResponse;
+import com.kindle.backend.response.statusResponse.FailureDataResponse;
+import com.kindle.backend.response.statusResponse.SuccessDataResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

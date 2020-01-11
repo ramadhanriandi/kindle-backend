@@ -1,4 +1,4 @@
-package com.kindle.backend.response;
+package com.kindle.backend.response.dataResponse;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,10 +7,11 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DataNoRelationResponse<T> {
+public class DataCompleteResponse<T1, T2> {
   private int id;
   private String type;
-  private T attributes;
+  private T1 attributes;
+  private T2 relationships;
 
   public int getId() {
     return id;
@@ -28,11 +29,19 @@ public class DataNoRelationResponse<T> {
     this.type = type;
   }
 
-  public T getAttributes() {
+  public T1 getAttributes() {
     return attributes;
   }
 
-  public void setAttributes(T attributes) {
+  public void setAttributes(T1 attributes) {
     this.attributes = attributes;
+  }
+
+  public T2 getRelationships() {
+    return relationships;
+  }
+
+  public void setRelationships(T2 relationships) {
+    this.relationships = relationships;
   }
 }

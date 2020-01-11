@@ -1,5 +1,6 @@
-package com.kindle.backend.response;
+package com.kindle.backend.response.statusResponse;
 
+import com.kindle.backend.response.BaseResponse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

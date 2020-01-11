@@ -6,7 +6,7 @@ import com.kindle.backend.model.entity.TransactionList;
 import com.kindle.backend.model.repository.BookRepository;
 import com.kindle.backend.model.repository.CustomerRepository;
 import com.kindle.backend.model.repository.TransactionListRepository;
-import com.kindle.backend.response.TransactionListResponse;
+import com.kindle.backend.response.oldResponse.TransactionListResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

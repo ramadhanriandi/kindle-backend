@@ -2,7 +2,7 @@ package com.kindle.backend.controller;
 
 import com.kindle.backend.model.constant.ApiPath;
 import com.kindle.backend.model.entity.Book;
-import com.kindle.backend.response.PutResponse;
+import com.kindle.backend.response.oldResponse.PutResponse;
 import com.kindle.backend.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
