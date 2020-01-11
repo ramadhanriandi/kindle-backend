@@ -28,9 +28,7 @@ public class AdminService {
     } else {
       GetAdminByAdminIdResponse getAdminByAdminIdResponse = new GetAdminByAdminIdResponse(admin.getEmail(), admin.getUsername(), admin.getPassword());
 
-      List<GetAdminByAdminIdResponse> getAdminByAdminIdResponses = new ArrayList<>();
-      getAdminByAdminIdResponses.add(getAdminByAdminIdResponse);
-      DataNoRelationResponse<GetAdminByAdminIdResponse> dataNoRelationResponse = new DataNoRelationResponse<>(admin.getAdminId(), "admin", getAdminByAdminIdResponses);
+      DataNoRelationResponse<GetAdminByAdminIdResponse> dataNoRelationResponse = new DataNoRelationResponse<>(admin.getAdminId(), "admin", getAdminByAdminIdResponse);
 
       List<DataNoRelationResponse> dataNoRelationResponses = new ArrayList<>();
       dataNoRelationResponses.add(dataNoRelationResponse);
@@ -40,27 +38,64 @@ public class AdminService {
     }
   }
 
-  public void updateAdmin(Integer adminId, Admin admin) {
-    admin.setAdminId(adminId);
-    adminRepository.save(admin);
+  public BaseResponse updateAdmin(Integer adminId, Admin admin) {
+    Admin fetchResponse = adminRepository.findFirstByAdminId(adminId);
+
+    if (fetchResponse == null) {
+      ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(404, "AdminId not found");
+
+      List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
+      errorDetailResponses.add(errorDetailResponse);
+      FailureDataResponse failureDataResponse = new FailureDataResponse(400, "Bad Request", errorDetailResponses);
+
+      return failureDataResponse;
+    } else {
+      admin.setAdminId(adminId);
+      Admin adminResponse = adminRepository.save(admin);
+
+      if (adminResponse == null) {
+        ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(500, "Cannot update admin data");
+
+        List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
+        errorDetailResponses.add(errorDetailResponse);
+        FailureDataResponse failureDataResponse = new FailureDataResponse(500, "Internal server error", errorDetailResponses);
+
+        return failureDataResponse;
+      } else {
+        DataNoAttributeResponse dataNoAttributeResponse = new DataNoAttributeResponse(adminId, "admin");
+
+        List<DataNoAttributeResponse> dataNoAttributeResponses = new ArrayList<>();
+        dataNoAttributeResponses.add(dataNoAttributeResponse);
+        SuccessDataResponse<DataNoAttributeResponse> successDataResponse = new SuccessDataResponse<>(200, "OK", dataNoAttributeResponses);
+
+        return successDataResponse;
+      }
+
+    }
   }
 
-  public PostResponse login(Admin admin) {
+  public BaseResponse login(Admin admin) {
     String email = admin.getEmail();
     String password = admin.getPassword();
-    PostResponse loginResponse = new PostResponse();
 
-    Admin adminResponse = adminRepository.findFirstByEmailAndPassword(email, password);
+    Admin fetchResponse = adminRepository.findFirstByEmailAndPassword(email, password);
 
-    if (adminResponse == null) {
-      loginResponse.setCode(401);
-      loginResponse.setMessage("Login failed: wrong email or password");
+    if (fetchResponse == null) {
+      ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(404, "Wrong email or password");
+
+      List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
+      errorDetailResponses.add(errorDetailResponse);
+      FailureDataResponse failureDataResponse = new FailureDataResponse(400, "Bad Request", errorDetailResponses);
+
+      return failureDataResponse;
     } else {
-      loginResponse.setUserId(adminResponse.getAdminId());
-      loginResponse.setCode(200);
-      loginResponse.setMessage("Login success");
-    }
+      DataNoAttributeResponse dataNoAttributeResponse = new DataNoAttributeResponse(fetchResponse.getAdminId(), "admin");
 
-    return loginResponse;
+      List<DataNoAttributeResponse> dataNoAttributeResponses = new ArrayList<>();
+      dataNoAttributeResponses.add(dataNoAttributeResponse);
+      SuccessDataResponse<DataNoAttributeResponse> successDataResponse = new SuccessDataResponse<>(200, "OK", dataNoAttributeResponses);
+
+      return successDataResponse;
+    }
   }
 }

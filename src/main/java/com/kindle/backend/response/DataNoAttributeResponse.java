@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DataNoAttributeResponse<T> {
+public class DataNoAttributeResponse {
   private int id;
   private String type;
 

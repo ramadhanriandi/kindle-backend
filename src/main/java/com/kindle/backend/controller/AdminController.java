@@ -20,12 +20,12 @@ public class AdminController {
   }
 
   @RequestMapping(value = ApiPath.ADMIN_BY_ADMIN_ID, method = RequestMethod.PUT)
-  public void updateAdmin(@PathVariable Integer adminId, @RequestBody Admin admin) {
-    this.adminService.updateAdmin(adminId, admin);
+  public BaseResponse updateAdmin(@PathVariable Integer adminId, @RequestBody Admin admin) {
+    return this.adminService.updateAdmin(adminId, admin);
   }
 
   @RequestMapping(value = ApiPath.ADMIN_LOGIN, method = RequestMethod.POST)
-  public PostResponse login(@RequestBody Admin admin) {
+  public BaseResponse login(@RequestBody Admin admin) {
     return this.adminService.login(admin);
   }
 }
