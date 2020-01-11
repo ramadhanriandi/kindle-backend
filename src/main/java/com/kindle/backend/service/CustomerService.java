@@ -10,14 +10,12 @@ import com.kindle.backend.response.dataResponse.DataNoAttributeResponse;
 import com.kindle.backend.response.dataResponse.DataNoRelationResponse;
 import com.kindle.backend.response.errorResponse.ErrorDetailResponse;
 import com.kindle.backend.response.oldResponse.CartResponse;
-import com.kindle.backend.response.oldResponse.PostResponse;
 import com.kindle.backend.response.oldResponse.WishlistResponse;
 import com.kindle.backend.response.statusResponse.FailureDataResponse;
 import com.kindle.backend.response.statusResponse.SuccessDataResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -170,48 +168,31 @@ public class CustomerService {
     }
   }
 
-  public PostResponse login(Customer customer) {
+  public BaseResponse login(Customer customer) {
     String email = customer.getEmail();
     String password = customer.getPassword();
-    PostResponse loginResponse = new PostResponse();
 
-    Customer customerResponse = customerRepository.findFirstByEmailAndPassword(email, password);
+    Customer fetchResponse = customerRepository.findFirstByEmailAndPassword(email, password);
 
-    if (customerResponse == null) {
-      loginResponse.setCode(401);
-      loginResponse.setMessage("Login failed: wrong email or password");
+    if (fetchResponse == null) {
+      ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(404, "Wrong email or password");
+
+      List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
+      errorDetailResponses.add(errorDetailResponse);
+      FailureDataResponse failureDataResponse = new FailureDataResponse(400, "Bad Request", errorDetailResponses);
+
+      return failureDataResponse;
     } else {
-      if (customerResponse.getStatus().equals("Active")) {
-        loginResponse.setUserId(customerResponse.getCustomerId());
-        loginResponse.setCode(200);
-        loginResponse.setMessage("Login success");
-      } else {
-        loginResponse.setCode(402);
-        loginResponse.setMessage("Login failed: your account is " + customerResponse.getStatus());
-      }
-    }
+      DataNoAttributeResponse dataNoAttributeResponse = new DataNoAttributeResponse(fetchResponse.getCustomerId(), "customer");
 
-    return loginResponse;
+      List<DataNoAttributeResponse> dataNoAttributeResponses = new ArrayList<>();
+      dataNoAttributeResponses.add(dataNoAttributeResponse);
+      SuccessDataResponse<DataNoAttributeResponse> successDataResponse = new SuccessDataResponse<>(200, "OK", dataNoAttributeResponses);
+
+      return successDataResponse;
+    }
   }
 
-  public PostResponse register(Customer customer) {
-    PostResponse registerResponse = new PostResponse();
-
-    Customer customerResponse = customerRepository.save(customer);
-
-    if (customerResponse == null) {
-      registerResponse.setCode(401);
-      registerResponse.setMessage("Error: register fail");
-    } else {
-      registerResponse.setUserId(customerResponse.getCustomerId());
-      registerResponse.setCode(200);
-      registerResponse.setMessage("Register success");
-    }
-
-    return registerResponse;
-  }
-
-  @Transactional
   public List<Book> findCustomerLibrary(Integer customerId){
     Customer customerResponse = customerRepository.findFirstByCustomerId(customerId);
 

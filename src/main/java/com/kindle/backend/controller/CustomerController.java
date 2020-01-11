@@ -5,7 +5,6 @@ import com.kindle.backend.model.entity.Book;
 import com.kindle.backend.model.entity.Customer;
 import com.kindle.backend.response.BaseResponse;
 import com.kindle.backend.response.oldResponse.CartResponse;
-import com.kindle.backend.response.oldResponse.PostResponse;
 import com.kindle.backend.response.oldResponse.WishlistResponse;
 import com.kindle.backend.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +44,7 @@ public class CustomerController {
   }
 
   @RequestMapping(value = ApiPath.CUSTOMER_LOGIN, method = RequestMethod.POST)
-  public PostResponse login(@RequestBody Customer customer) {
+  public BaseResponse login(@RequestBody Customer customer) {
     return this.customerService.login(customer);
   }
 
