@@ -142,9 +142,9 @@
 - Request Header :
 	- Accept : `application/json`
 - Request Body :
-    	- `username` : String
+	- `username` : String
 	- `fullname` : String
-    	- `email` : String
+	- `email` : String
 	- `password` : String
 	- `phone` : int
 	- `description` : String
