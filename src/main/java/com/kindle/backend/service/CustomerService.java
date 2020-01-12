@@ -4,14 +4,18 @@ import com.kindle.backend.model.entity.Book;
 import com.kindle.backend.model.entity.Customer;
 import com.kindle.backend.model.repository.BookRepository;
 import com.kindle.backend.model.repository.CustomerRepository;
+import com.kindle.backend.response.BaseResponse;
+import com.kindle.backend.response.attributeResponse.GetAllCustomerResponse;
+import com.kindle.backend.response.dataResponse.DataNoAttributeResponse;
+import com.kindle.backend.response.dataResponse.DataNoRelationResponse;
+import com.kindle.backend.response.errorResponse.ErrorDetailResponse;
 import com.kindle.backend.response.oldResponse.CartResponse;
-import com.kindle.backend.response.oldResponse.PostResponse;
-import com.kindle.backend.response.oldResponse.PutResponse;
 import com.kindle.backend.response.oldResponse.WishlistResponse;
+import com.kindle.backend.response.statusResponse.FailureDataResponse;
+import com.kindle.backend.response.statusResponse.SuccessDataResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,80 +27,172 @@ public class CustomerService {
   @Autowired
   private BookRepository bookRepository;
 
-  public Customer findByCustomerId(Integer customerId){
-    return customerRepository.findFirstByCustomerId(customerId);
+  public BaseResponse findAllCustomer(){
+    List<Customer> customers = customerRepository.findAll();
+
+    if (customers == null) {
+      ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(404, "Customer not found");
+
+      List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
+      errorDetailResponses.add(errorDetailResponse);
+      FailureDataResponse failureDataResponse = new FailureDataResponse(400, "Bad Request", errorDetailResponses);
+
+      return failureDataResponse;
+    } else {
+      List<DataNoRelationResponse> dataNoRelationResponses = new ArrayList<>();
+
+      for (Customer customer : customers) {
+        GetAllCustomerResponse getAllCustomerResponse = new GetAllCustomerResponse(customer.getUsername(), customer.getStatus());
+        DataNoRelationResponse<GetAllCustomerResponse> dataNoRelationResponse = new DataNoRelationResponse<>(customer.getCustomerId(), "customer", getAllCustomerResponse);
+        dataNoRelationResponses.add(dataNoRelationResponse);
+      }
+
+      SuccessDataResponse<DataNoRelationResponse> successDataResponse = new SuccessDataResponse<>(200, "OK", dataNoRelationResponses);
+
+      return successDataResponse;
+    }
   }
 
-  public List<Customer> findAllCustomer(){
-    return customerRepository.findAll();
+  public BaseResponse findByCustomerId(Integer customerId){
+    Customer customer = customerRepository.findFirstByCustomerId(customerId);
+
+    if (customer == null) {
+      ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(404, "CustomerId not found");
+
+      List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
+      errorDetailResponses.add(errorDetailResponse);
+      FailureDataResponse failureDataResponse = new FailureDataResponse(400, "Bad Request", errorDetailResponses);
+
+      return failureDataResponse;
+    } else {
+      List<DataNoRelationResponse> dataNoRelationResponses = new ArrayList<>();
+
+      GetAllCustomerResponse getAllCustomerResponse = new GetAllCustomerResponse(customer.getUsername(), customer.getStatus());
+      DataNoRelationResponse<GetAllCustomerResponse> dataNoRelationResponse = new DataNoRelationResponse<>(customerId, "customer", getAllCustomerResponse);
+      dataNoRelationResponses.add(dataNoRelationResponse);
+
+      SuccessDataResponse<DataNoRelationResponse> successDataResponse = new SuccessDataResponse<>(200, "OK", dataNoRelationResponses);
+
+      return successDataResponse;
+    }
   }
 
-  public Customer save(Customer customer) {
-    return customerRepository.save(customer);
-  }
-
-  public PutResponse updateCustomer(Integer customerId, Customer customer) {
-    PutResponse updateResponse = new PutResponse();
-    customer.setCustomerId(customerId);
+  public BaseResponse save(Customer customer) {
     Customer customerResponse = customerRepository.save(customer);
 
     if (customerResponse == null) {
-      updateResponse.setCode(401);
-      updateResponse.setMessage("Error: update fail");
+      ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(500, "Cannot create customer data");
+
+      List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
+      errorDetailResponses.add(errorDetailResponse);
+      FailureDataResponse failureDataResponse = new FailureDataResponse(500, "Internal server error", errorDetailResponses);
+
+      return failureDataResponse;
     } else {
-      updateResponse.setCode(200);
-      updateResponse.setMessage("Update success");
+      DataNoAttributeResponse dataNoAttributeResponse = new DataNoAttributeResponse(customerResponse.getCustomerId(), "customer");
+
+      List<DataNoAttributeResponse> dataNoAttributeResponses = new ArrayList<>();
+      dataNoAttributeResponses.add(dataNoAttributeResponse);
+      SuccessDataResponse<DataNoAttributeResponse> successDataResponse = new SuccessDataResponse<>(201, "Created", dataNoAttributeResponses);
+
+      return successDataResponse;
     }
-
-    return updateResponse;
   }
 
-  public long deleteByCustomerId(Integer customerId) {
-    return customerRepository.deleteByCustomerId(customerId);
-  }
+  public BaseResponse updateCustomer(Integer customerId, Customer customer) {
+    Customer fetchResponse = customerRepository.findFirstByCustomerId(customerId);
 
-  public PostResponse login(Customer customer) {
-    String email = customer.getEmail();
-    String password = customer.getPassword();
-    PostResponse loginResponse = new PostResponse();
+    if (fetchResponse == null) {
+      ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(404, "CustomerId not found");
 
-    Customer customerResponse = customerRepository.findFirstByEmailAndPassword(email, password);
+      List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
+      errorDetailResponses.add(errorDetailResponse);
+      FailureDataResponse failureDataResponse = new FailureDataResponse(400, "Bad Request", errorDetailResponses);
 
-    if (customerResponse == null) {
-      loginResponse.setCode(401);
-      loginResponse.setMessage("Login failed: wrong email or password");
+      return failureDataResponse;
     } else {
-      if (customerResponse.getStatus().equals("Active")) {
-        loginResponse.setUserId(customerResponse.getCustomerId());
-        loginResponse.setCode(200);
-        loginResponse.setMessage("Login success");
+      customer.setCustomerId(customerId);
+      Customer customerResponse = customerRepository.save(customer);
+
+      if (customerResponse == null) {
+        ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(500, "Cannot update customer data");
+
+        List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
+        errorDetailResponses.add(errorDetailResponse);
+        FailureDataResponse failureDataResponse = new FailureDataResponse(500, "Internal server error", errorDetailResponses);
+
+        return failureDataResponse;
       } else {
-        loginResponse.setCode(402);
-        loginResponse.setMessage("Login failed: your account is " + customerResponse.getStatus());
+        DataNoAttributeResponse dataNoAttributeResponse = new DataNoAttributeResponse(customerId, "customer");
+
+        List<DataNoAttributeResponse> dataNoAttributeResponses = new ArrayList<>();
+        dataNoAttributeResponses.add(dataNoAttributeResponse);
+        SuccessDataResponse<DataNoAttributeResponse> successDataResponse = new SuccessDataResponse<>(200, "OK", dataNoAttributeResponses);
+
+        return successDataResponse;
       }
     }
-
-    return loginResponse;
   }
 
-  public PostResponse register(Customer customer) {
-    PostResponse registerResponse = new PostResponse();
+  public BaseResponse deleteByCustomerId(Integer customerId) {
+    Customer fetchResponse = customerRepository.findFirstByCustomerId(customerId);
 
-    Customer customerResponse = customerRepository.save(customer);
+    if (fetchResponse == null) {
+      ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(404, "CustomerId not found");
 
-    if (customerResponse == null) {
-      registerResponse.setCode(401);
-      registerResponse.setMessage("Error: register fail");
+      List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
+      errorDetailResponses.add(errorDetailResponse);
+      FailureDataResponse failureDataResponse = new FailureDataResponse(400, "Bad Request", errorDetailResponses);
+
+      return failureDataResponse;
     } else {
-      registerResponse.setUserId(customerResponse.getCustomerId());
-      registerResponse.setCode(200);
-      registerResponse.setMessage("Register success");
-    }
+      long customerResponse = customerRepository.deleteByCustomerId(customerId);
 
-    return registerResponse;
+      if (customerResponse <= 0) {
+        ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(500, "Cannot delete customer data");
+
+        List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
+        errorDetailResponses.add(errorDetailResponse);
+        FailureDataResponse failureDataResponse = new FailureDataResponse(500, "Internal server error", errorDetailResponses);
+
+        return failureDataResponse;
+      } else {
+        DataNoAttributeResponse dataNoAttributeResponse = new DataNoAttributeResponse(customerId, "customer");
+
+        List<DataNoAttributeResponse> dataNoAttributeResponses = new ArrayList<>();
+        dataNoAttributeResponses.add(dataNoAttributeResponse);
+        SuccessDataResponse<DataNoAttributeResponse> successDataResponse = new SuccessDataResponse<>(200, "OK", dataNoAttributeResponses);
+
+        return successDataResponse;
+      }
+    }
   }
 
-  @Transactional
+  public BaseResponse login(Customer customer) {
+    String email = customer.getEmail();
+    String password = customer.getPassword();
+
+    Customer fetchResponse = customerRepository.findFirstByEmailAndPassword(email, password);
+
+    if (fetchResponse == null) {
+      ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(404, "Wrong email or password");
+
+      List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
+      errorDetailResponses.add(errorDetailResponse);
+      FailureDataResponse failureDataResponse = new FailureDataResponse(400, "Bad Request", errorDetailResponses);
+
+      return failureDataResponse;
+    } else {
+      DataNoAttributeResponse dataNoAttributeResponse = new DataNoAttributeResponse(fetchResponse.getCustomerId(), "customer");
+
+      List<DataNoAttributeResponse> dataNoAttributeResponses = new ArrayList<>();
+      dataNoAttributeResponses.add(dataNoAttributeResponse);
+      SuccessDataResponse<DataNoAttributeResponse> successDataResponse = new SuccessDataResponse<>(200, "OK", dataNoAttributeResponses);
+
+      return successDataResponse;
+    }
+  }
+
   public List<Book> findCustomerLibrary(Integer customerId){
     Customer customerResponse = customerRepository.findFirstByCustomerId(customerId);
 
