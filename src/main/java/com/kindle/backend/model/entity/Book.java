@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
-import org.hibernate.engine.spi.PersistentAttributeInterceptor;
 
 import javax.persistence.*;
 import java.util.List;
@@ -51,29 +50,27 @@ public class Book {
   private String url;
 
   @Column(name = BookConstant.BOOK_CATEGORIES)
-  @Basic(fetch = FetchType.LAZY) //trying lazy fetch for category
   private String categories;
 
   @JsonIgnore
-  @ManyToMany(mappedBy = "library", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+  @ManyToMany(mappedBy = "library", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
   private List<Customer> ownerBook;
 
   @JsonIgnore
   @LazyCollection(LazyCollectionOption.FALSE)
-  @OneToMany(mappedBy = "bookDetail", fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "bookDetail", fetch = FetchType.EAGER)
   private List<TransactionList> orderList;
 
-  @JsonIgnore
-  @ManyToOne(fetch = FetchType.LAZY, optional = false)
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "merchant_id", nullable = false, insertable = false, updatable = false)
   private Merchant merchant;
 
   @JsonIgnore
-  @ManyToMany(fetch = FetchType.LAZY, mappedBy = "wishlist", cascade = CascadeType.PERSIST)
+  @ManyToMany(mappedBy = "wishlist", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
   private List<Customer> likedBook;
 
   @JsonIgnore
-  @ManyToMany(mappedBy = "cart", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+  @ManyToMany(mappedBy = "cart", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
   private List<Customer> cartedBook;
 
   public int getBookSku() {
@@ -196,7 +193,11 @@ public class Book {
     this.cartedBook = cartedBook;
   }
 
-  public String getCategories() { return categories; }
+  public String getCategories() {
+    return categories;
+  }
 
-  public void setCategories(String categories) { this.categories = categories; }
+  public void setCategories(String categories) {
+    this.categories = categories;
+  }
 }

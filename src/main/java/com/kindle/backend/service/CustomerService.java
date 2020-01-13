@@ -6,13 +6,20 @@ import com.kindle.backend.model.repository.BookRepository;
 import com.kindle.backend.model.repository.CustomerRepository;
 import com.kindle.backend.response.BaseResponse;
 import com.kindle.backend.response.attributeResponse.GetAllCustomerResponse;
+import com.kindle.backend.response.attributeResponse.GetCustomerCartResponse;
+import com.kindle.backend.response.attributeResponse.GetCustomerLibraryResponse;
+import com.kindle.backend.response.attributeResponse.GetCustomerWishlistResponse;
+import com.kindle.backend.response.dataResponse.DataCompleteResponse;
 import com.kindle.backend.response.dataResponse.DataNoAttributeResponse;
 import com.kindle.backend.response.dataResponse.DataNoRelationResponse;
 import com.kindle.backend.response.errorResponse.ErrorDetailResponse;
-import com.kindle.backend.response.oldResponse.CartResponse;
-import com.kindle.backend.response.oldResponse.WishlistResponse;
+import com.kindle.backend.response.includedResponse.MerchantIncludedResponse;
+import com.kindle.backend.response.relationshipResponse.BaseRelationshipDataResponse;
+import com.kindle.backend.response.relationshipResponse.CartRelationshipResponse;
+import com.kindle.backend.response.relationshipResponse.WishlistRelationshipResponse;
 import com.kindle.backend.response.statusResponse.FailureDataResponse;
 import com.kindle.backend.response.statusResponse.SuccessDataResponse;
+import com.kindle.backend.response.statusResponse.SuccessDataWithIncludedResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -193,145 +200,434 @@ public class CustomerService {
     }
   }
 
-  public List<Book> findCustomerLibrary(Integer customerId){
-    Customer customerResponse = customerRepository.findFirstByCustomerId(customerId);
+  public BaseResponse findCustomerLibrary(Integer customerId){
+    Customer customer = customerRepository.findFirstByCustomerId(customerId);
 
-    return customerResponse.getLibrary();
+    if (customer == null) {
+      ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(404, "CustomerId not found");
+
+      List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
+      errorDetailResponses.add(errorDetailResponse);
+      FailureDataResponse failureDataResponse = new FailureDataResponse(400, "Bad Request", errorDetailResponses);
+
+      return failureDataResponse;
+    } else {
+      List<Book> library = customer.getLibrary();
+      List<DataNoRelationResponse> dataNoRelationResponses = new ArrayList<>();
+
+      for (Book book : library) {
+        GetCustomerLibraryResponse getCustomerLibraryResponse = new GetCustomerLibraryResponse(book.getDocument());
+        DataNoRelationResponse<GetCustomerLibraryResponse> dataNoRelationResponse = new DataNoRelationResponse<>(book.getBookSku(), "book", getCustomerLibraryResponse);
+        dataNoRelationResponses.add(dataNoRelationResponse);
+      }
+
+      SuccessDataResponse<DataNoRelationResponse> successDataResponse = new SuccessDataResponse<>(200, "OK", dataNoRelationResponses);
+
+      return successDataResponse;
+    }
   }
 
-  public boolean isOnLibrary(Integer customerId, Integer bookSku){
-    Customer customerResponse = customerRepository.findFirstByCustomerId(customerId);
-    List<Book> library = customerResponse.getLibrary();
-    for (Book book : library) {
-      if (book.getBookSku() == bookSku) {
-        return true;
+  public BaseResponse isOnLibrary(Integer customerId, Integer bookSku){
+    Customer fetchResponse = customerRepository.findFirstByCustomerId(customerId);
+
+    if (fetchResponse == null) {
+      ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(404, "CustomerId not found");
+
+      List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
+      errorDetailResponses.add(errorDetailResponse);
+      FailureDataResponse failureDataResponse = new FailureDataResponse(400, "Bad Request", errorDetailResponses);
+
+      return failureDataResponse;
+    } else {
+      List<Book> library = fetchResponse.getLibrary();;
+      boolean found = false;
+
+      for (Book book : library) {
+        if (book.getBookSku() == bookSku) {
+          found = true;
+        }
+      }
+
+      if (found) {
+        DataNoAttributeResponse dataNoAttributeResponse = new DataNoAttributeResponse(bookSku, "book");
+
+        List<DataNoAttributeResponse> dataNoAttributeResponses = new ArrayList<>();
+        dataNoAttributeResponses.add(dataNoAttributeResponse);
+        SuccessDataResponse<DataNoAttributeResponse> successDataResponse = new SuccessDataResponse<>(200, "OK", dataNoAttributeResponses);
+
+        return successDataResponse;
+      } else {
+        ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(404, "BookSku not found");
+
+        List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
+        errorDetailResponses.add(errorDetailResponse);
+        FailureDataResponse failureDataResponse = new FailureDataResponse(400, "Bad Request", errorDetailResponses);
+
+        return failureDataResponse;
       }
     }
-    return false;
   }
 
-  public List<WishlistResponse> findCustomerWishlist(Integer customerId){
-    Customer customerResponse = customerRepository.findFirstByCustomerId(customerId);
-    List<Book> wishlist = customerResponse.getWishlist();
-    List<WishlistResponse> wishlistResponses = new ArrayList<>();
-    for (Book book : wishlist) {
-      wishlistResponses.add(new WishlistResponse(book, book.getMerchant().getFullname()));
+  public BaseResponse findCustomerWishlist(Integer customerId){
+    Customer customer = customerRepository.findFirstByCustomerId(customerId);
+
+    if (customer == null) {
+      ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(404, "CustomerId not found");
+
+      List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
+      errorDetailResponses.add(errorDetailResponse);
+      FailureDataResponse failureDataResponse = new FailureDataResponse(400, "Bad Request", errorDetailResponses);
+
+      return failureDataResponse;
+    } else {
+      List<Book> wishlist = customer.getWishlist();
+      List<DataCompleteResponse> dataCompleteResponses = new ArrayList<>();
+      List<DataNoRelationResponse> dataNoRelationResponses = new ArrayList<>();
+
+      for (Book book : wishlist) {
+        // attributes
+        GetCustomerWishlistResponse getCustomerWishlistResponse = new GetCustomerWishlistResponse(book.getTitle(), book.getAuthor(), book.getYear(), book.getPrice(), book.getDocument());
+
+        // relationships
+        List<DataNoAttributeResponse> merchantRelationshipDatas = new ArrayList<>();
+        DataNoAttributeResponse merchantRelationshipData = new DataNoAttributeResponse(book.getMerchantId(), "merchant");
+        merchantRelationshipDatas.add(merchantRelationshipData);
+        BaseRelationshipDataResponse merchantRelationship = new BaseRelationshipDataResponse(merchantRelationshipDatas);
+        WishlistRelationshipResponse wishlistRelationshipResponse = new WishlistRelationshipResponse(merchantRelationship);
+
+        DataCompleteResponse<GetCustomerWishlistResponse, WishlistRelationshipResponse> dataCompleteResponse = new DataCompleteResponse<>(book.getBookSku(), "book", getCustomerWishlistResponse, wishlistRelationshipResponse);
+        dataCompleteResponses.add(dataCompleteResponse);
+
+        // included
+        MerchantIncludedResponse merchantIncludedResponse = new MerchantIncludedResponse(book.getMerchant().getFullname());
+        DataNoRelationResponse<MerchantIncludedResponse> merchantIncluded = new DataNoRelationResponse<>(book.getMerchantId(), "merchant", merchantIncludedResponse);
+
+        if (!(dataNoRelationResponses.contains(merchantIncluded))) {
+          dataNoRelationResponses.add(merchantIncluded);
+        }
+      }
+
+      SuccessDataWithIncludedResponse<DataCompleteResponse, DataNoRelationResponse> successDataResponse = new SuccessDataWithIncludedResponse<>(200, "OK", dataCompleteResponses, dataNoRelationResponses);
+
+      return successDataResponse;
     }
-
-    return wishlistResponses;
   }
 
-  public boolean isOnWishlist(Integer customerId, Integer bookSku){
-    Customer customerResponse = customerRepository.findFirstByCustomerId(customerId);
-    List<Book> wishlist = customerResponse.getWishlist();
-    for (Book book : wishlist) {
-      if (book.getBookSku() == bookSku) {
-        return true;
+  public BaseResponse isOnWishlist(Integer customerId, Integer bookSku){
+    Customer fetchResponse = customerRepository.findFirstByCustomerId(customerId);
+
+    if (fetchResponse == null) {
+      ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(404, "CustomerId not found");
+
+      List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
+      errorDetailResponses.add(errorDetailResponse);
+      FailureDataResponse failureDataResponse = new FailureDataResponse(400, "Bad Request", errorDetailResponses);
+
+      return failureDataResponse;
+    } else {
+      List<Book> wishlist = fetchResponse.getWishlist();;
+      boolean found = false;
+
+      for (Book book : wishlist) {
+        if (book.getBookSku() == bookSku) {
+          found = true;
+        }
+      }
+
+      if (found) {
+        DataNoAttributeResponse dataNoAttributeResponse = new DataNoAttributeResponse(bookSku, "book");
+
+        List<DataNoAttributeResponse> dataNoAttributeResponses = new ArrayList<>();
+        dataNoAttributeResponses.add(dataNoAttributeResponse);
+        SuccessDataResponse<DataNoAttributeResponse> successDataResponse = new SuccessDataResponse<>(200, "OK", dataNoAttributeResponses);
+
+        return successDataResponse;
+      } else {
+        ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(404, "BookSku not found");
+
+        List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
+        errorDetailResponses.add(errorDetailResponse);
+        FailureDataResponse failureDataResponse = new FailureDataResponse(400, "Bad Request", errorDetailResponses);
+
+        return failureDataResponse;
       }
     }
-    return false;
   }
 
-  public List<CartResponse> findCustomerCart(Integer customerId){
-    Customer customerResponse = customerRepository.findFirstByCustomerId(customerId);
-    List<Book> cart = customerResponse.getCart();
-    List<CartResponse> cartResponses = new ArrayList<>();
-    for (Book book : cart) {
-      cartResponses.add(new CartResponse(book, book.getMerchant().getFullname()));
+  public BaseResponse findCustomerCart(Integer customerId){
+    Customer customer = customerRepository.findFirstByCustomerId(customerId);
+
+    if (customer == null) {
+      ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(404, "CustomerId not found");
+
+      List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
+      errorDetailResponses.add(errorDetailResponse);
+      FailureDataResponse failureDataResponse = new FailureDataResponse(400, "Bad Request", errorDetailResponses);
+
+      return failureDataResponse;
+    } else {
+      List<Book> cart = customer.getCart();
+      List<DataCompleteResponse> dataCompleteResponses = new ArrayList<>();
+      List<DataNoRelationResponse> dataNoRelationResponses = new ArrayList<>();
+
+      for (Book book : cart) {
+        // attributes
+        GetCustomerCartResponse getCustomerCartResponse = new GetCustomerCartResponse(book.getTitle(), book.getAuthor(), book.getYear(), book.getPrice(), book.getDocument());
+
+        // relationships
+        List<DataNoAttributeResponse> merchantRelationshipDatas = new ArrayList<>();
+        DataNoAttributeResponse merchantRelationshipData = new DataNoAttributeResponse(book.getMerchantId(), "merchant");
+        merchantRelationshipDatas.add(merchantRelationshipData);
+        BaseRelationshipDataResponse merchantRelationship = new BaseRelationshipDataResponse(merchantRelationshipDatas);
+        CartRelationshipResponse cartRelationshipResponse = new CartRelationshipResponse(merchantRelationship);
+
+        DataCompleteResponse<GetCustomerCartResponse, CartRelationshipResponse> dataCompleteResponse = new DataCompleteResponse<>(book.getBookSku(), "book", getCustomerCartResponse, cartRelationshipResponse);
+        dataCompleteResponses.add(dataCompleteResponse);
+
+        // included
+        MerchantIncludedResponse merchantIncludedResponse = new MerchantIncludedResponse(book.getMerchant().getFullname());
+        DataNoRelationResponse<MerchantIncludedResponse> merchantIncluded = new DataNoRelationResponse<>(book.getMerchantId(), "merchant", merchantIncludedResponse);
+
+        if (!(dataNoRelationResponses.contains(merchantIncluded))) {
+          dataNoRelationResponses.add(merchantIncluded);
+        }
+      }
+
+      SuccessDataWithIncludedResponse<DataCompleteResponse, DataNoRelationResponse> successDataResponse = new SuccessDataWithIncludedResponse<>(200, "OK", dataCompleteResponses, dataNoRelationResponses);
+
+      return successDataResponse;
     }
-
-    return cartResponses;
   }
 
-  public boolean isOnCart(Integer customerId, Integer bookSku){
-    Customer customerResponse = customerRepository.findFirstByCustomerId(customerId);
-    List<Book> cart = customerResponse.getCart();
-    for (Book book : cart) {
-      if (book.getBookSku() == bookSku) {
-        return true;
+  public BaseResponse isOnCart(Integer customerId, Integer bookSku){
+    Customer fetchResponse = customerRepository.findFirstByCustomerId(customerId);
+
+    if (fetchResponse == null) {
+      ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(404, "CustomerId not found");
+
+      List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
+      errorDetailResponses.add(errorDetailResponse);
+      FailureDataResponse failureDataResponse = new FailureDataResponse(400, "Bad Request", errorDetailResponses);
+
+      return failureDataResponse;
+    } else {
+      List<Book> cart = fetchResponse.getCart();;
+      boolean found = false;
+
+      for (Book book : cart) {
+        if (book.getBookSku() == bookSku) {
+          found = true;
+        }
+      }
+
+      if (found) {
+        DataNoAttributeResponse dataNoAttributeResponse = new DataNoAttributeResponse(bookSku, "book");
+
+        List<DataNoAttributeResponse> dataNoAttributeResponses = new ArrayList<>();
+        dataNoAttributeResponses.add(dataNoAttributeResponse);
+        SuccessDataResponse<DataNoAttributeResponse> successDataResponse = new SuccessDataResponse<>(200, "OK", dataNoAttributeResponses);
+
+        return successDataResponse;
+      } else {
+        ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(404, "BookSku not found");
+
+        List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
+        errorDetailResponses.add(errorDetailResponse);
+        FailureDataResponse failureDataResponse = new FailureDataResponse(400, "Bad Request", errorDetailResponses);
+
+        return failureDataResponse;
       }
     }
-    return false;
   }
 
-  public Customer addCustomerWishlist(Integer customerId, Integer bookSku) {
-    Customer customerResponse = customerRepository.findFirstByCustomerId(customerId);
+  public BaseResponse addCustomerWishlist(Integer customerId, Integer bookSku) {
     Book bookResponse = bookRepository.findFirstByBookSku(bookSku);
+    Customer customerResponse = customerRepository.findFirstByCustomerId(customerId);
+
     customerResponse.getWishlist().add(bookResponse);
     bookResponse.getLikedBook().add(customerResponse);
-    bookRepository.save(bookResponse);
 
-    return customerRepository.save(customerResponse);
+    Book savedBook = bookRepository.save(bookResponse);
+    Customer savedCustomer = customerRepository.save(customerResponse);
+
+    if (savedCustomer == null || savedBook == null) {
+      ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(500, "Cannot add the book into customer wishlist");
+
+      List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
+      errorDetailResponses.add(errorDetailResponse);
+      FailureDataResponse failureDataResponse = new FailureDataResponse(500, "Internal server error", errorDetailResponses);
+
+      return failureDataResponse;
+    } else {
+      DataNoAttributeResponse dataNoAttributeResponse = new DataNoAttributeResponse(savedBook.getBookSku(), "book");
+
+      List<DataNoAttributeResponse> dataNoAttributeResponses = new ArrayList<>();
+      dataNoAttributeResponses.add(dataNoAttributeResponse);
+      SuccessDataResponse<DataNoAttributeResponse> successDataResponse = new SuccessDataResponse<>(201, "Created", dataNoAttributeResponses);
+
+      return successDataResponse;
+    }
   }
 
-  public Customer deleteCustomerWishlist(Integer customerId, Integer bookSku) {
+  public BaseResponse deleteCustomerWishlist(Integer customerId, Integer bookSku) {
     Customer customerResponse = customerRepository.findFirstByCustomerId(customerId);
     Book bookResponse = bookRepository.findFirstByBookSku(bookSku);
 
-    List<Book> bookList = new ArrayList<>();
-    for (Book book : customerResponse.getWishlist()) {
-      if (book.getBookSku() != bookResponse.getBookSku()) {
-        bookList.add(book);
+    if (customerResponse == null || bookResponse == null) {
+      ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(404, "CustomerId or BookSku not found");
+
+      List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
+      errorDetailResponses.add(errorDetailResponse);
+      FailureDataResponse failureDataResponse = new FailureDataResponse(400, "Bad Request", errorDetailResponses);
+
+      return failureDataResponse;
+    } else {
+      List<Book> bookList = new ArrayList<>();
+      for (Book book : customerResponse.getWishlist()) {
+        if (book.getBookSku() != bookResponse.getBookSku()) {
+          bookList.add(book);
+        }
+      }
+
+      List<Customer> customerList = new ArrayList<>();
+      for (Customer customer : bookResponse.getLikedBook()) {
+        if (customer.getCustomerId() != customerResponse.getCustomerId()) {
+          customerList.add(customer);
+        }
+      }
+
+      customerResponse.setWishlist(bookList);
+      bookResponse.setLikedBook(customerList);
+      Book savedBook = bookRepository.save(bookResponse);
+      Customer savedCustomer = customerRepository.save(customerResponse);
+
+      if (savedBook == null || savedCustomer == null) {
+        ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(500, "Cannot delete the book from customer wishlsit");
+
+        List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
+        errorDetailResponses.add(errorDetailResponse);
+        FailureDataResponse failureDataResponse = new FailureDataResponse(500, "Internal server error", errorDetailResponses);
+
+        return failureDataResponse;
+      } else {
+        DataNoAttributeResponse dataNoAttributeResponse = new DataNoAttributeResponse(bookSku, "book");
+
+        List<DataNoAttributeResponse> dataNoAttributeResponses = new ArrayList<>();
+        dataNoAttributeResponses.add(dataNoAttributeResponse);
+        SuccessDataResponse<DataNoAttributeResponse> successDataResponse = new SuccessDataResponse<>(200, "OK", dataNoAttributeResponses);
+
+        return successDataResponse;
       }
     }
-
-    List<Customer> customerList = new ArrayList<>();
-    for (Customer customer : bookResponse.getLikedBook()) {
-      if (customer.getCustomerId() != customerResponse.getCustomerId()) {
-        customerList.add(customer);
-      }
-    }
-
-    customerResponse.setWishlist(bookList);
-    bookResponse.setLikedBook(customerList);
-    bookRepository.save(bookResponse);
-
-    return customerRepository.save(customerResponse);
   }
 
-  public Customer addCustomerCart(Integer customerId, Integer bookSku) {
-    Customer customerResponse = customerRepository.findFirstByCustomerId(customerId);
+  public BaseResponse addCustomerCart(Integer customerId, Integer bookSku) {
     Book bookResponse = bookRepository.findFirstByBookSku(bookSku);
+    Customer customerResponse = customerRepository.findFirstByCustomerId(customerId);
+
     customerResponse.getCart().add(bookResponse);
     bookResponse.getCartedBook().add(customerResponse);
-    bookRepository.save(bookResponse);
 
-    return customerRepository.save(customerResponse);
+    Book savedBook = bookRepository.save(bookResponse);
+    Customer savedCustomer = customerRepository.save(customerResponse);
+
+    if (savedCustomer == null || savedBook == null) {
+      ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(500, "Cannot add the book into customer cart");
+
+      List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
+      errorDetailResponses.add(errorDetailResponse);
+      FailureDataResponse failureDataResponse = new FailureDataResponse(500, "Internal server error", errorDetailResponses);
+
+      return failureDataResponse;
+    } else {
+      DataNoAttributeResponse dataNoAttributeResponse = new DataNoAttributeResponse(savedBook.getBookSku(), "book");
+
+      List<DataNoAttributeResponse> dataNoAttributeResponses = new ArrayList<>();
+      dataNoAttributeResponses.add(dataNoAttributeResponse);
+      SuccessDataResponse<DataNoAttributeResponse> successDataResponse = new SuccessDataResponse<>(201, "Created", dataNoAttributeResponses);
+
+      return successDataResponse;
+    }
   }
 
-  public Customer deleteCustomerCart(Integer customerId, Integer bookSku) {
+  public BaseResponse deleteCustomerCart(Integer customerId, Integer bookSku) {
     Customer customerResponse = customerRepository.findFirstByCustomerId(customerId);
     Book bookResponse = bookRepository.findFirstByBookSku(bookSku);
 
-    List<Book> bookList = new ArrayList<>();
-    for (Book book : customerResponse.getCart()) {
-      if (book.getBookSku() != bookResponse.getBookSku()) {
-        bookList.add(book);
+    if (customerResponse == null || bookResponse == null) {
+      ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(404, "CustomerId or BookSku not found");
+
+      List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
+      errorDetailResponses.add(errorDetailResponse);
+      FailureDataResponse failureDataResponse = new FailureDataResponse(400, "Bad Request", errorDetailResponses);
+
+      return failureDataResponse;
+    } else {
+      List<Book> bookList = new ArrayList<>();
+      for (Book book : customerResponse.getCart()) {
+        if (book.getBookSku() != bookResponse.getBookSku()) {
+          bookList.add(book);
+        }
+      }
+
+      List<Customer> customerList = new ArrayList<>();
+      for (Customer customer : bookResponse.getCartedBook()) {
+        if (customer.getCustomerId() != customerResponse.getCustomerId()) {
+          customerList.add(customer);
+        }
+      }
+
+      customerResponse.setCart(bookList);
+      bookResponse.setCartedBook(customerList);
+      Book savedBook = bookRepository.save(bookResponse);
+      Customer savedCustomer = customerRepository.save(customerResponse);
+
+      if (savedBook == null || savedCustomer == null) {
+        ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(500, "Cannot delete the book from customer cart");
+
+        List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
+        errorDetailResponses.add(errorDetailResponse);
+        FailureDataResponse failureDataResponse = new FailureDataResponse(500, "Internal server error", errorDetailResponses);
+
+        return failureDataResponse;
+      } else {
+        DataNoAttributeResponse dataNoAttributeResponse = new DataNoAttributeResponse(bookSku, "book");
+
+        List<DataNoAttributeResponse> dataNoAttributeResponses = new ArrayList<>();
+        dataNoAttributeResponses.add(dataNoAttributeResponse);
+        SuccessDataResponse<DataNoAttributeResponse> successDataResponse = new SuccessDataResponse<>(200, "OK", dataNoAttributeResponses);
+
+        return successDataResponse;
       }
     }
-
-    List<Customer> customerList = new ArrayList<>();
-    for (Customer customer : bookResponse.getCartedBook()) {
-      if (customer.getCustomerId() != customerResponse.getCustomerId()) {
-        customerList.add(customer);
-      }
-    }
-
-    customerResponse.setCart(bookList);
-    bookResponse.setCartedBook(customerList);
-    bookRepository.save(bookResponse);
-
-    return customerRepository.save(customerResponse);
   }
 
-  public Customer addCustomerLibrary(Integer customerId, Integer bookSku) {
-    Customer customerResponse = customerRepository.findFirstByCustomerId(customerId);
+  public BaseResponse addCustomerLibrary(Integer customerId, Integer bookSku) {
     Book bookResponse = bookRepository.findFirstByBookSku(bookSku);
+    Customer customerResponse = customerRepository.findFirstByCustomerId(customerId);
 
     customerResponse.getLibrary().add(bookResponse);
     bookResponse.getOwnerBook().add(customerResponse);
-    bookRepository.save(bookResponse);
 
-    return customerRepository.save(customerResponse);
+    Book savedBook = bookRepository.save(bookResponse);
+    Customer savedCustomer = customerRepository.save(customerResponse);
+
+    if (savedCustomer == null || savedBook == null) {
+      ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(500, "Cannot add the book into customer library");
+
+      List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
+      errorDetailResponses.add(errorDetailResponse);
+      FailureDataResponse failureDataResponse = new FailureDataResponse(500, "Internal server error", errorDetailResponses);
+
+      return failureDataResponse;
+    } else {
+      DataNoAttributeResponse dataNoAttributeResponse = new DataNoAttributeResponse(savedBook.getBookSku(), "book");
+
+      List<DataNoAttributeResponse> dataNoAttributeResponses = new ArrayList<>();
+      dataNoAttributeResponses.add(dataNoAttributeResponse);
+      SuccessDataResponse<DataNoAttributeResponse> successDataResponse = new SuccessDataResponse<>(201, "Created", dataNoAttributeResponses);
+
+      return successDataResponse;
+    }
   }
 }

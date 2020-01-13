@@ -1,16 +1,11 @@
 package com.kindle.backend.controller;
 
 import com.kindle.backend.model.constant.ApiPath;
-import com.kindle.backend.model.entity.Book;
 import com.kindle.backend.model.entity.Customer;
 import com.kindle.backend.response.BaseResponse;
-import com.kindle.backend.response.oldResponse.CartResponse;
-import com.kindle.backend.response.oldResponse.WishlistResponse;
 import com.kindle.backend.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @CrossOrigin
 @RestController
@@ -49,57 +44,57 @@ public class CustomerController {
   }
 
   @RequestMapping(value = ApiPath.CUSTOMER_CART, method = RequestMethod.GET)
-  public List<CartResponse> getCustomerCart(@PathVariable Integer customerId) {
+  public BaseResponse getCustomerCart(@PathVariable Integer customerId) {
     return this.customerService.findCustomerCart(customerId);
   }
 
   @RequestMapping(value = ApiPath.CUSTOMER_LIBRARY, method = RequestMethod.GET)
-  public List<Book> getCustomerLibrary(@PathVariable Integer customerId) {
+  public BaseResponse getCustomerLibrary(@PathVariable Integer customerId) {
     return this.customerService.findCustomerLibrary(customerId);
   }
 
   @RequestMapping(value = ApiPath.CUSTOMER_WISHLIST, method = RequestMethod.GET)
-  public List<WishlistResponse> getCustomerWishlist(@PathVariable Integer customerId) {
+  public BaseResponse getCustomerWishlist(@PathVariable Integer customerId) {
     return this.customerService.findCustomerWishlist(customerId);
   }
 
   @RequestMapping(value = ApiPath.CUSTOMER_CART_CHECK, method = RequestMethod.GET)
-  public boolean isOnCart(@PathVariable Integer customerId, @PathVariable Integer bookSku) {
+  public BaseResponse isOnCart(@PathVariable Integer customerId, @PathVariable Integer bookSku) {
     return this.customerService.isOnCart(customerId, bookSku);
   }
 
   @RequestMapping(value = ApiPath.CUSTOMER_LIBRARY_CHECK, method = RequestMethod.GET)
-  public boolean inOnLibrary(@PathVariable Integer customerId, @PathVariable Integer bookSku) {
+  public BaseResponse inOnLibrary(@PathVariable Integer customerId, @PathVariable Integer bookSku) {
     return this.customerService.isOnLibrary(customerId, bookSku);
   }
 
   @RequestMapping(value = ApiPath.CUSTOMER_WISHLIST_CHECK, method = RequestMethod.GET)
-  public boolean isOnWishlist(@PathVariable Integer customerId, @PathVariable Integer bookSku) {
+  public BaseResponse isOnWishlist(@PathVariable Integer customerId, @PathVariable Integer bookSku) {
     return this.customerService.isOnWishlist(customerId, bookSku);
   }
 
-  @RequestMapping(value = ApiPath.CUSTOMER_WISHLIST, method = RequestMethod.POST)
-  public Customer addCustomerWishlist(@PathVariable Integer customerId, @RequestParam Integer bookSku) {
-    return this.customerService.addCustomerWishlist(customerId, bookSku);
-  }
-
   @RequestMapping(value = ApiPath.CUSTOMER_CART, method = RequestMethod.POST)
-  public Customer addCustomerCart(@PathVariable Integer customerId, @RequestParam Integer bookSku) {
+  public BaseResponse addCustomerCart(@PathVariable Integer customerId, @RequestParam Integer bookSku) {
     return this.customerService.addCustomerCart(customerId, bookSku);
   }
 
   @RequestMapping(value = ApiPath.CUSTOMER_LIBRARY, method = RequestMethod.POST)
-  public Customer addCustomerLibrary(@PathVariable Integer customerId, @RequestParam Integer bookSku) {
+  public BaseResponse addCustomerLibrary(@PathVariable Integer customerId, @RequestParam Integer bookSku) {
     return this.customerService.addCustomerLibrary(customerId, bookSku);
   }
 
-  @RequestMapping(value = ApiPath.CUSTOMER_WISHLIST, method = RequestMethod.DELETE)
-  public Customer deleteCustomerWishlist(@PathVariable Integer customerId, @RequestParam Integer bookSku) {
-    return this.customerService.deleteCustomerWishlist(customerId, bookSku);
+  @RequestMapping(value = ApiPath.CUSTOMER_WISHLIST, method = RequestMethod.POST)
+  public BaseResponse addCustomerWishlist(@PathVariable Integer customerId, @RequestParam Integer bookSku) {
+    return this.customerService.addCustomerWishlist(customerId, bookSku);
   }
 
   @RequestMapping(value = ApiPath.CUSTOMER_CART, method = RequestMethod.DELETE)
-  public Customer deleteCustomerCart(@PathVariable Integer customerId, @RequestParam Integer bookSku) {
+  public BaseResponse deleteCustomerCart(@PathVariable Integer customerId, @RequestParam Integer bookSku) {
     return this.customerService.deleteCustomerCart(customerId, bookSku);
+  }
+
+  @RequestMapping(value = ApiPath.CUSTOMER_WISHLIST, method = RequestMethod.DELETE)
+  public BaseResponse deleteCustomerWishlist(@PathVariable Integer customerId, @RequestParam Integer bookSku) {
+    return this.customerService.deleteCustomerWishlist(customerId, bookSku);
   }
 }
