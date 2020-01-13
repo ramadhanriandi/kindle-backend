@@ -313,15 +313,45 @@ public class CustomerService {
     }
   }
 
-  public boolean isOnWishlist(Integer customerId, Integer bookSku){
-    Customer customerResponse = customerRepository.findFirstByCustomerId(customerId);
-    List<Book> wishlist = customerResponse.getWishlist();
-    for (Book book : wishlist) {
-      if (book.getBookSku() == bookSku) {
-        return true;
+  public BaseResponse isOnWishlist(Integer customerId, Integer bookSku){
+    Customer fetchResponse = customerRepository.findFirstByCustomerId(customerId);
+
+    if (fetchResponse == null) {
+      ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(404, "CustomerId not found");
+
+      List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
+      errorDetailResponses.add(errorDetailResponse);
+      FailureDataResponse failureDataResponse = new FailureDataResponse(400, "Bad Request", errorDetailResponses);
+
+      return failureDataResponse;
+    } else {
+      List<Book> wishlist = fetchResponse.getWishlist();;
+      boolean found = false;
+
+      for (Book book : wishlist) {
+        if (book.getBookSku() == bookSku) {
+          found = true;
+        }
+      }
+
+      if (found) {
+        DataNoAttributeResponse dataNoAttributeResponse = new DataNoAttributeResponse(bookSku, "book");
+
+        List<DataNoAttributeResponse> dataNoAttributeResponses = new ArrayList<>();
+        dataNoAttributeResponses.add(dataNoAttributeResponse);
+        SuccessDataResponse<DataNoAttributeResponse> successDataResponse = new SuccessDataResponse<>(200, "OK", dataNoAttributeResponses);
+
+        return successDataResponse;
+      } else {
+        ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(404, "BookSku not found");
+
+        List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
+        errorDetailResponses.add(errorDetailResponse);
+        FailureDataResponse failureDataResponse = new FailureDataResponse(400, "Bad Request", errorDetailResponses);
+
+        return failureDataResponse;
       }
     }
-    return false;
   }
 
   public BaseResponse findCustomerCart(Integer customerId){

@@ -69,7 +69,7 @@ public class CustomerController {
   }
 
   @RequestMapping(value = ApiPath.CUSTOMER_WISHLIST_CHECK, method = RequestMethod.GET)
-  public boolean isOnWishlist(@PathVariable Integer customerId, @PathVariable Integer bookSku) {
+  public BaseResponse isOnWishlist(@PathVariable Integer customerId, @PathVariable Integer bookSku) {
     return this.customerService.isOnWishlist(customerId, bookSku);
   }
 
