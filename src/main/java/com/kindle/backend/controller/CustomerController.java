@@ -49,7 +49,7 @@ public class CustomerController {
   }
 
   @RequestMapping(value = ApiPath.CUSTOMER_CART, method = RequestMethod.GET)
-  public List<CartResponse> getCustomerCart(@PathVariable Integer customerId) {
+  public BaseResponse getCustomerCart(@PathVariable Integer customerId) {
     return this.customerService.findCustomerCart(customerId);
   }
 

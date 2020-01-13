@@ -6,13 +6,18 @@ import com.kindle.backend.model.repository.BookRepository;
 import com.kindle.backend.model.repository.CustomerRepository;
 import com.kindle.backend.response.BaseResponse;
 import com.kindle.backend.response.attributeResponse.GetAllCustomerResponse;
+import com.kindle.backend.response.attributeResponse.GetCustomerCartResponse;
+import com.kindle.backend.response.dataResponse.DataCompleteResponse;
 import com.kindle.backend.response.dataResponse.DataNoAttributeResponse;
 import com.kindle.backend.response.dataResponse.DataNoRelationResponse;
 import com.kindle.backend.response.errorResponse.ErrorDetailResponse;
-import com.kindle.backend.response.oldResponse.CartResponse;
+import com.kindle.backend.response.includedResponse.MerchantIncludedResponse;
 import com.kindle.backend.response.oldResponse.WishlistResponse;
+import com.kindle.backend.response.relationshipResponse.BaseRelationshipDataResponse;
+import com.kindle.backend.response.relationshipResponse.CartRelationshipResponse;
 import com.kindle.backend.response.statusResponse.FailureDataResponse;
 import com.kindle.backend.response.statusResponse.SuccessDataResponse;
+import com.kindle.backend.response.statusResponse.SuccessDataWithIncludedResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -232,15 +237,49 @@ public class CustomerService {
     return false;
   }
 
-  public List<CartResponse> findCustomerCart(Integer customerId){
-    Customer customerResponse = customerRepository.findFirstByCustomerId(customerId);
-    List<Book> cart = customerResponse.getCart();
-    List<CartResponse> cartResponses = new ArrayList<>();
-    for (Book book : cart) {
-      cartResponses.add(new CartResponse(book, book.getMerchant().getFullname()));
-    }
+  public BaseResponse findCustomerCart(Integer customerId){
+    Customer customer = customerRepository.findFirstByCustomerId(customerId);
 
-    return cartResponses;
+    if (customer == null) {
+      ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(404, "CustomerId not found");
+
+      List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
+      errorDetailResponses.add(errorDetailResponse);
+      FailureDataResponse failureDataResponse = new FailureDataResponse(400, "Bad Request", errorDetailResponses);
+
+      return failureDataResponse;
+    } else {
+      List<Book> cart = customer.getCart();
+      List<DataCompleteResponse> dataCompleteResponses = new ArrayList<>();
+      List<DataNoRelationResponse> dataNoRelationResponses = new ArrayList<>();
+
+      for (Book book : cart) {
+        // attributes
+        GetCustomerCartResponse getCustomerCartResponse = new GetCustomerCartResponse(book.getTitle(), book.getAuthor(), book.getYear(), book.getPrice(), book.getDocument());
+
+        // relationships
+        List<DataNoAttributeResponse> merchantRelationshipDatas = new ArrayList<>();
+        DataNoAttributeResponse merchantRelationshipData = new DataNoAttributeResponse(book.getMerchantId(), "merchant");
+        merchantRelationshipDatas.add(merchantRelationshipData);
+        BaseRelationshipDataResponse merchantRelationship = new BaseRelationshipDataResponse(merchantRelationshipDatas);
+        CartRelationshipResponse cartRelationshipResponse = new CartRelationshipResponse(merchantRelationship);
+
+        DataCompleteResponse<GetCustomerCartResponse, CartRelationshipResponse> dataCompleteResponse = new DataCompleteResponse<>(book.getBookSku(), "book", getCustomerCartResponse, cartRelationshipResponse);
+        dataCompleteResponses.add(dataCompleteResponse);
+
+        // included
+        MerchantIncludedResponse merchantIncludedResponse = new MerchantIncludedResponse(book.getMerchant().getFullname());
+        DataNoRelationResponse<MerchantIncludedResponse> merchantIncluded = new DataNoRelationResponse<>(book.getMerchantId(), "merchant", merchantIncludedResponse);
+
+        if (!(dataNoRelationResponses.contains(merchantIncluded))) {
+          dataNoRelationResponses.add(merchantIncluded);
+        }
+      }
+
+      SuccessDataWithIncludedResponse<DataCompleteResponse, DataNoRelationResponse> successDataResponse = new SuccessDataWithIncludedResponse<>(200, "OK", dataCompleteResponses, dataNoRelationResponses);
+
+      return successDataResponse;
+    }
   }
 
   public boolean isOnCart(Integer customerId, Integer bookSku){
