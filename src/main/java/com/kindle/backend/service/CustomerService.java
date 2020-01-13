@@ -523,29 +523,56 @@ public class CustomerService {
     }
   }
 
-  public Customer deleteCustomerCart(Integer customerId, Integer bookSku) {
+  public BaseResponse deleteCustomerCart(Integer customerId, Integer bookSku) {
     Customer customerResponse = customerRepository.findFirstByCustomerId(customerId);
     Book bookResponse = bookRepository.findFirstByBookSku(bookSku);
 
-    List<Book> bookList = new ArrayList<>();
-    for (Book book : customerResponse.getCart()) {
-      if (book.getBookSku() != bookResponse.getBookSku()) {
-        bookList.add(book);
+    if (customerResponse == null || bookResponse == null) {
+      ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(404, "CustomerId or BookSku not found");
+
+      List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
+      errorDetailResponses.add(errorDetailResponse);
+      FailureDataResponse failureDataResponse = new FailureDataResponse(400, "Bad Request", errorDetailResponses);
+
+      return failureDataResponse;
+    } else {
+      List<Book> bookList = new ArrayList<>();
+      for (Book book : customerResponse.getCart()) {
+        if (book.getBookSku() != bookResponse.getBookSku()) {
+          bookList.add(book);
+        }
+      }
+
+      List<Customer> customerList = new ArrayList<>();
+      for (Customer customer : bookResponse.getCartedBook()) {
+        if (customer.getCustomerId() != customerResponse.getCustomerId()) {
+          customerList.add(customer);
+        }
+      }
+
+      customerResponse.setCart(bookList);
+      bookResponse.setCartedBook(customerList);
+      Book savedBook = bookRepository.save(bookResponse);
+      Customer savedCustomer = customerRepository.save(customerResponse);
+
+      if (savedBook == null || savedCustomer == null) {
+        ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(500, "Cannot delete the book from customer cart");
+
+        List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
+        errorDetailResponses.add(errorDetailResponse);
+        FailureDataResponse failureDataResponse = new FailureDataResponse(500, "Internal server error", errorDetailResponses);
+
+        return failureDataResponse;
+      } else {
+        DataNoAttributeResponse dataNoAttributeResponse = new DataNoAttributeResponse(bookSku, "book");
+
+        List<DataNoAttributeResponse> dataNoAttributeResponses = new ArrayList<>();
+        dataNoAttributeResponses.add(dataNoAttributeResponse);
+        SuccessDataResponse<DataNoAttributeResponse> successDataResponse = new SuccessDataResponse<>(200, "OK", dataNoAttributeResponses);
+
+        return successDataResponse;
       }
     }
-
-    List<Customer> customerList = new ArrayList<>();
-    for (Customer customer : bookResponse.getCartedBook()) {
-      if (customer.getCustomerId() != customerResponse.getCustomerId()) {
-        customerList.add(customer);
-      }
-    }
-
-    customerResponse.setCart(bookList);
-    bookResponse.setCartedBook(customerList);
-    bookRepository.save(bookResponse);
-
-    return customerRepository.save(customerResponse);
   }
 
   public BaseResponse addCustomerLibrary(Integer customerId, Integer bookSku) {
