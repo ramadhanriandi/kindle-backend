@@ -233,8 +233,8 @@
 - Response Body (Success) :
 ```
 {
-	"code": 201,
-	"status": "Created",
+	"code": 200,
+	"status": "OK",
 	"data": [{
 		"id": 1,
 		"type": "merchant"
