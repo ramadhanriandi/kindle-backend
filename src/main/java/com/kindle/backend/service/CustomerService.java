@@ -280,7 +280,7 @@ public class CustomerService {
 
       return failureDataResponse;
     } else {
-      List<Book> wishlist = customer.getCart();
+      List<Book> wishlist = customer.getWishlist();
       List<DataCompleteResponse> dataCompleteResponses = new ArrayList<>();
       List<DataNoRelationResponse> dataNoRelationResponses = new ArrayList<>();
 
@@ -470,28 +470,6 @@ public class CustomerService {
   }
 
   public BaseResponse deleteCustomerWishlist(Integer customerId, Integer bookSku) {
-//    Customer customerResponse = customerRepository.findFirstByCustomerId(customerId);
-//    Book bookResponse = bookRepository.findFirstByBookSku(bookSku);
-//
-//    List<Book> bookList = new ArrayList<>();
-//    for (Book book : customerResponse.getWishlist()) {
-//      if (book.getBookSku() != bookResponse.getBookSku()) {
-//        bookList.add(book);
-//      }
-//    }
-//
-//    List<Customer> customerList = new ArrayList<>();
-//    for (Customer customer : bookResponse.getLikedBook()) {
-//      if (customer.getCustomerId() != customerResponse.getCustomerId()) {
-//        customerList.add(customer);
-//      }
-//    }
-//
-//    customerResponse.setWishlist(bookList);
-//    bookResponse.setLikedBook(customerList);
-//    bookRepository.save(bookResponse);
-//
-//    return customerRepository.save(customerResponse);
     Customer customerResponse = customerRepository.findFirstByCustomerId(customerId);
     Book bookResponse = bookRepository.findFirstByBookSku(bookSku);
 
