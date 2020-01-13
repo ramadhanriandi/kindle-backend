@@ -84,7 +84,7 @@ public class CustomerController {
   }
 
   @RequestMapping(value = ApiPath.CUSTOMER_WISHLIST, method = RequestMethod.POST)
-  public Customer addCustomerWishlist(@PathVariable Integer customerId, @RequestParam Integer bookSku) {
+  public BaseResponse addCustomerWishlist(@PathVariable Integer customerId, @RequestParam Integer bookSku) {
     return this.customerService.addCustomerWishlist(customerId, bookSku);
   }
 

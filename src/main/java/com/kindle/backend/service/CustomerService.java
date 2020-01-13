@@ -440,14 +440,33 @@ public class CustomerService {
     }
   }
 
-  public Customer addCustomerWishlist(Integer customerId, Integer bookSku) {
-    Customer customerResponse = customerRepository.findFirstByCustomerId(customerId);
+  public BaseResponse addCustomerWishlist(Integer customerId, Integer bookSku) {
     Book bookResponse = bookRepository.findFirstByBookSku(bookSku);
+    Customer customerResponse = customerRepository.findFirstByCustomerId(customerId);
+
     customerResponse.getWishlist().add(bookResponse);
     bookResponse.getLikedBook().add(customerResponse);
-    bookRepository.save(bookResponse);
 
-    return customerRepository.save(customerResponse);
+    Book savedBook = bookRepository.save(bookResponse);
+    Customer savedCustomer = customerRepository.save(customerResponse);
+
+    if (savedCustomer == null || savedBook == null) {
+      ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(500, "Cannot add the book into customer wishlist");
+
+      List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
+      errorDetailResponses.add(errorDetailResponse);
+      FailureDataResponse failureDataResponse = new FailureDataResponse(500, "Internal server error", errorDetailResponses);
+
+      return failureDataResponse;
+    } else {
+      DataNoAttributeResponse dataNoAttributeResponse = new DataNoAttributeResponse(savedBook.getBookSku(), "book");
+
+      List<DataNoAttributeResponse> dataNoAttributeResponses = new ArrayList<>();
+      dataNoAttributeResponses.add(dataNoAttributeResponse);
+      SuccessDataResponse<DataNoAttributeResponse> successDataResponse = new SuccessDataResponse<>(201, "Created", dataNoAttributeResponses);
+
+      return successDataResponse;
+    }
   }
 
   public Customer deleteCustomerWishlist(Integer customerId, Integer bookSku) {
