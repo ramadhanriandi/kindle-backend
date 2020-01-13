@@ -1,16 +1,11 @@
 package com.kindle.backend.controller;
 
 import com.kindle.backend.model.constant.ApiPath;
-import com.kindle.backend.model.entity.Book;
 import com.kindle.backend.model.entity.Customer;
 import com.kindle.backend.response.BaseResponse;
-import com.kindle.backend.response.oldResponse.CartResponse;
-import com.kindle.backend.response.oldResponse.WishlistResponse;
 import com.kindle.backend.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @CrossOrigin
 @RestController
@@ -64,7 +59,7 @@ public class CustomerController {
   }
 
   @RequestMapping(value = ApiPath.CUSTOMER_CART_CHECK, method = RequestMethod.GET)
-  public boolean isOnCart(@PathVariable Integer customerId, @PathVariable Integer bookSku) {
+  public BaseResponse isOnCart(@PathVariable Integer customerId, @PathVariable Integer bookSku) {
     return this.customerService.isOnCart(customerId, bookSku);
   }
 

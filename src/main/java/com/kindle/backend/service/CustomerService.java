@@ -339,15 +339,45 @@ public class CustomerService {
     }
   }
 
-  public boolean isOnCart(Integer customerId, Integer bookSku){
-    Customer customerResponse = customerRepository.findFirstByCustomerId(customerId);
-    List<Book> cart = customerResponse.getCart();
-    for (Book book : cart) {
-      if (book.getBookSku() == bookSku) {
-        return true;
+  public BaseResponse isOnCart(Integer customerId, Integer bookSku){
+    Customer fetchResponse = customerRepository.findFirstByCustomerId(customerId);
+
+    if (fetchResponse == null) {
+      ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(404, "CustomerId not found");
+
+      List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
+      errorDetailResponses.add(errorDetailResponse);
+      FailureDataResponse failureDataResponse = new FailureDataResponse(400, "Bad Request", errorDetailResponses);
+
+      return failureDataResponse;
+    } else {
+      List<Book> cart = fetchResponse.getCart();;
+      boolean found = false;
+
+      for (Book book : cart) {
+        if (book.getBookSku() == bookSku) {
+          found = true;
+        }
+      }
+
+      if (found) {
+        DataNoAttributeResponse dataNoAttributeResponse = new DataNoAttributeResponse(bookSku, "book");
+
+        List<DataNoAttributeResponse> dataNoAttributeResponses = new ArrayList<>();
+        dataNoAttributeResponses.add(dataNoAttributeResponse);
+        SuccessDataResponse<DataNoAttributeResponse> successDataResponse = new SuccessDataResponse<>(200, "OK", dataNoAttributeResponses);
+
+        return successDataResponse;
+      } else {
+        ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(404, "BookSku not found");
+
+        List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
+        errorDetailResponses.add(errorDetailResponse);
+        FailureDataResponse failureDataResponse = new FailureDataResponse(400, "Bad Request", errorDetailResponses);
+
+        return failureDataResponse;
       }
     }
-    return false;
   }
 
   public Customer addCustomerWishlist(Integer customerId, Integer bookSku) {
