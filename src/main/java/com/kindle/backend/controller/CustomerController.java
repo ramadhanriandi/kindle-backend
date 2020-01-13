@@ -64,7 +64,7 @@ public class CustomerController {
   }
 
   @RequestMapping(value = ApiPath.CUSTOMER_LIBRARY_CHECK, method = RequestMethod.GET)
-  public boolean inOnLibrary(@PathVariable Integer customerId, @PathVariable Integer bookSku) {
+  public BaseResponse inOnLibrary(@PathVariable Integer customerId, @PathVariable Integer bookSku) {
     return this.customerService.isOnLibrary(customerId, bookSku);
   }
 
