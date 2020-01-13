@@ -73,19 +73,19 @@ public class CustomerController {
     return this.customerService.isOnWishlist(customerId, bookSku);
   }
 
-  @RequestMapping(value = ApiPath.CUSTOMER_WISHLIST, method = RequestMethod.POST)
-  public Customer addCustomerWishlist(@PathVariable Integer customerId, @RequestParam Integer bookSku) {
-    return this.customerService.addCustomerWishlist(customerId, bookSku);
-  }
-
   @RequestMapping(value = ApiPath.CUSTOMER_CART, method = RequestMethod.POST)
-  public Customer addCustomerCart(@PathVariable Integer customerId, @RequestParam Integer bookSku) {
+  public BaseResponse addCustomerCart(@PathVariable Integer customerId, @RequestParam Integer bookSku) {
     return this.customerService.addCustomerCart(customerId, bookSku);
   }
 
   @RequestMapping(value = ApiPath.CUSTOMER_LIBRARY, method = RequestMethod.POST)
-  public Customer addCustomerLibrary(@PathVariable Integer customerId, @RequestParam Integer bookSku) {
+  public BaseResponse addCustomerLibrary(@PathVariable Integer customerId, @RequestParam Integer bookSku) {
     return this.customerService.addCustomerLibrary(customerId, bookSku);
+  }
+
+  @RequestMapping(value = ApiPath.CUSTOMER_WISHLIST, method = RequestMethod.POST)
+  public Customer addCustomerWishlist(@PathVariable Integer customerId, @RequestParam Integer bookSku) {
+    return this.customerService.addCustomerWishlist(customerId, bookSku);
   }
 
   @RequestMapping(value = ApiPath.CUSTOMER_WISHLIST, method = RequestMethod.DELETE)
