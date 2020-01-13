@@ -8,6 +8,7 @@ import com.kindle.backend.response.BaseResponse;
 import com.kindle.backend.response.attributeResponse.GetAllCustomerResponse;
 import com.kindle.backend.response.attributeResponse.GetCustomerCartResponse;
 import com.kindle.backend.response.attributeResponse.GetCustomerLibraryResponse;
+import com.kindle.backend.response.attributeResponse.GetCustomerWishlistResponse;
 import com.kindle.backend.response.dataResponse.DataCompleteResponse;
 import com.kindle.backend.response.dataResponse.DataNoAttributeResponse;
 import com.kindle.backend.response.dataResponse.DataNoRelationResponse;
@@ -15,6 +16,7 @@ import com.kindle.backend.response.errorResponse.ErrorDetailResponse;
 import com.kindle.backend.response.includedResponse.MerchantIncludedResponse;
 import com.kindle.backend.response.relationshipResponse.BaseRelationshipDataResponse;
 import com.kindle.backend.response.relationshipResponse.CartRelationshipResponse;
+import com.kindle.backend.response.relationshipResponse.WishlistRelationshipResponse;
 import com.kindle.backend.response.statusResponse.FailureDataResponse;
 import com.kindle.backend.response.statusResponse.SuccessDataResponse;
 import com.kindle.backend.response.statusResponse.SuccessDataWithIncludedResponse;
@@ -237,14 +239,48 @@ public class CustomerService {
   }
 
   public BaseResponse findCustomerWishlist(Integer customerId){
-//    Customer customerResponse = customerRepository.findFirstByCustomerId(customerId);
-//    List<Book> wishlist = customerResponse.getWishlist();
-//    List<WishlistResponse> wishlistResponses = new ArrayList<>();
-//    for (Book book : wishlist) {
-//      wishlistResponses.add(new WishlistResponse(book, book.getMerchant().getFullname()));
-//    }
-//
-//    return wishlistResponses;
+    Customer customer = customerRepository.findFirstByCustomerId(customerId);
+
+    if (customer == null) {
+      ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(404, "CustomerId not found");
+
+      List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
+      errorDetailResponses.add(errorDetailResponse);
+      FailureDataResponse failureDataResponse = new FailureDataResponse(400, "Bad Request", errorDetailResponses);
+
+      return failureDataResponse;
+    } else {
+      List<Book> wishlist = customer.getCart();
+      List<DataCompleteResponse> dataCompleteResponses = new ArrayList<>();
+      List<DataNoRelationResponse> dataNoRelationResponses = new ArrayList<>();
+
+      for (Book book : wishlist) {
+        // attributes
+        GetCustomerWishlistResponse getCustomerWishlistResponse = new GetCustomerWishlistResponse(book.getTitle(), book.getAuthor(), book.getYear(), book.getPrice(), book.getDocument());
+
+        // relationships
+        List<DataNoAttributeResponse> merchantRelationshipDatas = new ArrayList<>();
+        DataNoAttributeResponse merchantRelationshipData = new DataNoAttributeResponse(book.getMerchantId(), "merchant");
+        merchantRelationshipDatas.add(merchantRelationshipData);
+        BaseRelationshipDataResponse merchantRelationship = new BaseRelationshipDataResponse(merchantRelationshipDatas);
+        WishlistRelationshipResponse wishlistRelationshipResponse = new WishlistRelationshipResponse(merchantRelationship);
+
+        DataCompleteResponse<GetCustomerWishlistResponse, WishlistRelationshipResponse> dataCompleteResponse = new DataCompleteResponse<>(book.getBookSku(), "book", getCustomerWishlistResponse, wishlistRelationshipResponse);
+        dataCompleteResponses.add(dataCompleteResponse);
+
+        // included
+        MerchantIncludedResponse merchantIncludedResponse = new MerchantIncludedResponse(book.getMerchant().getFullname());
+        DataNoRelationResponse<MerchantIncludedResponse> merchantIncluded = new DataNoRelationResponse<>(book.getMerchantId(), "merchant", merchantIncludedResponse);
+
+        if (!(dataNoRelationResponses.contains(merchantIncluded))) {
+          dataNoRelationResponses.add(merchantIncluded);
+        }
+      }
+
+      SuccessDataWithIncludedResponse<DataCompleteResponse, DataNoRelationResponse> successDataResponse = new SuccessDataWithIncludedResponse<>(200, "OK", dataCompleteResponses, dataNoRelationResponses);
+
+      return successDataResponse;
+    }
   }
 
   public boolean isOnWishlist(Integer customerId, Integer bookSku){
