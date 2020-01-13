@@ -7,12 +7,12 @@ import com.kindle.backend.model.repository.CustomerRepository;
 import com.kindle.backend.response.BaseResponse;
 import com.kindle.backend.response.attributeResponse.GetAllCustomerResponse;
 import com.kindle.backend.response.attributeResponse.GetCustomerCartResponse;
+import com.kindle.backend.response.attributeResponse.GetCustomerLibraryResponse;
 import com.kindle.backend.response.dataResponse.DataCompleteResponse;
 import com.kindle.backend.response.dataResponse.DataNoAttributeResponse;
 import com.kindle.backend.response.dataResponse.DataNoRelationResponse;
 import com.kindle.backend.response.errorResponse.ErrorDetailResponse;
 import com.kindle.backend.response.includedResponse.MerchantIncludedResponse;
-import com.kindle.backend.response.oldResponse.WishlistResponse;
 import com.kindle.backend.response.relationshipResponse.BaseRelationshipDataResponse;
 import com.kindle.backend.response.relationshipResponse.CartRelationshipResponse;
 import com.kindle.backend.response.statusResponse.FailureDataResponse;
@@ -198,10 +198,31 @@ public class CustomerService {
     }
   }
 
-  public List<Book> findCustomerLibrary(Integer customerId){
-    Customer customerResponse = customerRepository.findFirstByCustomerId(customerId);
+  public BaseResponse findCustomerLibrary(Integer customerId){
+    Customer customer = customerRepository.findFirstByCustomerId(customerId);
 
-    return customerResponse.getLibrary();
+    if (customer == null) {
+      ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(404, "CustomerId not found");
+
+      List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
+      errorDetailResponses.add(errorDetailResponse);
+      FailureDataResponse failureDataResponse = new FailureDataResponse(400, "Bad Request", errorDetailResponses);
+
+      return failureDataResponse;
+    } else {
+      List<Book> library = customer.getLibrary();
+      List<DataNoRelationResponse> dataNoRelationResponses = new ArrayList<>();
+
+      for (Book book : library) {
+        GetCustomerLibraryResponse getCustomerLibraryResponse = new GetCustomerLibraryResponse(book.getDocument());
+        DataNoRelationResponse<GetCustomerLibraryResponse> dataNoRelationResponse = new DataNoRelationResponse<>(book.getBookSku(), "book", getCustomerLibraryResponse);
+        dataNoRelationResponses.add(dataNoRelationResponse);
+      }
+
+      SuccessDataResponse<DataNoRelationResponse> successDataResponse = new SuccessDataResponse<>(200, "OK", dataNoRelationResponses);
+
+      return successDataResponse;
+    }
   }
 
   public boolean isOnLibrary(Integer customerId, Integer bookSku){
@@ -215,15 +236,15 @@ public class CustomerService {
     return false;
   }
 
-  public List<WishlistResponse> findCustomerWishlist(Integer customerId){
-    Customer customerResponse = customerRepository.findFirstByCustomerId(customerId);
-    List<Book> wishlist = customerResponse.getWishlist();
-    List<WishlistResponse> wishlistResponses = new ArrayList<>();
-    for (Book book : wishlist) {
-      wishlistResponses.add(new WishlistResponse(book, book.getMerchant().getFullname()));
-    }
-
-    return wishlistResponses;
+  public BaseResponse findCustomerWishlist(Integer customerId){
+//    Customer customerResponse = customerRepository.findFirstByCustomerId(customerId);
+//    List<Book> wishlist = customerResponse.getWishlist();
+//    List<WishlistResponse> wishlistResponses = new ArrayList<>();
+//    for (Book book : wishlist) {
+//      wishlistResponses.add(new WishlistResponse(book, book.getMerchant().getFullname()));
+//    }
+//
+//    return wishlistResponses;
   }
 
   public boolean isOnWishlist(Integer customerId, Integer bookSku){

@@ -54,12 +54,12 @@ public class CustomerController {
   }
 
   @RequestMapping(value = ApiPath.CUSTOMER_LIBRARY, method = RequestMethod.GET)
-  public List<Book> getCustomerLibrary(@PathVariable Integer customerId) {
+  public BaseResponse getCustomerLibrary(@PathVariable Integer customerId) {
     return this.customerService.findCustomerLibrary(customerId);
   }
 
   @RequestMapping(value = ApiPath.CUSTOMER_WISHLIST, method = RequestMethod.GET)
-  public List<WishlistResponse> getCustomerWishlist(@PathVariable Integer customerId) {
+  public BaseResponse getCustomerWishlist(@PathVariable Integer customerId) {
     return this.customerService.findCustomerWishlist(customerId);
   }
 
