@@ -29,7 +29,12 @@ public class TransactionList {
   private int transactionId;
 
   @JsonIgnore
-  @ManyToOne(fetch = FetchType.EAGER)
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = TransactionListConstant.TRANSACTIONLIST_TRANSACTION_ID, insertable = false, updatable = false)
+  private Transaction transactionDetail;
+
+  @JsonIgnore
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = TransactionListConstant.TRANSACTIONLIST_BOOK_SKU, insertable = false, updatable = false)
   private Book bookDetail;
 

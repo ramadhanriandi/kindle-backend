@@ -2,6 +2,7 @@ package com.kindle.backend.controller;
 
 import com.kindle.backend.model.constant.ApiPath;
 import com.kindle.backend.model.entity.Book;
+import com.kindle.backend.response.BaseResponse;
 import com.kindle.backend.response.oldResponse.PutResponse;
 import com.kindle.backend.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ public class BookController {
   private BookService bookService;
 
   @RequestMapping(value = ApiPath.BOOK, method = RequestMethod.GET)
-  public List<Book> getAllBook() {
+  public BaseResponse getAllBook() {
     return this.bookService.findAllBook();
   }
 

@@ -42,7 +42,7 @@ public class Merchant {
   private String status;
 
   @JsonIgnore
-  @OneToMany(fetch = FetchType.EAGER, mappedBy = "merchant")
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "merchant")
   private List<Book> catalog;
 
   public int getMerchantId() {
