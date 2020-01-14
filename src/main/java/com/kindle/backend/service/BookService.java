@@ -60,7 +60,7 @@ public class BookService {
       getBookResponse.setPrice(bookResult.getPrice());
       getBookResponse.setDocument(bookResult.getDocument());
       getBookResponse.setVariant(bookResult.getVariant());
-      getBookResponse.setUrl(bookResult.getCategories());
+      getBookResponse.setUrl(bookResult.getUrl());
       getBookResponse.setCategories(bookResult.getCategories());
 
       //create relationship response for complete data response
@@ -143,7 +143,7 @@ public class BookService {
         getBookResponse.setPrice(book.getPrice());
         getBookResponse.setDocument(book.getDocument());
         getBookResponse.setVariant(book.getVariant());
-        getBookResponse.setUrl(book.getCategories());
+        getBookResponse.setUrl(book.getUrl());
         getBookResponse.setCategories(book.getCategories());
 
         //create book relationship response
@@ -331,7 +331,7 @@ public class BookService {
 
         for (Book book : bookResultList){
             //create the attribute
-            GetMerchantCatalogResponse getMerchantCatalogResponse = new GetMerchantCatalogResponse(book.getDocument());
+            GetMerchantCatalogResponse getMerchantCatalogResponse = new GetMerchantCatalogResponse(book.getTitle(), book.getDocument());
 
             //wrap the attribute in data no relation response
             DataNoRelationResponse<GetMerchantCatalogResponse> dataNoRelationResponse = new DataNoRelationResponse<>();

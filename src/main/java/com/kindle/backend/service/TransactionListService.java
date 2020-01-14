@@ -2,6 +2,7 @@ package com.kindle.backend.service;
 
 import com.kindle.backend.model.entity.Book;
 import com.kindle.backend.model.entity.Customer;
+import com.kindle.backend.model.entity.Merchant;
 import com.kindle.backend.model.entity.TransactionList;
 import com.kindle.backend.model.repository.BookRepository;
 import com.kindle.backend.model.repository.CustomerRepository;
@@ -14,6 +15,7 @@ import com.kindle.backend.response.errorResponse.ErrorDetailResponse;
 import com.kindle.backend.response.includedResponse.BookIncludedResponse;
 import com.kindle.backend.response.includedResponse.MerchantIncludedResponse;
 import com.kindle.backend.response.relationshipResponse.BaseRelationshipDataResponse;
+import com.kindle.backend.response.relationshipResponse.MerchantOrderRelationshipResponse;
 import com.kindle.backend.response.relationshipResponse.TransactionListRelationshipResponse;
 import com.kindle.backend.response.statusResponse.FailureDataResponse;
 import com.kindle.backend.response.statusResponse.SuccessDataResponse;
@@ -35,7 +37,7 @@ public class TransactionListService {
   @Autowired
   private BookRepository bookRepository;
 
-  public BaseResponse findAllTranscationListByTransactionId(int transactionId) {
+  public BaseResponse findAllTransactionListByTransactionId(int transactionId) {
     List<TransactionList> transactionLists = transactionListRepository.findAllByTransactionId(transactionId);
 
     if (transactionLists == null) {
@@ -65,6 +67,57 @@ public class TransactionListService {
         TransactionListRelationshipResponse transactionListRelationshipResponse = new TransactionListRelationshipResponse(merchantRelationship, bookRelationship);
 
         DataWithRelationOnlyResponse<TransactionListRelationshipResponse> dataWithRelationOnlyResponse = new DataWithRelationOnlyResponse<>(transactionList.getTransactionListId(), "transactionlist", transactionListRelationshipResponse);
+
+        dataWithRelationOnlyResponses.add(dataWithRelationOnlyResponse);
+
+        // included
+        MerchantIncludedResponse merchantIncludedResponse = new MerchantIncludedResponse(transactionList.getBookDetail().getMerchant().getFullname());
+        BookIncludedResponse bookIncludedResponse = new BookIncludedResponse(transactionList.getBookDetail().getTitle(), transactionList.getBookDetail().getAuthor(), transactionList.getBookDetail().getYear(), transactionList.getBookDetail().getPrice(), transactionList.getBookDetail().getDocument());
+
+        DataNoRelationResponse<MerchantIncludedResponse> merchantIncluded = new DataNoRelationResponse<>(transactionList.getMerchantId(), "merchant", merchantIncludedResponse);
+        DataNoRelationResponse<BookIncludedResponse> bookIncluded = new DataNoRelationResponse<>(transactionList.getBookSku(), "book", bookIncludedResponse);
+
+        if (!(dataNoRelationResponses.contains(merchantIncluded))) {
+          dataNoRelationResponses.add(merchantIncluded);
+        }
+
+        if (!(dataNoRelationResponses.contains(bookIncluded))) {
+          dataNoRelationResponses.add(bookIncluded);
+        }
+      }
+
+      SuccessDataWithIncludedResponse<DataWithRelationOnlyResponse, DataNoRelationResponse> successDataResponse = new SuccessDataWithIncludedResponse<>(200, "OK", dataWithRelationOnlyResponses, dataNoRelationResponses);
+
+      return successDataResponse;
+    }
+  }
+
+  public BaseResponse findAllTransactionListByMerchantId(int merchantId) {
+    List<TransactionList> transactionLists = transactionListRepository.findAllByMerchantId(merchantId);
+
+    if ((transactionLists == null)) {
+      ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(404, "Transaction list not found");
+
+      List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
+      errorDetailResponses.add(errorDetailResponse);
+      FailureDataResponse failureDataResponse = new FailureDataResponse(400, "Bad Request", errorDetailResponses);
+
+      return failureDataResponse;
+    }
+    else {
+      List<DataWithRelationOnlyResponse> dataWithRelationOnlyResponses = new ArrayList<>();
+      List<DataNoRelationResponse> dataNoRelationResponses = new ArrayList<>();
+
+      for (TransactionList transactionList : transactionLists) {
+        // relationships
+        List<DataNoAttributeResponse> bookRelationshipDatas = new ArrayList<>();
+        DataNoAttributeResponse bookRelationshipData = new DataNoAttributeResponse(transactionList.getBookSku(), "book");
+        bookRelationshipDatas.add(bookRelationshipData);
+        BaseRelationshipDataResponse bookRelationship = new BaseRelationshipDataResponse(bookRelationshipDatas);
+
+        MerchantOrderRelationshipResponse merchantOrderRelationshipResponse = new MerchantOrderRelationshipResponse(bookRelationship);
+
+        DataWithRelationOnlyResponse<MerchantOrderRelationshipResponse> dataWithRelationOnlyResponse = new DataWithRelationOnlyResponse<>(transactionList.getTransactionListId(), "transactionlist", merchantOrderRelationshipResponse);
 
         dataWithRelationOnlyResponses.add(dataWithRelationOnlyResponse);
 

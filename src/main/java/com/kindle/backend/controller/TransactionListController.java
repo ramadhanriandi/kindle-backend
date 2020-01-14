@@ -15,7 +15,7 @@ public class TransactionListController {
 
   @RequestMapping(value = ApiPath.TRANSACTIONLIST, method = RequestMethod.GET)
   public BaseResponse getAllTransactionListByTransactionId(@RequestParam int transactionId) {
-    return this.transactionListService.findAllTranscationListByTransactionId(transactionId);
+    return this.transactionListService.findAllTransactionListByTransactionId(transactionId);
   }
 
   @RequestMapping(value = ApiPath.TRANSACTIONLIST, method = RequestMethod.POST)

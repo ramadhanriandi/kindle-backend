@@ -7,6 +7,7 @@ import com.kindle.backend.response.BaseResponse;
 import com.kindle.backend.response.oldResponse.PostResponse;
 import com.kindle.backend.service.BookService;
 import com.kindle.backend.service.MerchantService;
+import com.kindle.backend.service.TransactionListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +20,8 @@ public class MerchantController {
   private MerchantService merchantService;
   @Autowired
   private BookService bookService;
+  @Autowired
+  private TransactionListService transactionListService;
 
   @RequestMapping(value = ApiPath.MERCHANT, method = RequestMethod.GET)
   public BaseResponse getAllMerchant() {
@@ -53,5 +56,10 @@ public class MerchantController {
   @RequestMapping(value = ApiPath.MERCHANT_CATALOG, method = RequestMethod.GET)
   public BaseResponse getMerchantCatalog(@PathVariable Integer merchantId){
     return this.bookService.findBookByMerchantId(merchantId);
+  }
+
+  @RequestMapping(value = ApiPath.MERCHANT_ORDERS, method = RequestMethod.GET)
+  public BaseResponse getAllTransactionListByMerchantId(@PathVariable int merchantId) {
+      return this.transactionListService.findAllTransactionListByMerchantId(merchantId);
   }
 }
