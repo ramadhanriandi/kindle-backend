@@ -8,7 +8,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MerchantOrderRelationshipResponse {
+  private BaseRelationshipDataResponse transaction;
   private BaseRelationshipDataResponse book;
+
+  public BaseRelationshipDataResponse getTransaction() {
+    return transaction;
+  }
+
+  public void setTransaction(BaseRelationshipDataResponse transaction) {
+    this.transaction = transaction;
+  }
 
   public BaseRelationshipDataResponse getBook() {
     return book;
