@@ -80,9 +80,10 @@ public class CategoryControllerTest {
             .andExpect(jsonPath("$.code", is(successDataResponse.getCode())));
   }
 
+  @Test
   public void getCategoryByCategoryId() throws Exception {
     when(categoryService.findByCategoryId(1)).thenReturn(successDataResponseGetCategoryById);
-    mockMvc.perform(get("/api/categories" + 1).contentType(MediaType.APPLICATION_JSON))
+    mockMvc.perform(get("/api/categories/" + 1).contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.code", is(successDataResponseGetCategoryById.getCode())));
   }
