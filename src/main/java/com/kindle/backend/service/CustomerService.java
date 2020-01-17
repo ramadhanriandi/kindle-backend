@@ -187,13 +187,23 @@ public class CustomerService {
 
       return failureDataResponse;
     } else {
-      DataNoAttributeResponse dataNoAttributeResponse = new DataNoAttributeResponse(fetchResponse.getCustomerId(), "customer");
+      if (fetchResponse.getStatus() == "Active") {
+        DataNoAttributeResponse dataNoAttributeResponse = new DataNoAttributeResponse(fetchResponse.getCustomerId(), "customer");
 
-      List<DataNoAttributeResponse> dataNoAttributeResponses = new ArrayList<>();
-      dataNoAttributeResponses.add(dataNoAttributeResponse);
-      SuccessDataResponse<DataNoAttributeResponse> successDataResponse = new SuccessDataResponse<>(200, "OK", dataNoAttributeResponses);
+        List<DataNoAttributeResponse> dataNoAttributeResponses = new ArrayList<>();
+        dataNoAttributeResponses.add(dataNoAttributeResponse);
+        SuccessDataResponse<DataNoAttributeResponse> successDataResponse = new SuccessDataResponse<>(200, "OK", dataNoAttributeResponses);
 
-      return successDataResponse;
+        return successDataResponse;
+      } else {
+        ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(404, "Your account is inactive");
+
+        List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
+        errorDetailResponses.add(errorDetailResponse);
+        FailureDataResponse failureDataResponse = new FailureDataResponse(400, "Bad Request", errorDetailResponses);
+
+        return failureDataResponse;
+      }
     }
   }
 
