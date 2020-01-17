@@ -17,7 +17,6 @@ public class ApiPath {
   public static final String CUSTOMER = API + "/customers";
   public static final String CUSTOMER_BY_CUSTOMER_ID = CUSTOMER + "/{customerId}";
   public static final String CUSTOMER_LOGIN = CUSTOMER + "/login";
-  public static final String CUSTOMER_REGISTER = CUSTOMER + "/register";
   public static final String CUSTOMER_CART = CUSTOMER_BY_CUSTOMER_ID + "/cart";
   public static final String CUSTOMER_CART_CHECK = CUSTOMER_CART + "/{bookSku}/check";
   public static final String CUSTOMER_LIBRARY = CUSTOMER_BY_CUSTOMER_ID + "/library";
@@ -29,6 +28,7 @@ public class ApiPath {
   public static final String MERCHANT_BY_MERCHANT_ID = MERCHANT + "/{merchantId}";
   public static final String MERCHANT_LOGIN = MERCHANT + "/login";
   public static final String MERCHANT_CATALOG = MERCHANT_BY_MERCHANT_ID + "/catalog";
+  public static final String MERCHANT_ORDERS = MERCHANT_BY_MERCHANT_ID + "/orders";
 
   public static final String TRANSACTION = API + "/transactions";
   public static final String TRANSACTION_BY_TRANSACTION_ID = TRANSACTION + "/{transactionId}";

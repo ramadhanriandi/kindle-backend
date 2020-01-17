@@ -1,4 +1,4 @@
-package com.kindle.backend.response;
+package com.kindle.backend.response.oldResponse;
 
 import com.kindle.backend.model.entity.Book;
 

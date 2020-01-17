@@ -1,8 +1,17 @@
-package com.kindle.backend.response;
+package com.kindle.backend.response.oldResponse;
 
-public class PutResponse {
+public class PostResponse {
+  private int userId;
   private int code;
   private String message;
+
+  public int getUserId() {
+    return userId;
+  }
+
+  public void setUserId(int userId) {
+    this.userId = userId;
+  }
 
   public String getMessage() {
     return message;
