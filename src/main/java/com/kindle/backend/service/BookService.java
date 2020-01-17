@@ -1,7 +1,6 @@
 package com.kindle.backend.service;
 
 import com.kindle.backend.model.entity.Book;
-import com.kindle.backend.model.entity.Merchant;
 import com.kindle.backend.model.repository.BookRepository;
 import com.kindle.backend.model.repository.MerchantRepository;
 import com.kindle.backend.response.BaseResponse;
@@ -11,9 +10,7 @@ import com.kindle.backend.response.dataResponse.DataCompleteResponse;
 import com.kindle.backend.response.dataResponse.DataNoAttributeResponse;
 import com.kindle.backend.response.dataResponse.DataNoRelationResponse;
 import com.kindle.backend.response.errorResponse.ErrorDetailResponse;
-import com.kindle.backend.response.includedResponse.BookIncludedResponse;
 import com.kindle.backend.response.includedResponse.MerchantIncludedResponse;
-import com.kindle.backend.response.oldResponse.PutResponse;
 import com.kindle.backend.response.relationshipResponse.BaseRelationshipDataResponse;
 import com.kindle.backend.response.relationshipResponse.BookRelationshipResponse;
 import com.kindle.backend.response.statusResponse.FailureDataResponse;
@@ -60,7 +57,7 @@ public class BookService {
       getBookResponse.setPrice(bookResult.getPrice());
       getBookResponse.setDocument(bookResult.getDocument());
       getBookResponse.setVariant(bookResult.getVariant());
-      getBookResponse.setUrl(bookResult.getCategories());
+      getBookResponse.setUrl(bookResult.getUrl());
       getBookResponse.setCategories(bookResult.getCategories());
 
       //create relationship response for complete data response
