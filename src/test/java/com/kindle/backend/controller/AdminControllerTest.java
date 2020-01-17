@@ -1,7 +1,9 @@
 package com.kindle.backend.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kindle.backend.model.entity.Admin;
 import com.kindle.backend.response.attributeResponse.GetAdminByAdminIdResponse;
+import com.kindle.backend.response.dataResponse.DataNoAttributeResponse;
 import com.kindle.backend.response.dataResponse.DataNoRelationResponse;
 import com.kindle.backend.response.statusResponse.SuccessDataResponse;
 import com.kindle.backend.service.AdminService;
@@ -19,8 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.core.Is.is;
-import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -33,32 +35,88 @@ public class AdminControllerTest {
   @MockBean
   private AdminService adminService;
 
-  private SuccessDataResponse<DataNoRelationResponse> successDataResponse;
-  private List<DataNoRelationResponse> dataNoRelationResponses;
-  private DataNoRelationResponse<GetAdminByAdminIdResponse> dataNoRelationResponse;
-  private GetAdminByAdminIdResponse getAdminByAdminIdResponse;
-  private Admin admin;
+  @MockBean
+  private ObjectMapper objectMapper;
+
+  private SuccessDataResponse<DataNoRelationResponse> successDataResponseGetAdminById;
+  private List<DataNoRelationResponse> dataNoRelationResponsesGetAdminById;
+  private DataNoRelationResponse<GetAdminByAdminIdResponse> dataNoRelationResponseGetAdminById;
+  private GetAdminByAdminIdResponse getAdminByAdminIdResponseGetAdminById;
+  private Admin adminGetAdminById;
+
+  private DataNoAttributeResponse dataNoAttributeResponseUpdateAdmin;
+  private List<DataNoAttributeResponse> dataNoAttributeResponsesUpdateAdmin;
+  private SuccessDataResponse<DataNoAttributeResponse> successDataResponseUpdateAdmin;
+  private Admin updatedAdmin;
+
+  private DataNoAttributeResponse dataNoAttributeResponseLoginAdmin;
+  private List<DataNoAttributeResponse> dataNoAttributeResponsesLoginAdmin;
+  private SuccessDataResponse<DataNoAttributeResponse> successDataResponseLoginAdmin;
+  private Admin loginAdmin;
 
   @Before
   public void setUp() {
-    admin = new Admin();
-    admin.setAdminId(1);
-    admin.setEmail("test@example.com");
-    admin.setUsername("test");
-    admin.setPassword("123456");
+    objectMapper = new ObjectMapper();
 
-    getAdminByAdminIdResponse = new GetAdminByAdminIdResponse(admin.getEmail(), admin.getUsername(), admin.getPassword());
-    dataNoRelationResponse = new DataNoRelationResponse<>(admin.getAdminId(), "admin", getAdminByAdminIdResponse);
-    dataNoRelationResponses = new ArrayList<>();
-    dataNoRelationResponses.add(dataNoRelationResponse);
-    successDataResponse = new SuccessDataResponse<>(200, "OK", dataNoRelationResponses);
+    adminGetAdminById = new Admin();
+    adminGetAdminById.setAdminId(1);
+    adminGetAdminById.setEmail("test@example.com");
+    adminGetAdminById.setUsername("test");
+    adminGetAdminById.setPassword("123456");
+
+    getAdminByAdminIdResponseGetAdminById = new GetAdminByAdminIdResponse(adminGetAdminById.getEmail(), adminGetAdminById.getUsername(), adminGetAdminById.getPassword());
+    dataNoRelationResponseGetAdminById = new DataNoRelationResponse<>(adminGetAdminById.getAdminId(), "admin", getAdminByAdminIdResponseGetAdminById);
+    dataNoRelationResponsesGetAdminById = new ArrayList<>();
+    dataNoRelationResponsesGetAdminById.add(dataNoRelationResponseGetAdminById);
+    successDataResponseGetAdminById = new SuccessDataResponse<>(200, "OK", dataNoRelationResponsesGetAdminById);
+
+    updatedAdmin = new Admin();
+    updatedAdmin.setEmail("test2@example.com");
+    updatedAdmin.setUsername("test2");
+    updatedAdmin.setPassword("123456");
+
+    dataNoAttributeResponseUpdateAdmin = new DataNoAttributeResponse(updatedAdmin.getAdminId(), "admin");
+    dataNoAttributeResponsesUpdateAdmin = new ArrayList<>();
+    dataNoAttributeResponsesUpdateAdmin.add(dataNoAttributeResponseUpdateAdmin);
+    successDataResponseUpdateAdmin = new SuccessDataResponse<>(200, "OK", dataNoAttributeResponsesUpdateAdmin);
+
+    loginAdmin = new Admin();
+    loginAdmin.setEmail("test2@example.com");
+    loginAdmin.setPassword("123456");
+
+    dataNoAttributeResponseLoginAdmin = new DataNoAttributeResponse(loginAdmin.getAdminId(), "admin");
+    dataNoAttributeResponsesLoginAdmin = new ArrayList<>();
+    dataNoAttributeResponsesLoginAdmin.add(dataNoAttributeResponseLoginAdmin);
+    successDataResponseLoginAdmin = new SuccessDataResponse<>(200, "OK", dataNoAttributeResponsesLoginAdmin);
   }
 
   @Test
   public void getAdminById() throws Exception {
-    given(adminService.findByAdminId(1)).willReturn(successDataResponse);
+    when(adminService.findByAdminId(1)).thenReturn(successDataResponseGetAdminById);
     mockMvc.perform(get("/api/admins/" + 1).contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.code", is(successDataResponse.getCode())));
+            .andExpect(jsonPath("$.code", is(successDataResponseGetAdminById.getCode())));
+  }
+
+  @Test
+  public void updateAdmin() throws Exception {
+    when(adminService.updateAdmin(1, updatedAdmin)).thenReturn(successDataResponseUpdateAdmin);
+    mockMvc.perform(put("/api/admins/" + 1)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(updatedAdmin))
+            .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.code", is(successDataResponseUpdateAdmin.getCode())));
+  }
+
+  @Test
+  public void loginAdmin() throws Exception {
+    when(adminService.login(loginAdmin)).thenReturn(successDataResponseLoginAdmin);
+    mockMvc.perform(post("/api/admins/login")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(updatedAdmin))
+            .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.code", is(successDataResponseUpdateAdmin.getCode())));
   }
 }
