@@ -2,8 +2,13 @@ package com.kindle.backend.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kindle.backend.model.entity.Book;
+import com.kindle.backend.response.attributeResponse.GetBookResponse;
 import com.kindle.backend.response.dataResponse.DataCompleteResponse;
+import com.kindle.backend.response.dataResponse.DataNoAttributeResponse;
 import com.kindle.backend.response.dataResponse.DataNoRelationResponse;
+import com.kindle.backend.response.includedResponse.MerchantIncludedResponse;
+import com.kindle.backend.response.relationshipResponse.BaseRelationshipDataResponse;
+import com.kindle.backend.response.relationshipResponse.BookRelationshipResponse;
 import com.kindle.backend.response.statusResponse.SuccessDataWithIncludedResponse;
 import com.kindle.backend.service.BookService;
 import org.junit.Before;
@@ -43,6 +48,17 @@ public class BookControllerTest {
   private List<DataNoRelationResponse> dataNoRelationResponses;
   private SuccessDataWithIncludedResponse<DataCompleteResponse, DataNoRelationResponse> successDataWithIncludedResponse;
   private List<Book> books;
+
+  private GetBookResponse getBookResponseGetBookBySku;
+  private List<DataNoAttributeResponse> dataNoAttributeResponseListGetBookBySku;
+  private BaseRelationshipDataResponse baseRelationshipDataResponseGetBookBySku;
+  private BookRelationshipResponse bookRelationshipResponseGetBookBySku;
+  private DataCompleteResponse<GetBookResponse, BookRelationshipResponse> dataCompleteResponseGetBookBySku;
+  private List<DataCompleteResponse> dataCompleteResponseListGetBookBySku;
+  private MerchantIncludedResponse merchantIncludedResponseGetBookBySku;
+  private DataNoRelationResponse<MerchantIncludedResponse> dataNoRelationResponseGetBookBySku;
+  private List<DataNoRelationResponse> dataNoRelationResponseListGetBookBySku;
+  private SuccessDataWithIncludedResponse successDataWithIncludedResponseGetBookBySku;
   private Book book;
 
   @Before
@@ -68,6 +84,20 @@ public class BookControllerTest {
     dataNoRelationResponses = new ArrayList<>();
     dataNoRelationResponses.add(new DataNoRelationResponse());
     successDataWithIncludedResponse = new SuccessDataWithIncludedResponse<>(200, "OK", dataCompleteResponses, dataNoRelationResponses);
+
+    getBookResponseGetBookBySku = new GetBookResponse();
+    dataNoAttributeResponseListGetBookBySku = new ArrayList<>();
+    dataNoAttributeResponseListGetBookBySku.add(new DataNoAttributeResponse(1, "merchant"));
+    baseRelationshipDataResponseGetBookBySku = new BaseRelationshipDataResponse();
+    bookRelationshipResponseGetBookBySku = new BookRelationshipResponse();
+    dataCompleteResponseGetBookBySku = new DataCompleteResponse<>();
+    dataCompleteResponseListGetBookBySku = new ArrayList<>();
+    dataCompleteResponseListGetBookBySku.add(dataCompleteResponseGetBookBySku);
+    merchantIncludedResponseGetBookBySku = new MerchantIncludedResponse("Fullname");
+    dataNoRelationResponseGetBookBySku = new DataNoRelationResponse<>();
+    dataNoRelationResponseListGetBookBySku = new ArrayList<>();
+    dataNoRelationResponseListGetBookBySku.add(dataNoRelationResponseGetBookBySku);
+    successDataWithIncludedResponseGetBookBySku = new SuccessDataWithIncludedResponse<>(200, "OK", dataCompleteResponseListGetBookBySku, dataNoRelationResponseListGetBookBySku);
   }
 
   @Test
@@ -76,5 +106,13 @@ public class BookControllerTest {
     mockMvc.perform(get("/api/books").contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.code", is(successDataWithIncludedResponse.getCode())));
+  }
+
+  @Test
+  public void getBookBySku() throws Exception {
+    when(bookService.findByBookSku(1)).thenReturn(successDataWithIncludedResponseGetBookBySku);
+    mockMvc.perform(get("/api/books/" + 1).contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.code", is(successDataWithIncludedResponseGetBookBySku.getCode())));
   }
 }
