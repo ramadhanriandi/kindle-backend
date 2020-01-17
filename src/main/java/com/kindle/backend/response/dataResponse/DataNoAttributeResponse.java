@@ -1,15 +1,18 @@
 package com.kindle.backend.response.dataResponse;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class DataNoAttributeResponse {
   private int id;
   private String type;
+
+  public DataNoAttributeResponse(int id, String type) {
+    this.id = id;
+    this.type = type;
+  }
 
   public int getId() {
     return id;

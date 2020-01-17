@@ -1,17 +1,22 @@
 package com.kindle.backend.response.dataResponse;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class DataCompleteResponse<T1, T2> {
   private int id;
   private String type;
   private T1 attributes;
   private T2 relationships;
+
+  public DataCompleteResponse(int id, String type, T1 attributes, T2 relationships) {
+    this.id = id;
+    this.type = type;
+    this.attributes = attributes;
+    this.relationships = relationships;
+  }
 
   public int getId() {
     return id;

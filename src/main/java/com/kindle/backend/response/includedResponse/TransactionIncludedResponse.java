@@ -1,5 +1,6 @@
-package com.kindle.backend.response.attributeResponse;
+package com.kindle.backend.response.includedResponse;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -7,16 +8,11 @@ import java.sql.Timestamp;
 
 @Data
 @NoArgsConstructor
-public class GetTransactionByTransactionIdResponse {
+@AllArgsConstructor
+public class TransactionIncludedResponse {
   private Timestamp date;
-  private int total;
   private int customerId;
-
-  public GetTransactionByTransactionIdResponse(Timestamp date, int total, int customerId) {
-    this.date = date;
-    this.total = total;
-    this.customerId = customerId;
-  }
+  private String customerName;
 
   public Timestamp getDate() {
     return date;
@@ -26,19 +22,19 @@ public class GetTransactionByTransactionIdResponse {
     this.date = date;
   }
 
-  public int getTotal() {
-    return total;
-  }
-
-  public void setTotal(int total) {
-    this.total = total;
-  }
-
   public int getCustomerId() {
     return customerId;
   }
 
   public void setCustomerId(int customerId) {
     this.customerId = customerId;
+  }
+
+  public String getCustomerName() {
+    return customerName;
+  }
+
+  public void setCustomerName(String customerName) {
+    this.customerName = customerName;
   }
 }

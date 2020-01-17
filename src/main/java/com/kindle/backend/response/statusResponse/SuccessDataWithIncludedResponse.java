@@ -1,20 +1,27 @@
 package com.kindle.backend.response.statusResponse;
 
 import com.kindle.backend.response.BaseResponse;
-import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Data
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
-@AllArgsConstructor
 public class SuccessDataWithIncludedResponse<T1, T2> extends BaseResponse {
   private int code;
   private String status;
   private List<T1> data;
   private List<T2> included;
+
+  public SuccessDataWithIncludedResponse(int code, String status, List<T1> data, List<T2> included) {
+    this.code = code;
+    this.status = status;
+    this.data = data;
+    this.included = included;
+  }
 
   public int getCode() {
     return code;

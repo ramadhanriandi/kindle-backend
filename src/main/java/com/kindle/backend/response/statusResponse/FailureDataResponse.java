@@ -2,19 +2,25 @@ package com.kindle.backend.response.statusResponse;
 
 import com.kindle.backend.response.BaseResponse;
 import com.kindle.backend.response.errorResponse.ErrorDetailResponse;
-import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Data
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
-@AllArgsConstructor
 public class FailureDataResponse extends BaseResponse {
   private int code;
   private String status;
   private List<ErrorDetailResponse> errors;
+
+  public FailureDataResponse(int code, String status, List<ErrorDetailResponse> errors) {
+    this.code = code;
+    this.status = status;
+    this.errors = errors;
+  }
 
   public int getCode() {
     return code;

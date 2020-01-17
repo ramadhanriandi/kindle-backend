@@ -1,17 +1,22 @@
 package com.kindle.backend.response.attributeResponse;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class GetCustomerByCustomerIdResponse {
   private String username;
   private String status;
   private String email;
   private String password;
+
+  public GetCustomerByCustomerIdResponse(String username, String status, String email, String password) {
+    this.username = username;
+    this.status = status;
+    this.email = email;
+    this.password = password;
+  }
 
   public String getUsername() {
     return username;

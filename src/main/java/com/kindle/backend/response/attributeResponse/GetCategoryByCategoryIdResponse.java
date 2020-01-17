@@ -1,14 +1,16 @@
 package com.kindle.backend.response.attributeResponse;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class GetCategoryByCategoryIdResponse {
   private String name;
+
+  public GetCategoryByCategoryIdResponse(String name) {
+    this.name = name;
+  }
 
   public String getName() {
     return name;

@@ -1,16 +1,20 @@
 package com.kindle.backend.response.dataResponse;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class DataWithRelationOnlyResponse<T> {
   private int id;
   private String type;
   private T relationships;
+
+  public DataWithRelationOnlyResponse(int id, String type, T relationships) {
+    this.id = id;
+    this.type = type;
+    this.relationships = relationships;
+  }
 
   public int getId() {
     return id;

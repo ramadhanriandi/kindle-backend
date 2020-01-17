@@ -1,12 +1,16 @@
 package com.kindle.backend.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.kindle.backend.model.constant.TransactionConstant;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -27,6 +31,11 @@ public class Transaction {
 
   @Column(name = TransactionConstant.TRANSACTION_CUSTOMER_ID)
   private int customerId;
+
+  @JsonIgnore
+  @LazyCollection(LazyCollectionOption.FALSE)
+  @OneToMany(mappedBy = "transactionDetail", fetch = FetchType.EAGER)
+  private List<TransactionList> orderList;
 
   public int getTransactionId() {
     return transactionId;
@@ -59,4 +68,13 @@ public class Transaction {
   public void setCustomerId(int customerId) {
     this.customerId = customerId;
   }
+
+  public List<TransactionList> getOrderList() {
+    return orderList;
+  }
+
+  public void setOrderList(List<TransactionList> orderList) {
+    this.orderList = orderList;
+  }
+
 }

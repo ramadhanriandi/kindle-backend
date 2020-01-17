@@ -1,18 +1,24 @@
 package com.kindle.backend.response.attributeResponse;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class GetCustomerWishlistResponse {
   private String title;
   private String author;
   private int year;
   private float price;
   private String document;
+
+  public GetCustomerWishlistResponse(String title, String author, int year, float price, String document) {
+    this.title = title;
+    this.author = author;
+    this.year = year;
+    this.price = price;
+    this.document = document;
+  }
 
   public String getTitle() {
     return title;

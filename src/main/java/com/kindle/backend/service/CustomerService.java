@@ -46,7 +46,7 @@ public class CustomerService {
       List<DataNoRelationResponse> dataNoRelationResponses = new ArrayList<>();
 
       for (Customer customer : customers) {
-        GetAllCustomerResponse getAllCustomerResponse = new GetAllCustomerResponse(customer.getUsername(), customer.getStatus());
+        GetAllCustomerResponse getAllCustomerResponse = new GetAllCustomerResponse(customer.getUsername(), customer.getStatus(), customer.getEmail(), customer.getPassword());
         DataNoRelationResponse<GetAllCustomerResponse> dataNoRelationResponse = new DataNoRelationResponse<>(customer.getCustomerId(), "customer", getAllCustomerResponse);
         dataNoRelationResponses.add(dataNoRelationResponse);
       }

@@ -1,12 +1,10 @@
 package com.kindle.backend.response.attributeResponse;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class GetMerchantByMerchantIdResponse {
   private String username;
   private String email;
@@ -15,6 +13,16 @@ public class GetMerchantByMerchantIdResponse {
   private String description;
   private String phone;
   private String status;
+
+  public GetMerchantByMerchantIdResponse(String username, String email, String password, String fullname, String description, String phone, String status) {
+    this.username = username;
+    this.email = email;
+    this.password = password;
+    this.fullname = fullname;
+    this.description = description;
+    this.phone = phone;
+    this.status = status;
+  }
 
   public String getUsername() {
     return username;

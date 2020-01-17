@@ -10,5 +10,7 @@ import java.util.List;
 public interface TransactionListRepository extends CrudRepository<TransactionList, Integer> {
   List<TransactionList> findAllByTransactionId(Integer transactionId);
 
+  List<TransactionList> findAllByMerchantId(Integer transactionId);
+
   TransactionList save(TransactionList transactionList);
 }

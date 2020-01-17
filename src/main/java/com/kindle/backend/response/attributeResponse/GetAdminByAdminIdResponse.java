@@ -1,16 +1,20 @@
 package com.kindle.backend.response.attributeResponse;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class GetAdminByAdminIdResponse {
   private String email;
   private String username;
   private String password;
+
+  public GetAdminByAdminIdResponse(String email, String username, String password) {
+    this.email = email;
+    this.username = username;
+    this.password = password;
+  }
 
   public String getEmail() {
     return email;
