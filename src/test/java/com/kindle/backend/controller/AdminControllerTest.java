@@ -97,26 +97,4 @@ public class AdminControllerTest {
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.code", is(successDataResponseGetAdminById.getCode())));
   }
-
-  @Test
-  public void updateAdmin() throws Exception {
-    when(adminService.updateAdmin(1, updatedAdmin)).thenReturn(successDataResponseUpdateAdmin);
-    mockMvc.perform(put("/api/admins/" + 1)
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(updatedAdmin))
-            .accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.code", is(successDataResponseUpdateAdmin.getCode())));
-  }
-
-  @Test
-  public void loginAdmin() throws Exception {
-    when(adminService.login(loginAdmin)).thenReturn(successDataResponseLoginAdmin);
-    mockMvc.perform(post("/api/admins/login")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(updatedAdmin))
-            .accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.code", is(successDataResponseUpdateAdmin.getCode())));
-  }
 }
