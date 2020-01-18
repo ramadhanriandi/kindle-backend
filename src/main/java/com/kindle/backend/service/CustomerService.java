@@ -5,10 +5,7 @@ import com.kindle.backend.model.entity.Customer;
 import com.kindle.backend.model.repository.BookRepository;
 import com.kindle.backend.model.repository.CustomerRepository;
 import com.kindle.backend.response.BaseResponse;
-import com.kindle.backend.response.attributeResponse.GetAllCustomerResponse;
-import com.kindle.backend.response.attributeResponse.GetCustomerCartResponse;
-import com.kindle.backend.response.attributeResponse.GetCustomerLibraryResponse;
-import com.kindle.backend.response.attributeResponse.GetCustomerWishlistResponse;
+import com.kindle.backend.response.attributeResponse.*;
 import com.kindle.backend.response.dataResponse.DataCompleteResponse;
 import com.kindle.backend.response.dataResponse.DataNoAttributeResponse;
 import com.kindle.backend.response.dataResponse.DataNoRelationResponse;
@@ -49,7 +46,7 @@ public class CustomerService {
       List<DataNoRelationResponse> dataNoRelationResponses = new ArrayList<>();
 
       for (Customer customer : customers) {
-        GetAllCustomerResponse getAllCustomerResponse = new GetAllCustomerResponse(customer.getUsername(), customer.getStatus());
+        GetAllCustomerResponse getAllCustomerResponse = new GetAllCustomerResponse(customer.getUsername(), customer.getStatus(), customer.getEmail(), customer.getPassword());
         DataNoRelationResponse<GetAllCustomerResponse> dataNoRelationResponse = new DataNoRelationResponse<>(customer.getCustomerId(), "customer", getAllCustomerResponse);
         dataNoRelationResponses.add(dataNoRelationResponse);
       }
@@ -74,8 +71,8 @@ public class CustomerService {
     } else {
       List<DataNoRelationResponse> dataNoRelationResponses = new ArrayList<>();
 
-      GetAllCustomerResponse getAllCustomerResponse = new GetAllCustomerResponse(customer.getUsername(), customer.getStatus());
-      DataNoRelationResponse<GetAllCustomerResponse> dataNoRelationResponse = new DataNoRelationResponse<>(customerId, "customer", getAllCustomerResponse);
+      GetCustomerByCustomerIdResponse getCustomerByCustomerIdResponse = new GetCustomerByCustomerIdResponse(customer.getUsername(), customer.getStatus(), customer.getEmail(), customer.getPassword());
+      DataNoRelationResponse<GetCustomerByCustomerIdResponse> dataNoRelationResponse = new DataNoRelationResponse<>(customerId, "customer", getCustomerByCustomerIdResponse);
       dataNoRelationResponses.add(dataNoRelationResponse);
 
       SuccessDataResponse<DataNoRelationResponse> successDataResponse = new SuccessDataResponse<>(200, "OK", dataNoRelationResponses);
@@ -190,13 +187,23 @@ public class CustomerService {
 
       return failureDataResponse;
     } else {
-      DataNoAttributeResponse dataNoAttributeResponse = new DataNoAttributeResponse(fetchResponse.getCustomerId(), "customer");
+      if (fetchResponse.getStatus() == "Active") {
+        DataNoAttributeResponse dataNoAttributeResponse = new DataNoAttributeResponse(fetchResponse.getCustomerId(), "customer");
 
-      List<DataNoAttributeResponse> dataNoAttributeResponses = new ArrayList<>();
-      dataNoAttributeResponses.add(dataNoAttributeResponse);
-      SuccessDataResponse<DataNoAttributeResponse> successDataResponse = new SuccessDataResponse<>(200, "OK", dataNoAttributeResponses);
+        List<DataNoAttributeResponse> dataNoAttributeResponses = new ArrayList<>();
+        dataNoAttributeResponses.add(dataNoAttributeResponse);
+        SuccessDataResponse<DataNoAttributeResponse> successDataResponse = new SuccessDataResponse<>(200, "OK", dataNoAttributeResponses);
 
-      return successDataResponse;
+        return successDataResponse;
+      } else {
+        ErrorDetailResponse errorDetailResponse = new ErrorDetailResponse(404, "Your account is inactive");
+
+        List<ErrorDetailResponse> errorDetailResponses = new ArrayList<>();
+        errorDetailResponses.add(errorDetailResponse);
+        FailureDataResponse failureDataResponse = new FailureDataResponse(400, "Bad Request", errorDetailResponses);
+
+        return failureDataResponse;
+      }
     }
   }
 

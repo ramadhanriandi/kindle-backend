@@ -6,10 +6,14 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class ErrorDetailResponse {
   private int status;
   private String detail;
+
+  public ErrorDetailResponse(int status, String detail) {
+    this.status = status;
+    this.detail = detail;
+  }
 
   public int getStatus() {
     return status;

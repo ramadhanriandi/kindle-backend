@@ -5,23 +5,17 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class GetAdminByAdminIdResponse {
-  private String email;
+public class GetCustomerByCustomerIdResponse {
   private String username;
+  private String status;
+  private String email;
   private String password;
 
-  public GetAdminByAdminIdResponse(String email, String username, String password) {
-    this.email = email;
+  public GetCustomerByCustomerIdResponse(String username, String status, String email, String password) {
     this.username = username;
-    this.password = password;
-  }
-
-  public String getEmail() {
-    return email;
-  }
-
-  public void setEmail(String email) {
+    this.status = status;
     this.email = email;
+    this.password = password;
   }
 
   public String getUsername() {
@@ -30,6 +24,22 @@ public class GetAdminByAdminIdResponse {
 
   public void setUsername(String username) {
     this.username = username;
+  }
+
+  public String getStatus() {
+    return status;
+  }
+
+  public void setStatus(String status) {
+    this.status = status;
+  }
+
+  public String getEmail() {
+    return email;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
   }
 
   public String getPassword() {

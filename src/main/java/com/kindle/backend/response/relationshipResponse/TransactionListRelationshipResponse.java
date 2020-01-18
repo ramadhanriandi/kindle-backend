@@ -1,15 +1,18 @@
 package com.kindle.backend.response.relationshipResponse;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class TransactionListRelationshipResponse {
   private BaseRelationshipDataResponse merchant;
   private BaseRelationshipDataResponse book;
+
+  public TransactionListRelationshipResponse(BaseRelationshipDataResponse merchant, BaseRelationshipDataResponse book) {
+    this.merchant = merchant;
+    this.book = book;
+  }
 
   public BaseRelationshipDataResponse getMerchant() {
     return merchant;

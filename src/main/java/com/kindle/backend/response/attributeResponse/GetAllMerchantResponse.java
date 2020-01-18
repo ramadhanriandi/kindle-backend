@@ -1,15 +1,18 @@
 package com.kindle.backend.response.attributeResponse;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class GetAllMerchantResponse {
   private String fullname;
   private String status;
+
+  public GetAllMerchantResponse(String fullname, String status) {
+    this.fullname = fullname;
+    this.status = status;
+  }
 
   public String getFullname() {
     return fullname;
